@@ -1,0 +1,75 @@
+.global {
+  width: 100%;
+  height: 100vh !important;
+  min-width: 1510px;
+}
+.header {
+  width: 100%;
+  background-color: #ec4141;
+  height: 64px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+}
+.sider {
+  height: 100%;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 5px;
+}
+.footer {
+  height: 53px;
+  padding: 0;
+}
+.sider {
+}
+.content {
+  overflow: auto !important;
+  overflow-x: hidden !important;
+  height: 100%;
+  background-color: #ffffff;
+}
+.container {
+  height: 100%;
+}
+.routerLink {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 5px;
+  padding-left: 5px;
+  color: #373737;
+  cursor: pointer;
+}
+.routerLink:hover {
+  background-color: #f6f6f7;
+}
+.clickLink {
+  background-color: #f6f6f7;
+  font-weight: 700;
+  font-size: 16px;
+}
+.infoContainer {
+  height: 100%;
+  margin-left: 70%;
+  display: flex;
+  align-items: center;
+}
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.loginText {
+  margin-left: 5px;
+  color: #f2f2f2;
+  cursor: pointer;
+  font-size: 13px;
+}
+.loginText:hover {
+  color: #ffffff;
+}

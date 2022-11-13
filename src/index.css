@@ -1,13 +1,48 @@
-body {
+* {
+  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+@import "~antd/dist/antd.css";
+div {
+  /*三角箭头的颜色*/
+  scrollbar-arrow-color: #e0e0e0;
+  /*滚动条滑块按钮的颜色*/
+  scrollbar-face-color: #e0e0e0;
+  /*滚动条整体颜色*/
+  scrollbar-highlight-color: #e0e0e0;
+  /*滚动条阴影*/
+  scrollbar-shadow-color: transparent;
+  /*滚动条轨道颜色*/
+  scrollbar-track-color: transparent;
+  /*滚动条3d亮色阴影边框的外观颜色——左边和上边的阴影色*/
+  scrollbar-3dlight-color: #e0e0e0;
+  /*滚动条3d暗色阴影边框的外观颜色——右边和下边的阴影色*/
+  scrollbar-darkshadow-color: #e0e0e0;
+  /*滚动条基准颜色*/
+  scrollbar-base-color: #e0e0e0;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: transparent;
+}
+/*滚动条的轨道*/
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+/*滚动条的滑块按钮*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #e0e0e0;
+  box-shadow: inset 0 0 5px #e0e0e0;
+}
+/*滚动条的上下两端的按钮*/
+::-webkit-scrollbar-button {
+  height: 0;
+  background-color: #e0e0e0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
