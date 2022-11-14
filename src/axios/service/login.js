@@ -14,5 +14,10 @@ export const createQr = (key) => {
   );
 };
 export const checkQr = (key) => {
-  return Axios.get("/api/login/qr/check?key=" + key);
+  return Axios.get(
+    "/api/login/qr/check?key=" + key + "&timestamp=" + Date.now()
+  );
+};
+export const getUserInfo = () => {
+  return Axios.get("/api/user/account");
 };

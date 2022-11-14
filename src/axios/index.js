@@ -6,7 +6,7 @@ const Axios = axios.create({
 Axios.interceptors.request.use((request) => {
   request.headers = {
     ...request.headers,
-    authorization: "Bearer " + localStorage.getItem("token") || "",
+    "Set-Cookies": localStorage.getItem("cookie") || "",
     withCredentials: true,
   };
   return request;

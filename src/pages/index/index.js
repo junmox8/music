@@ -23,6 +23,7 @@ export default function Index() {
   const [isLoading, setLoading] = useState(false); //控制loading显示
   const [qrimg, setImgUrl] = useState(""); //二维码图片url
   const [qrkey, setQrKey] = useState(""); //二维码图片key
+  const [loginState, setState] = useState(false); //登陆状态
   const click = (index) => {
     let arr = [];
     for (let i = 0; i <= clickArr.length - 1; i++) {
@@ -32,21 +33,23 @@ export default function Index() {
     navigate(routerArr[index].path);
   };
   const login = async () => {
-    setLoading(true);
-    const {
-      data: {
-        data: { unikey: key },
-      },
-    } = await loginByQr();
-    const {
-      data: {
-        data: { qrimg },
-      },
-    } = await createQr(key);
-    setQrKey(key);
-    setImgUrl(qrimg);
-    setLoading(false);
-    setLogin(true);
+    if (loginState === false) {
+      setLoading(true);
+      const {
+        data: {
+          data: { unikey: key },
+        },
+      } = await loginByQr();
+      const {
+        data: {
+          data: { qrimg },
+        },
+      } = await createQr(key);
+      setQrKey(key);
+      setImgUrl(qrimg);
+      setLoading(false);
+      setLogin(true);
+    }
   };
   return (
     <div className={style.global}>
