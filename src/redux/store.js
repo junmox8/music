@@ -1,3 +1,6 @@
 import { combineReducers, createStore } from "redux";
-const reducer = combineReducers();
+import isLogin from "./reducers/login";
+const reducer = combineReducers({
+  isLogin,
+});
 export default createStore(reducer);
