@@ -59,6 +59,27 @@
           width: 100%;
           text-align: end;
           color: #0c88d3;
+          position: relative;
+        }
+        .text1 {
+          cursor: pointer;
+          font-size: 14px;
+        }
+        .text2 {
+          font-size: 14px;
+          color: #d0d0d7;
+        }
+        .loginButton {
+          width: 90%;
+          height: 40px;
+          background-color: #ff3a3a;
+          color: #ffffff;
+          font-weight: 500;
+          font-size: 16px;
+          text-align: center;
+          line-height: 40px;
+          border-radius: 25px;
+          cursor: pointer;
         }
       }
     }

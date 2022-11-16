@@ -6,13 +6,21 @@ import {
   LockFilled,
   UnlockFilled,
 } from "@ant-design/icons";
-import { checkQr, getUserInfo } from "../../axios/service/login";
-import { message, Input, Space } from "antd";
+import {
+  checkQr,
+  getUserInfo,
+  loginByPassword,
+} from "../../axios/service/login";
+import { message, Input, Spin } from "antd";
 let interval = null; //useEffect定时器
+const reg_tel =
+  /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/; //手机号正则表达式
 export default function Login(props) {
   const [qrState, setState] = useState(801); //801代表待扫码 802为待确认 803为登陆成功 800为过期
   const [page, changePage] = useState(0); //0代码是扫码页面 1代表是手机号登录页面
   const [type, setType] = useState(1); //0代表扫码登陆 1代表密码 2代表验证码 (这个是表单登录页面 所以一般不用0)
+  const [sendCaptcha, setCaptcha] = useState(true); //true代表可以发送验证码 false代表还在冷却
+  const [waitSecond, setSecond] = useState(60); //发送验证码冷却时间
   const [loginForm, setForm] = useState({
     phoneNumber: "",
     password: "",
@@ -60,6 +68,49 @@ export default function Login(props) {
           captcha: e.target.value,
         });
         break;
+    }
+  };
+  const sendCaptchaFun = async () => {
+    setCaptcha(false);
+    let i = 0;
+    let time = null;
+    time = setInterval(() => {
+      if (i >= 59) {
+        clearInterval(time);
+        setSecond(60);
+        setCaptcha(true);
+      }
+      setSecond((second) => second - 1); //在循环中使用useState 回调处理异步问题
+      i++;
+    }, 1000);
+  };
+  const login = async () => {
+    if (type === 1) {
+      if (!loginForm.phoneNumber || !loginForm.password)
+        return message.error("请填写完整信息");
+      if (!reg_tel.test(loginForm.phoneNumber))
+        return message.error("请注意手机号格式");
+      const result = await loginByPassword(
+        loginForm.phoneNumber,
+        loginForm.password
+      );
+      if (result.status == 200) {
+        const {
+          data: {
+            profile: { nickname: name, avatarUrl: avatar },
+            cookie,
+          },
+        } = result;
+        props.closeBox();
+        localStorage.setItem("cookie", cookie);
+        props.sendUserInfo({ name, avatar });
+        setForm({
+          phoneNumber: "",
+          password: "",
+          captcha: "",
+        });
+        message.success("登陆成功");
+      }
     }
   };
   return (
@@ -150,7 +201,7 @@ export default function Login(props) {
                   </div>
                 }
               />
-              <Input
+              <Input.Password
                 style={{ display: type === 1 ? "block" : "none" }}
                 onChange={(e) => changeFormInput(e, "password")}
                 value={loginForm.password}
@@ -171,29 +222,74 @@ export default function Login(props) {
                     <UnlockFilled />
                   </div>
                 }
+                addonAfter={
+                  <div>
+                    <div
+                      className={style.text1}
+                      style={{
+                        display: sendCaptcha === true ? "block" : "none",
+                      }}
+                      onClick={sendCaptchaFun}
+                    >
+                      获取验证码
+                    </div>
+                    <div
+                      className={style.text2}
+                      style={{
+                        display: sendCaptcha === false ? "block" : "none",
+                      }}
+                    >
+                      00:
+                      <span
+                        style={{
+                          display: waitSecond < 10 ? "inline-block" : "none",
+                        }}
+                      >
+                        0
+                      </span>
+                      {waitSecond}
+                    </div>
+                  </div>
+                }
               />
               <div className={style.changeTypeText}>
                 <div
                   style={{
                     cursor: "pointer",
                     display: type === 1 ? "block" : "none",
+                    position: "absolute",
+                    right: "0",
                   }}
                   onClick={() => {
                     setType(2);
                   }}
                 >
-                  验证码登录
+                  <span>验证码登录</span>
                 </div>
                 <div
                   style={{
                     cursor: "pointer",
                     display: type === 2 ? "block" : "none",
+                    position: "absolute",
+                    right: "0",
                   }}
                   onClick={() => {
                     setType(1);
                   }}
                 >
-                  密码登录
+                  <span>密码登录</span>
+                </div>
+              </div>
+              <div
+                style={{
+                  marginTop: "25%",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <div className={style.loginButton} onClick={login}>
+                  登录
                 </div>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { message } from "antd";
 const Axios = axios.create({
   timeout: 4000,
   withCredentials: true,
@@ -16,7 +17,7 @@ Axios.interceptors.response.use(
     return responce;
   },
   (error) => {
-    console.log(error);
+    message.error(error.response.data.message);
   }
 );
 export default Axios;

@@ -21,3 +21,13 @@ export const checkQr = (key) => {
 export const getUserInfo = () => {
   return Axios.get("/api/user/account");
 };
+export const loginByPassword = (phoneNumber, password) => {
+  return Axios.get(
+    "/api/login/cellphone?phone=" +
+      phoneNumber +
+      "&password=" +
+      password +
+      "&timestamp=" +
+      Date.now()
+  );
+};
