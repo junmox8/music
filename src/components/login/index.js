@@ -21,6 +21,7 @@ export default function Login(props) {
   const [type, setType] = useState(1); //0代表扫码登陆 1代表密码 2代表验证码 (这个是表单登录页面 所以一般不用0)
   const [sendCaptcha, setCaptcha] = useState(true); //true代表可以发送验证码 false代表还在冷却
   const [waitSecond, setSecond] = useState(60); //发送验证码冷却时间
+  const [loading, setLoading] = useState(false); //掌控spin的显示
   const [loginForm, setForm] = useState({
     phoneNumber: "",
     password: "",
@@ -90,26 +91,36 @@ export default function Login(props) {
         return message.error("请填写完整信息");
       if (!reg_tel.test(loginForm.phoneNumber))
         return message.error("请注意手机号格式");
-      const result = await loginByPassword(
-        loginForm.phoneNumber,
-        loginForm.password
-      );
-      if (result.status == 200) {
-        const {
-          data: {
-            profile: { nickname: name, avatarUrl: avatar },
-            cookie,
-          },
-        } = result;
-        props.closeBox();
-        localStorage.setItem("cookie", cookie);
-        props.sendUserInfo({ name, avatar });
-        setForm({
-          phoneNumber: "",
-          password: "",
-          captcha: "",
-        });
-        message.success("登陆成功");
+      setLoading(true);
+      try {
+        const result = await loginByPassword(
+          loginForm.phoneNumber,
+          loginForm.password
+        );
+        console.log(result);
+        if (result && result.data && result.data.code == 200) {
+          const {
+            data: {
+              profile: { nickname: name, avatarUrl: avatar },
+              cookie,
+            },
+          } = result;
+          props.closeBox();
+          localStorage.setItem("cookie", cookie);
+          props.sendUserInfo({ name, avatar });
+          setForm({
+            phoneNumber: "",
+            password: "",
+            captcha: "",
+          });
+          message.success("登陆成功");
+        }
+        if (result && result.data && result.data.code !== 200)
+          message.error(result.data.message);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -167,6 +178,12 @@ export default function Login(props) {
           className={style.loginByPassword}
           style={{ display: page === 1 ? "block" : "none" }}
         >
+          <div
+            style={{ display: loading === true ? "block" : "none" }}
+            className={style.spinBox}
+          >
+            <Spin></Spin>
+          </div>
           <img
             onClick={() => {
               changePage(0);
