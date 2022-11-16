@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import style from "./index.module.scss";
 import Loading from "../../components/loginLoading";
 import Login from "../../components/login";
 import { Layout } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { loginByQr, createQr } from "../../axios/service/login";
+import { PoweroffOutlined } from "@ant-design/icons";
 import routerArr from "../../json/routerArr";
 
 const { Header, Content, Footer, Sider } = Layout;
 export default function Index() {
   useEffect(() => {
+    if (localStorage.getItem("cookie")) {
+      //如果本地存储有cookie则登陆状态
+      setState(true);
+      setUserInfo({
+        name: localStorage.getItem("name"),
+        avatar: localStorage.getItem("avatar"),
+      });
+    }
     navigate(routerArr[0].path, { replace: true });
     let arr = [];
     routerArr.forEach((item, index) => {
@@ -24,6 +33,13 @@ export default function Index() {
   const [qrimg, setImgUrl] = useState(""); //二维码图片url
   const [qrkey, setQrKey] = useState(""); //二维码图片key
   const [loginState, setState] = useState(false); //登陆状态
+  const [userInfo, setUserInfo] = useState({
+    //用户头像姓名
+    name: "未登录",
+    avatar:
+      "https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1668333498132",
+  });
+  const exitBox = useRef();
   const click = (index) => {
     let arr = [];
     for (let i = 0; i <= clickArr.length - 1; i++) {
@@ -72,6 +88,12 @@ export default function Index() {
             closeBox={() => {
               setLogin(false);
             }}
+            sendUserInfo={(userInfo) => {
+              setUserInfo(userInfo);
+              setState(true);
+              localStorage.setItem("name", userInfo.name);
+              localStorage.setItem("avatar", userInfo.avatar);
+            }}
           ></Login>
           <Loading display={isLoading}></Loading>
         </div>
@@ -86,12 +108,40 @@ export default function Index() {
             }}
             src="https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1668331046337"
           ></img>
-          <div className={style.infoContainer} onClick={login}>
-            <img
-              className={style.avatar}
-              src="https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1668333498132"
-            ></img>
-            <div className={style.loginText}>未登录</div>
+          <div
+            className={style.infoContainer}
+            onClick={login}
+            onMouseOver={() => {
+              if (loginState === true) {
+                exitBox.current.style.visibility = "visible";
+                exitBox.current.style.opacity = 1;
+              }
+            }}
+            onMouseOut={() => {
+              exitBox.current.style.visibility = "hidden";
+              exitBox.current.style.opacity = 0;
+            }}
+          >
+            <img className={style.avatar} src={userInfo.avatar}></img>
+            <div className={style.loginText}>{userInfo.name}</div>
+            <div
+              ref={exitBox}
+              className={style.exitBox}
+              onClick={() => {
+                setState(false);
+                localStorage.removeItem("cookie");
+                localStorage.removeItem("name");
+                localStorage.removeItem("avatar");
+                setUserInfo({
+                  name: "未登录",
+                  avatar:
+                    "https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1668333498132",
+                });
+              }}
+            >
+              <PoweroffOutlined />
+              <div style={{ marginLeft: "4px" }}>退出登录</div>
+            </div>
           </div>
         </Header>
         <Content className={style.container}>
