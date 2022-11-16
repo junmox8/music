@@ -31,3 +31,6 @@ export const loginByPassword = (phoneNumber, password) => {
       Date.now()
   );
 };
+export const sentCaptcha = (phoneNumber) => {
+  return Axios.get("/api/captcha/sent?phone=" + phoneNumber);
+};

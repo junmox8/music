@@ -13,6 +13,7 @@ import {
 } from "../../axios/service/login";
 import { message, Input, Spin } from "antd";
 let interval = null; //useEffect定时器
+let time = null; //登录节流
 const reg_tel =
   /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/; //手机号正则表达式
 export default function Login(props) {
@@ -85,45 +86,53 @@ export default function Login(props) {
       i++;
     }, 1000);
   };
-  const login = async () => {
-    if (type === 1) {
-      if (!loginForm.phoneNumber || !loginForm.password)
-        return message.error("请填写完整信息");
-      if (!reg_tel.test(loginForm.phoneNumber))
-        return message.error("请注意手机号格式");
-      setLoading(true);
-      try {
-        const result = await loginByPassword(
-          loginForm.phoneNumber,
-          loginForm.password
-        );
-        console.log(result);
-        if (result && result.data && result.data.code == 200) {
-          const {
-            data: {
-              profile: { nickname: name, avatarUrl: avatar },
-              cookie,
-            },
-          } = result;
-          props.closeBox();
-          localStorage.setItem("cookie", cookie);
-          props.sendUserInfo({ name, avatar });
-          setForm({
-            phoneNumber: "",
-            password: "",
-            captcha: "",
-          });
-          message.success("登陆成功");
+  async function login() {
+    if (!time) {
+      time = setTimeout(() => {
+        clearTimeout(time);
+        time = null;
+      }, 2000);
+      if (type === 1) {
+        if (!loginForm.phoneNumber || !loginForm.password)
+          return message.error("请填写完整信息");
+        if (!reg_tel.test(loginForm.phoneNumber))
+          return message.error("请注意手机号格式");
+        setLoading(true);
+        try {
+          const result = await loginByPassword(
+            loginForm.phoneNumber,
+            loginForm.password
+          );
+          console.log(result);
+          if (result && result.data && result.data.code == 200) {
+            const {
+              data: {
+                profile: { nickname: name, avatarUrl: avatar },
+                cookie,
+              },
+            } = result;
+            props.closeBox();
+            localStorage.setItem("cookie", cookie);
+            props.sendUserInfo({ name, avatar });
+            setForm({
+              phoneNumber: "",
+              password: "",
+              captcha: "",
+            });
+            message.success("登陆成功");
+          }
+          if (result && result.data && result.data.code !== 200)
+            message.error(result.data.message);
+        } catch (e) {
+          console.log(e);
+        } finally {
+          setLoading(false);
         }
-        if (result && result.data && result.data.code !== 200)
-          message.error(result.data.message);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setLoading(false);
       }
+    } else {
+      message.error("请求太频繁,请稍后再试");
     }
-  };
+  }
   return (
     <div
       className={style.loginBox}
