@@ -1,7 +1,7 @@
 export default [
   {
     name: "发现音乐",
-    path: "/findMusic",
+    path: "/findMusic/recommand",
   },
   {
     name: "视频",

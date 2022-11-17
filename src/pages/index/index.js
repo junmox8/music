@@ -167,11 +167,11 @@ export default function Index() {
           </Layout>
         </Content>
         <Footer className={style.footer}>
-          <video
+          <audio
             style={{ width: "100%", height: "53px" }}
             autoPlay
             controls
-          ></video>
+          ></audio>
         </Footer>
       </Layout>
     </div>

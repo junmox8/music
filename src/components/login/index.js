@@ -10,6 +10,8 @@ import {
   checkQr,
   getUserInfo,
   loginByPassword,
+  sentCaptcha,
+  loginByCaptcha,
 } from "../../axios/service/login";
 import { message, Input, Spin } from "antd";
 let interval = null; //useEffect定时器
@@ -73,6 +75,9 @@ export default function Login(props) {
     }
   };
   const sendCaptchaFun = async () => {
+    if (!loginForm.phoneNumber) return message.error("请填写手机号");
+    if (!reg_tel.test(loginForm.phoneNumber))
+      return message.error("请注意手机号格式");
     setCaptcha(false);
     let i = 0;
     let time = null;
@@ -85,6 +90,9 @@ export default function Login(props) {
       setSecond((second) => second - 1); //在循环中使用useState 回调处理异步问题
       i++;
     }, 1000);
+    const result = await sentCaptcha(loginForm.phoneNumber);
+    if (result.data.code === 200) message.success("验证码发送成功");
+    else message.error("发送失败,请稍后再试");
   };
   async function login() {
     if (!time) {
@@ -92,42 +100,53 @@ export default function Login(props) {
         clearTimeout(time);
         time = null;
       }, 2000);
-      if (type === 1) {
-        if (!loginForm.phoneNumber || !loginForm.password)
-          return message.error("请填写完整信息");
-        if (!reg_tel.test(loginForm.phoneNumber))
-          return message.error("请注意手机号格式");
-        setLoading(true);
-        try {
-          const result = await loginByPassword(
+
+      if (
+        ((!loginForm.phoneNumber || !loginForm.password) && type === 1) ||
+        ((!loginForm.phoneNumber || !loginForm.captcha) && type === 2)
+      )
+        return message.error("请填写完整信息");
+      if (!reg_tel.test(loginForm.phoneNumber))
+        return message.error("请注意手机号格式");
+      setLoading(true);
+      try {
+        let result;
+        if (type === 1) {
+          result = await loginByPassword(
             loginForm.phoneNumber,
             loginForm.password
           );
-          console.log(result);
-          if (result && result.data && result.data.code == 200) {
-            const {
-              data: {
-                profile: { nickname: name, avatarUrl: avatar },
-                cookie,
-              },
-            } = result;
-            props.closeBox();
-            localStorage.setItem("cookie", cookie);
-            props.sendUserInfo({ name, avatar });
-            setForm({
-              phoneNumber: "",
-              password: "",
-              captcha: "",
-            });
-            message.success("登陆成功");
-          }
-          if (result && result.data && result.data.code !== 200)
-            message.error(result.data.message);
-        } catch (e) {
-          console.log(e);
-        } finally {
-          setLoading(false);
         }
+        if (type === 2) {
+          result = await loginByCaptcha(
+            loginForm.phoneNumber,
+            loginForm.captcha
+          );
+          console.log(result);
+        }
+        if (result && result.data && result.data.code == 200) {
+          const {
+            data: {
+              profile: { nickname: name, avatarUrl: avatar },
+              cookie,
+            },
+          } = result;
+          props.closeBox();
+          localStorage.setItem("cookie", cookie);
+          props.sendUserInfo({ name, avatar });
+          setForm({
+            phoneNumber: "",
+            password: "",
+            captcha: "",
+          });
+          message.success("登陆成功");
+        }
+        if (result && result.data && result.data.code !== 200)
+          message.error(result.data.message);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
       }
     } else {
       message.error("请求太频繁,请稍后再试");

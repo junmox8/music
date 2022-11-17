@@ -32,5 +32,17 @@ export const loginByPassword = (phoneNumber, password) => {
   );
 };
 export const sentCaptcha = (phoneNumber) => {
-  return Axios.get("/api/captcha/sent?phone=" + phoneNumber);
+  return Axios.get(
+    "/api/captcha/sent?phone=" + phoneNumber + "&timestamp=" + Date.now()
+  );
+};
+export const loginByCaptcha = (phoneNumber, captcha) => {
+  return Axios.get(
+    "/api/login/cellphone?phone=" +
+      phoneNumber +
+      "&captcha=" +
+      captcha +
+      "&timestamp=" +
+      Date.now()
+  );
 };
