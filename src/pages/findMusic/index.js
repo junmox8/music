@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import style from "./index.module.scss";
-import { Carousel } from "antd";
 import routerArr from "../../json/findMusicRouterArr";
 
 export default function FindMusic() {

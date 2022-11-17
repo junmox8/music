@@ -33,7 +33,7 @@
   background-color: #ec4141;
 }
 .content {
-  width: 100%;
+  width: 100% !important;
   height: calc(100% - 50px);
   position: relative;
   overflow: scroll;

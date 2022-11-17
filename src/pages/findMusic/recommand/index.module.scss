@@ -7,7 +7,49 @@
 .bannerArea {
   width: 100%;
   height: 300px;
+  overflow: hidden;
+}
+.bannerBox {
+  width: 100%;
+  height: 300px;
+  background-color: transparent;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.carousel {
+  width: calc((100vw - 195px) * 0.6) !important;
+  height: 300px !important;
+}
+.img {
+  width: calc((100vw - 195px) * 0.6) !important;
+  height: 300px !important;
+}
+.blurImg {
+  filter: blur(146px);
+  width: 100% !important;
+  height: 100%;
+}
+.arrowBox {
+  position: absolute;
+  width: 40px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+}
+.arrowBox:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.arrowBox:nth-child(1) {
+  left: calc((100vh - 195px) * 0.3);
+}
+.arrowBox:nth-child(2) {
+  right: calc((100vh - 195px) * 0.3);
 }
