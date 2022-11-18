@@ -1,0 +1,8 @@
+.main {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  width: calc((100vw - 195px) * 0.8 * 0.3);
+  margin-top: 10px;
+}

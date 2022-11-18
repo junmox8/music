@@ -54,13 +54,15 @@
 .arrowBox:nth-child(2) {
   right: calc((100vh - 195px) * 0.3);
 }
-.songListArea {
+.songListArea,
+.newestSongArea {
   width: 100%;
   height: auto;
   margin-top: 50px;
   padding-left: 10%;
   padding-right: 10%;
-  .getSongListText {
+  .getSongListText,
+  .newestSongText {
     color: #373737;
     font-weight: 600;
     font-size: 20px;
@@ -74,13 +76,16 @@
     content: ">";
     margin-left: 5px;
   }
-  .songlists {
+
+  .songlists,
+  .newestSongList {
     width: 100%;
     height: auto;
     min-height: 100px;
     position: relative;
     overflow: hidden;
-    .songlistLine {
+    .songlistLine,
+    .newestSongLine {
       display: flex;
       justify-content: space-between;
       align-items: center;

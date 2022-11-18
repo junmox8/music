@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import style from "./index.module.scss";
-import { getBanner, getSongList } from "../../../axios/service/recommand";
+import {
+  getBanner,
+  getSongList,
+  getNewestMusic,
+} from "../../../axios/service/recommand";
 import { Carousel, Skeleton } from "antd";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import SonglistSkeleton from "../../../components/Skeleton/songlist/songlist";
 import Songlist from "../../../components/songlist";
+import NewestSongSkeleton from "../../../components/Skeleton/newestSong";
+import NewestSong from "../../../components/newestSong";
 export default function Recommand() {
   useEffect(() => {
     (async function () {
@@ -15,13 +21,18 @@ export default function Recommand() {
       const {
         data: { recommend },
       } = await getSongList();
-      console.log(recommend);
       setSongListArr(recommend);
+      const {
+        data: { result },
+      } = await getNewestMusic();
+      console.log(result);
+      // setNewestSongArr(result);
     })();
   }, []);
   const carousel = useRef();
   const [bannerArr, setBannerArr] = useState([]);
   const [songListArr, setSongListArr] = useState([]); //歌单数组
+  const [newestSongArr, setNewestSongArr] = useState([]); //最新歌曲数组
   const [bannerIndex, setIndex] = useState(0); //轮播图当前所在页数
   return (
     <div className={style.main}>
@@ -108,6 +119,35 @@ export default function Recommand() {
                   name={item.name}
                   id={item.id}
                 ></Songlist>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className={style.newestSongArea}>
+        <div className={style.newestSongText}>最新音乐</div>
+        <div className={style.newestSongList}>
+          <div
+            style={{ display: newestSongArr.length === 0 ? "flex" : "none" }}
+            className={style.newestSongLine}
+          >
+            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => {
+              return <NewestSongSkeleton key={index}></NewestSongSkeleton>;
+            })}
+          </div>
+          <div
+            style={{ display: newestSongArr.length === 0 ? "none" : "flex" }}
+            className={style.newestSongLine}
+          >
+            {newestSongArr.map((item, index) => {
+              return (
+                <NewestSong
+                  key={index}
+                  imgUrl={item.picUrl}
+                  playCount={item.playcount}
+                  name={item.name}
+                  id={item.id}
+                ></NewestSong>
               );
             })}
           </div>
