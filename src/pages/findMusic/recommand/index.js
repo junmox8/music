@@ -25,8 +25,7 @@ export default function Recommand() {
       const {
         data: { result },
       } = await getNewestMusic();
-      console.log(result);
-      // setNewestSongArr(result);
+      setNewestSongArr(result);
     })();
   }, []);
   const carousel = useRef();
@@ -34,6 +33,7 @@ export default function Recommand() {
   const [songListArr, setSongListArr] = useState([]); //歌单数组
   const [newestSongArr, setNewestSongArr] = useState([]); //最新歌曲数组
   const [bannerIndex, setIndex] = useState(0); //轮播图当前所在页数
+
   return (
     <div className={style.main}>
       <div className={style.bannerArea}>
@@ -144,9 +144,17 @@ export default function Recommand() {
                 <NewestSong
                   key={index}
                   imgUrl={item.picUrl}
-                  playCount={item.playcount}
+                  company={item.song?.album?.company}
                   name={item.name}
                   id={item.id}
+                  singers={JSON.stringify(item.song.artists)}
+                  alias={
+                    item.song.transName
+                      ? item.song.transName
+                      : item.song.alias[0]
+                      ? item.song.alias[0]
+                      : ""
+                  }
                 ></NewestSong>
               );
             })}
