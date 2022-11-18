@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import style from "./index.module.scss";
-import { getBanner } from "../../../axios/service/recommand";
+import { getBanner, getSongList } from "../../../axios/service/recommand";
 import { Carousel, Skeleton } from "antd";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
+import SonglistSkeleton from "../../../components/Skeleton/songlist/songlist";
+import Songlist from "../../../components/songlist";
 export default function Recommand() {
   useEffect(() => {
     (async function () {
@@ -10,10 +12,16 @@ export default function Recommand() {
         data: { banners },
       } = await getBanner();
       setBannerArr(banners);
+      const {
+        data: { recommend },
+      } = await getSongList();
+      console.log(recommend);
+      setSongListArr(recommend);
     })();
   }, []);
   const carousel = useRef();
   const [bannerArr, setBannerArr] = useState([]);
+  const [songListArr, setSongListArr] = useState([]); //歌单数组
   const [bannerIndex, setIndex] = useState(0); //轮播图当前所在页数
   return (
     <div className={style.main}>
@@ -50,7 +58,7 @@ export default function Recommand() {
           >
             {bannerArr.map((item, index) => {
               return (
-                <div>
+                <div key={index}>
                   <img
                     className={style.img}
                     key={index}
@@ -68,13 +76,42 @@ export default function Recommand() {
             position: "absolute",
             top: 0,
             left: 0,
-            zIndex: "10000",
+            zIndex: "100",
             display: bannerArr.length === 0 ? "block" : "none",
             textAlign: "center",
             lineHeight: "300px",
           }}
           active={true}
         />
+      </div>
+      <div className={style.songListArea}>
+        <div className={style.getSongListText}>推荐歌单</div>
+        <div className={style.songlists}>
+          <div
+            style={{ display: songListArr.length === 0 ? "flex" : "none" }}
+            className={style.songlistLine}
+          >
+            {[1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => {
+              return <SonglistSkeleton key={index}></SonglistSkeleton>;
+            })}
+          </div>
+          <div
+            style={{ display: songListArr.length === 0 ? "none" : "flex" }}
+            className={style.songlistLine}
+          >
+            {songListArr.map((item, index) => {
+              return (
+                <Songlist
+                  key={index}
+                  imgUrl={item.picUrl}
+                  playCount={item.playcount}
+                  name={item.name}
+                  id={item.id}
+                ></Songlist>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
   width: 100%;
   height: auto;
   min-height: 100%;
+  overflow: hidden;
 }
 .bannerArea {
   width: 100%;
@@ -16,7 +17,7 @@
   position: absolute;
   top: 0px;
   left: 0;
-  z-index: 1000;
+  z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +31,7 @@
   height: 300px !important;
 }
 .blurImg {
-  filter: blur(146px);
+  filter: blur(64px);
   width: 100% !important;
   height: 100%;
 }
@@ -52,4 +53,39 @@
 }
 .arrowBox:nth-child(2) {
   right: calc((100vh - 195px) * 0.3);
+}
+.songListArea {
+  width: 100%;
+  height: auto;
+  margin-top: 50px;
+  padding-left: 10%;
+  padding-right: 10%;
+  .getSongListText {
+    color: #373737;
+    font-weight: 600;
+    font-size: 20px;
+    width: fit-content;
+    cursor: pointer;
+  }
+  .getSongListText:hover {
+    color: black;
+  }
+  .getSongListText::after {
+    content: ">";
+    margin-left: 5px;
+  }
+  .songlists {
+    width: 100%;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    overflow: hidden;
+    .songlistLine {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      align-content: center;
+      flex-wrap: wrap;
+    }
+  }
 }
