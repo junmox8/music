@@ -1,6 +1,8 @@
 import { combineReducers, createStore } from "redux";
-import isLogin from "./reducers/login";
+import playSong from "./reducers/playSong";
+import setSongsArr from "./reducers/songsArr";
 const reducer = combineReducers({
-  isLogin,
+  playSong,
+  setSongsArr,
 });
 export default createStore(reducer);

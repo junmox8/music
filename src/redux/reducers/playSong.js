@@ -1,8 +1,8 @@
-export default function isLogin(init = false, action) {
+export default function playSong(init = "", action) {
   const { type, data } = action;
   switch (type) {
-    case "isLogin":
-      init = !init;
+    case "playSong":
+      init = "data";
       break;
     default:
       break;

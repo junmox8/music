@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
-import { PlayCircleFilled } from "@ant-design/icons";
+import { PlayCircleFilled, ContactsOutlined } from "@ant-design/icons";
+import { Tag, Tooltip } from "antd";
 export default function NewestSong(props) {
   useEffect(() => {
-    console.log(props);
+    setSingers(JSON.parse(props.singers));
   }, []);
+  const [singers, setSingers] = useState([]);
   return (
     <div className={style.main}>
       <div
@@ -32,7 +34,34 @@ export default function NewestSong(props) {
             ({props.alias})
           </p>
         </div>
-        <div className={style.lastContain}></div>
+        <div className={style.lastContain}>
+          <Tooltip
+            title={props.company.length === 0 ? "暂无公司" : props.company}
+          >
+            <Tag>公司</Tag>
+          </Tooltip>
+          <div className={style.singerText}>
+            {singers.map((item, index) => {
+              return (
+                <span key={index} style={{ display: "flex" }}>
+                  <span
+                    onClick={() => console.log(item.id)}
+                    className={style.singerName}
+                  >
+                    {item.name}
+                  </span>
+                  <span
+                    style={{
+                      display: index === singers.length - 1 ? "none" : "block",
+                    }}
+                  >
+                    /
+                  </span>
+                </span>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
