@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import style from "./index.module.scss";
 import Loading from "../../components/loginLoading";
 import Login from "../../components/login";
+import MusicControl from "../../components/musicControl";
 import { Layout } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { loginByQr, createQr } from "../../axios/service/login";
@@ -9,7 +10,7 @@ import { PoweroffOutlined } from "@ant-design/icons";
 import routerArr from "../../json/routerArr";
 import { connect } from "react-redux";
 const { Header, Content, Footer, Sider } = Layout;
-function Index(props) {
+export default function Index(props) {
   useEffect(() => {
     if (localStorage.getItem("cookie")) {
       //如果本地存储有cookie则登陆状态
@@ -25,7 +26,6 @@ function Index(props) {
       arr.push(index === 0 ? true : false);
     });
     setClickArr(arr);
-    console.log(props.song);
   }, []);
   const navigate = useNavigate();
   const [clickArr, setClickArr] = useState([]); //判断有没有点击路由
@@ -168,17 +168,9 @@ function Index(props) {
           </Layout>
         </Content>
         <Footer className={style.footer}>
-          <audio src={props.song} autoPlay></audio>
-          <div className={style.musicControl}></div>
+          <MusicControl></MusicControl>
         </Footer>
       </Layout>
     </div>
   );
 }
-const a = (state) => {
-  return {
-    song: state.playSong,
-  };
-};
-const b = (dispatch) => {};
-export default connect(a, b)(Index);

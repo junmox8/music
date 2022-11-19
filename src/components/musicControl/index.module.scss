@@ -1,0 +1,30 @@
+.musicControl {
+  width: 100%;
+  height: 53px;
+  .controlContent {
+    width: 80%;
+    margin-left: 10%;
+    height: 100%;
+    position: relative;
+    .btns {
+      width: fit-content;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      .icon {
+        font-size: 25px;
+        cursor: pointer;
+      }
+      .icon:hover,
+      .icon2:hover {
+        color: #898989;
+      }
+      .icon2 {
+        font-size: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
