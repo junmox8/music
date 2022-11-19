@@ -7,9 +7,9 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { loginByQr, createQr } from "../../axios/service/login";
 import { PoweroffOutlined } from "@ant-design/icons";
 import routerArr from "../../json/routerArr";
-
+import { connect } from "react-redux";
 const { Header, Content, Footer, Sider } = Layout;
-export default function Index() {
+function Index(props) {
   useEffect(() => {
     if (localStorage.getItem("cookie")) {
       //如果本地存储有cookie则登陆状态
@@ -25,6 +25,7 @@ export default function Index() {
       arr.push(index === 0 ? true : false);
     });
     setClickArr(arr);
+    console.log(props.song);
   }, []);
   const navigate = useNavigate();
   const [clickArr, setClickArr] = useState([]); //判断有没有点击路由
@@ -167,10 +168,17 @@ export default function Index() {
           </Layout>
         </Content>
         <Footer className={style.footer}>
-          <audio autoPlay></audio>
+          <audio src={props.song} autoPlay></audio>
           <div className={style.musicControl}></div>
         </Footer>
       </Layout>
     </div>
   );
 }
+const a = (state) => {
+  return {
+    song: state.playSong,
+  };
+};
+const b = (dispatch) => {};
+export default connect(a, b)(Index);

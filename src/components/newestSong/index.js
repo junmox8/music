@@ -1,15 +1,33 @@
 import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import { PlayCircleFilled, ContactsOutlined } from "@ant-design/icons";
-import { Tag, Tooltip } from "antd";
-export default function NewestSong(props) {
+import { Tag, Tooltip, message } from "antd";
+import { checkMusic, getMusicUrl } from "../../axios/service/music";
+import { connect } from "react-redux";
+import { song } from "../../redux/actions/playSong";
+function NewestSong(props) {
   useEffect(() => {
     setSingers(JSON.parse(props.singers));
   }, []);
   const [singers, setSingers] = useState([]);
+  const playSong = async (id) => {
+    const {
+      data: { success },
+    } = await checkMusic(id);
+    if (success === true) {
+      const {
+        data: { code, data: result },
+      } = await getMusicUrl(id);
+      if (code === 200) {
+        props.song(result[0].url);
+        //后续加入播放列表的操作记得补上
+      } else message.error("获取歌曲链接失败");
+    } else message.error("对不起,该音乐暂无版权");
+  };
   return (
     <div className={style.main}>
       <div
+        onClick={() => playSong(props.id)}
         style={{
           height: "100%",
           width: "15%",
@@ -66,3 +84,12 @@ export default function NewestSong(props) {
     </div>
   );
 }
+const a = (state) => {
+  return {};
+};
+const b = (dispatch) => {
+  return {
+    song: (url) => dispatch(song(url)),
+  };
+};
+export default connect(a, b)(NewestSong);
