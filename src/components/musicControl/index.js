@@ -10,11 +10,14 @@ import {
 } from "@ant-design/icons";
 import style from "./index.module.scss";
 import pubsub from "pubsub-js";
+let timeInterval = "";
 function MusicControl(props) {
   useEffect(() => {
+    //只要有歌曲传进来 立马进入播放状态
     setState(true);
   }, [props.song]);
   useEffect(() => {
+    //对传入的歌曲信息进行处理
     pubsub.subscribe("musicInfo", (_, obj) => {
       let str = "";
       JSON.parse(obj.singers).map((item, index) => {
@@ -30,8 +33,20 @@ function MusicControl(props) {
       setLength(0); //进度条清零
     });
   }, []);
-  const musicControl = useRef();
   const [playState, setState] = useState(false); //播放状态
+  useEffect(() => {
+    //如果歌曲播放 立马进入计时器
+    if (playState === true) {
+      if (slideLength >= singDetail.time) return clearInterval(timeInterval);
+      timeInterval = setInterval(() => {
+        if (slideLength === singDetail.time) return clearInterval(timeInterval);
+        setLength((value) => value + 1); //同步更新
+      }, 1000);
+    } else {
+      clearInterval(timeInterval);
+    }
+  }, [playState]);
+  const musicControl = useRef();
   const [singDetail, setDetail] = useState({
     //歌曲信息
     imgUrl: "",
