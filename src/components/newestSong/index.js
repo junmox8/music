@@ -2,9 +2,14 @@ import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import { PlayCircleFilled, ContactsOutlined } from "@ant-design/icons";
 import { Tag, Tooltip, message } from "antd";
-import { checkMusic, getMusicUrl } from "../../axios/service/music";
+import {
+  checkMusic,
+  getMusicUrl,
+  getMusicDetail,
+} from "../../axios/service/music";
 import { connect } from "react-redux";
 import { song } from "../../redux/actions/playSong";
+import pubsub from "pubsub-js";
 function NewestSong(props) {
   useEffect(() => {
     setSingers(JSON.parse(props.singers));
@@ -16,10 +21,19 @@ function NewestSong(props) {
     } = await checkMusic(id);
     if (success === true) {
       const {
-        data: { code, data: result },
+        data: { code, data: music },
       } = await getMusicUrl(id);
       if (code === 200) {
-        props.song(result[0].url);
+        props.song(music[0].url);
+        const {
+          data: { songs },
+        } = await getMusicDetail(id);
+        pubsub.publish("musicInfo", {
+          name: songs[0].name,
+          time: songs[0].dt,
+          singers: JSON.stringify(songs[0].ar),
+          img: songs[0].al.picUrl,
+        });
         //后续加入播放列表的操作记得补上
       } else message.error("获取歌曲链接失败");
     } else message.error("对不起,该音乐暂无版权");

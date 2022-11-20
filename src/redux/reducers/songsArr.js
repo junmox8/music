@@ -1,4 +1,7 @@
-export default function setSongsArr(init = [], action) {
+export default function setSongsArr(
+  init = [{ name: "", singer: "", time: "" }],
+  action
+) {
   const { type, data } = action;
   switch (type) {
     case "playSong":

@@ -5,3 +5,6 @@ export const checkMusic = (id) => {
 export const getMusicUrl = (id) => {
   return Axios.get("/api/song/url/v1?id=" + id + "&level=exhigh");
 };
+export const getMusicDetail = (id) => {
+  return Axios.get("/api/song/detail?ids=" + id);
+};
