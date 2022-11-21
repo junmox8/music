@@ -5,4 +5,44 @@
   min-height: 100%;
   padding-left: 10%;
   padding-right: 10%;
+  overflow: hidden;
+}
+.tagContent {
+  width: 100%;
+  height: 50px;
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+}
+.btn {
+  width: 100px;
+  height: 31px;
+  border-radius: 25px;
+  background-color: transparent;
+  border: 1px solid #d9d9d9;
+  color: #373737;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: center;
+  line-height: 31px;
+}
+.tags {
+  position: absolute;
+  right: 10px;
+  height: auto;
+  display: flex;
+  flex-wrap: nowrap;
+}
+.tag {
+  margin-left: 15px;
+  cursor: pointer;
+  color: #373737;
+  border-radius: 25px;
+}
+.tag:hover {
+  color: black;
 }
