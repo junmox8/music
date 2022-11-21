@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { Slider } from "antd";
+import { Slider, Space, Tooltip, Popover } from "antd";
 import timeFormat from "../../utils/songTimeChange";
 import {
   BackwardOutlined,
   ForwardOutlined,
   PlayCircleOutlined,
   PauseCircleOutlined,
+  RetweetOutlined, //顺序播放
+  SwapOutlined, //随机播放
+  RollbackOutlined, //单曲循环
+  SoundOutlined,
 } from "@ant-design/icons";
 import style from "./index.module.scss";
 import pubsub from "pubsub-js";
@@ -22,10 +26,15 @@ function MusicControl(props) {
     time: "", //以秒为单位
   });
   const [slideLength, setLength] = useState(0); //当前进度条进度 以秒为单位
+  const [playModel, setModel] = useState(0); //0顺序播放 1循环播放 2随机播放
+  const [audioSound, setSound] = useState(100); //音量大小
   useEffect(() => {
     //只要有歌曲传进来 立马进入播放状态
     setState((state) => true);
-    if (timeInterval) clearInterval(timeInterval);
+    if (timeInterval) {
+      clearInterval(timeInterval);
+      timeInterval = null;
+    } //清空定时器
     timeInterval = setInterval(() => {
       setLength((value) => value + 1); //同步更新
     }, 1000);
@@ -52,21 +61,32 @@ function MusicControl(props) {
   useEffect(() => {
     //如果歌曲播放 立马进入计时器
     if (playState === true) {
-      if (slideLength >= Number(singDetail.time) - 1)
+      if (slideLength >= Number(singDetail.time) - 1) {
         clearInterval(timeInterval);
-      else {
+        timeInterval = null;
+      } else {
+        if (timeInterval) {
+          clearInterval(timeInterval);
+          timeInterval = null;
+        }
         timeInterval = setInterval(() => {
-          if (slideLength >= Number(singDetail.time) - 1)
+          if (slideLength >= Number(singDetail.time) - 1) {
             clearInterval(timeInterval);
+            timeInterval = null;
+          }
           setLength((value) => value + 1); //同步更新
         }, 1000);
       }
     } else {
       clearInterval(timeInterval);
+      timeInterval = null;
     }
   }, [playState]);
   useEffect(() => {
-    if (slideLength >= Number(singDetail.time) - 1) clearInterval(timeInterval);
+    if (slideLength >= Number(singDetail.time) - 1) {
+      clearInterval(timeInterval);
+      timeInterval = null;
+    }
   }, [slideLength]);
 
   const changePlayState = () => {
@@ -81,6 +101,10 @@ function MusicControl(props) {
   };
   const onAfterChange = (value) => {
     musicControl.current.currentTime = value;
+  };
+  const onChange2 = (value) => {
+    setSound(value);
+    musicControl.current.volume = Number(value) / 100;
   };
   return (
     <div>
@@ -141,6 +165,55 @@ function MusicControl(props) {
                   <span style={{ color: "#747474" }}>
                     {timeFormat(singDetail.time)}
                   </span>
+                </div>
+                <div className={style.iconContent}>
+                  <Space>
+                    <Popover
+                      content={
+                        <div>
+                          <Slider
+                            style={{ height: "200px" }}
+                            vertical="true"
+                            value={audioSound}
+                            max={100}
+                            min={0}
+                            onChange={onChange2}
+                          ></Slider>
+                        </div>
+                      }
+                    >
+                      <SoundOutlined></SoundOutlined>
+                    </Popover>
+                    <Tooltip
+                      title={
+                        playModel === 0
+                          ? "顺序播放"
+                          : playModel === 1
+                          ? "单曲循环"
+                          : "随机播放"
+                      }
+                    >
+                      <RetweetOutlined
+                        onClick={() => {
+                          setModel(1);
+                        }}
+                        style={{ display: playModel === 0 ? "block" : "none" }}
+                      ></RetweetOutlined>
+
+                      <RollbackOutlined
+                        onClick={() => {
+                          setModel(2);
+                        }}
+                        style={{ display: playModel === 1 ? "block" : "none" }}
+                      ></RollbackOutlined>
+                      <SwapOutlined
+                        onClick={() => {
+                          setModel(0);
+                        }}
+                        style={{ display: playModel === 2 ? "block" : "none" }}
+                      ></SwapOutlined>
+                    </Tooltip>
+                  </Space>
                 </div>
               </div>
             </div>

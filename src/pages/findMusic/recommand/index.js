@@ -19,7 +19,7 @@ export default function Recommand() {
       } = await getBanner();
       setBannerArr(banners);
       const {
-        data: { recommend },
+        data: { result: recommend },
       } = await getSongList();
       setSongListArr(recommend);
       const {
@@ -115,7 +115,7 @@ export default function Recommand() {
                 <Songlist
                   key={index}
                   imgUrl={item.picUrl}
-                  playCount={item.playcount}
+                  playCount={item.playCount}
                   name={item.name}
                   id={item.id}
                 ></Songlist>

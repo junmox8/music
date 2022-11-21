@@ -1,0 +1,57 @@
+.main {
+  width: 100%;
+  height: 180px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.bgi {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  filter: blur(29px);
+  overflow: hidden;
+}
+.contentBox {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 102;
+  background-color: transparent;
+  padding-left: 18px;
+}
+.textBox {
+  height: 80%;
+  width: auto;
+  padding-left: 8px;
+  overflow: hidden;
+}
+.btn {
+  width: 100px;
+  height: 31px;
+  border-radius: 25px;
+  background-color: transparent;
+  border: 2px solid #e7aa5a;
+  color: #e7aa5a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 13%;
+  font-size: 13px;
+}
+.name {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 10%;
+}
