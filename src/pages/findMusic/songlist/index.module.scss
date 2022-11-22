@@ -55,9 +55,11 @@
 }
 .popContent {
   height: 380px;
+  width: 700px !important;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
+  overflow: hidden;
 }
 .songListContent {
   width: 100%;
@@ -68,12 +70,44 @@
   display: flex;
   flex-wrap: nowrap;
   height: auto;
+  margin-top: 10px;
   .left {
     width: 15%;
-    background-color: red;
+    text-align: center;
+    overflow: hidden;
+    .categories {
+      color: #333333;
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
   }
   .right {
     width: 85%;
-    background-color: blue;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    .tagInPop {
+      margin-top: 5px;
+      border-right: 2px solid #dad8df;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      border-radius: 25px;
+      width: fit-content;
+      height: fit-content;
+    }
+    .tagInPop:hover {
+      color: black;
+    }
   }
+}
+.songListContent {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }

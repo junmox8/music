@@ -2,17 +2,35 @@ import React, { useState, useEffect, useRef } from "react";
 import { getSongListTag } from "../../../axios/service/songlist";
 import { RightOutlined } from "@ant-design/icons";
 import { Popover } from "antd";
+import {
+  GlobalOutlined,
+  ProjectOutlined,
+  CoffeeOutlined,
+  SmileOutlined,
+  CustomerServiceOutlined,
+} from "@ant-design/icons";
+import SonglistSkeleton2 from "../../../components/Skeleton/songList2";
 import SonglistPageTitle from "../../../components/songListPageTitle";
 import tagArr from "../../../json/songListTag";
 import style from "./index.module.scss";
 export default function Songlist() {
   useEffect(() => {
     (async function () {
-      const result = await getSongListTag();
-      console.log(result);
+      const {
+        data: { sub, categories },
+      } = await getSongListTag();
+      let arr = [];
+      Object.keys(categories).forEach((item) => {
+        arr.push(categories[item]);
+      });
+      setCategories(arr);
+      setTags(sub);
     })();
   }, []);
   const [selectTag, setTag] = useState("");
+  const [tagCategories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [listArr, setArr] = useState([]); //歌单数组
   const select = (name) => {
     //选择标签
     setTag(name);
@@ -40,10 +58,55 @@ export default function Songlist() {
           }
           content={
             <div className={style.popContent}>
-              <div className={style.oneTagContent}>
-                <div className={style.left}></div>
-                <div className={style.right}></div>
-              </div>
+              {tagCategories.map((item, index) => {
+                return (
+                  <div key={index} className={style.oneTagContent}>
+                    <div className={style.left}>
+                      <div className={style.categories}>
+                        <GlobalOutlined
+                          style={{ display: index === 0 ? "block" : "none" }}
+                        ></GlobalOutlined>
+                        <ProjectOutlined
+                          style={{ display: index === 1 ? "block" : "none" }}
+                        ></ProjectOutlined>
+                        <CoffeeOutlined
+                          style={{ display: index === 2 ? "block" : "none" }}
+                        ></CoffeeOutlined>
+                        <SmileOutlined
+                          style={{ display: index === 3 ? "block" : "none" }}
+                        ></SmileOutlined>
+                        <CustomerServiceOutlined
+                          style={{ display: index === 4 ? "block" : "none" }}
+                        ></CustomerServiceOutlined>
+                        {item}
+                      </div>
+                    </div>
+                    <div className={style.right}>
+                      {tags.map((item, ind) => {
+                        return (
+                          <div
+                            style={{
+                              display:
+                                index == item.category ? "block" : "none",
+                              color:
+                                selectTag === item.name ? "#EC4141" : "#373737",
+                              backgroundColor:
+                                selectTag === item.name
+                                  ? "#FEF5F5"
+                                  : "transparent",
+                            }}
+                            onClick={() => select(item.name)}
+                            key={ind}
+                            className={style.tagInPop}
+                          >
+                            &nbsp;&nbsp;{item.name}&nbsp;&nbsp;
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           }
           trigger="click"
@@ -72,7 +135,16 @@ export default function Songlist() {
           })}
         </div>
       </div>
-      <div className={style.songListContent}></div>
+      <div className={style.songListContent}>
+        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => {
+          return (
+            <SonglistSkeleton2
+              key={index}
+              style={{ display: listArr.length > 0 ? "none" : "block" }}
+            ></SonglistSkeleton2>
+          );
+        })}
+      </div>
     </div>
   );
 }
