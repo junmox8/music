@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { getSongListTag } from "../../../axios/service/songlist";
 import { RightOutlined } from "@ant-design/icons";
-import { Popover } from "antd";
+import { Popover, Skeleton } from "antd";
 import {
   GlobalOutlined,
   ProjectOutlined,
@@ -9,6 +9,7 @@ import {
   SmileOutlined,
   CustomerServiceOutlined,
 } from "@ant-design/icons";
+import { getImg } from "../../../axios/service/songlist";
 import SonglistSkeleton2 from "../../../components/Skeleton/songList2";
 import SonglistPageTitle from "../../../components/songListPageTitle";
 import tagArr from "../../../json/songListTag";
@@ -25,19 +26,73 @@ export default function Songlist() {
       });
       setCategories(arr);
       setTags(sub);
+      const {
+        data: { playlists },
+      } = await getImg("全部", 1);
+      setTitleInfo({
+        img: playlists[0].coverImgUrl,
+        name: playlists[0].name,
+      });
     })();
   }, []);
   const [selectTag, setTag] = useState("");
   const [tagCategories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [listArr, setArr] = useState([]); //歌单数组
-  const select = (name) => {
-    //选择标签
+  const [noTitle, setTitle] = useState(false); //用于加载完成 但是标签没有对应封面
+  const [titleInfo, setTitleInfo] = useState({
+    img: "",
+    name: "",
+  });
+  const select = async (name) => {
+    setTitleInfo({
+      img: "",
+      name: "",
+    }); //清空封面
     setTag(name);
+    const {
+      data: { playlists },
+    } = await getImg(name, 1);
+    if (playlists.length > 0) {
+      setTitle((value) => false);
+      setTitleInfo({
+        img: playlists[0].coverImgUrl,
+        name: playlists[0].name,
+      });
+    } else setTitle(true);
   };
   return (
     <div className={style.main}>
-      <SonglistPageTitle></SonglistPageTitle>
+      <SonglistPageTitle
+        display={titleInfo.img.length >= 1 ? true : false}
+        img={titleInfo.img}
+        name={titleInfo.name}
+      ></SonglistPageTitle>
+      <div
+        style={{
+          width: "100%",
+          height: "180px",
+          position: "relative",
+          display:
+            titleInfo.img.length >= 1 || noTitle === true ? "none" : "block",
+        }}
+      >
+        <Skeleton.Image
+          style={{
+            width: "80%",
+            height: "180px",
+            position: "absolute",
+            top: 0,
+            left: "10%",
+            zIndex: "100",
+            textAlign: "center",
+            lineHeight: "180px",
+            display:
+              titleInfo.img.length >= 1 || noTitle === true ? "none" : "block",
+          }}
+          active={true}
+        />
+      </div>
       <div className={style.tagContent}>
         <Popover
           placement="bottom"
