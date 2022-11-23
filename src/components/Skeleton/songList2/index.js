@@ -1,9 +1,9 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import style from "./index.module.scss";
 import { Skeleton } from "antd";
-export default function SonglistSkeleton2(props) {
+function SonglistSkeleton2(props, ref) {
   return (
-    <div style={{ display: props.display }} className={style.main}>
+    <div ref={ref} style={{ display: props.display }} className={style.main}>
       <Skeleton.Image
         style={{ height: "190px", width: `calc((100vw - 195px) * 0.8*0.18)` }}
         className={style.skeleton}
@@ -12,3 +12,4 @@ export default function SonglistSkeleton2(props) {
     </div>
   );
 }
+export default forwardRef(SonglistSkeleton2);

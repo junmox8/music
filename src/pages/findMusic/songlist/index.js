@@ -36,7 +36,7 @@ export default function Songlist() {
       });
       const result = await getListSongs(100, 1, "全部");
       setNumber(result.data.total);
-      setArr(result.data.playlists);
+      clearCanSeeArr(result.data.playlists.length);
     })();
   }, []);
   useEffect(() => {
@@ -56,7 +56,8 @@ export default function Songlist() {
     name: "",
   });
   const page = useRef();
-  const listRef = []; //歌单数组ref
+  let [listRef, setRef] = useState([]); //歌单数组ref
+  const [canSee, setCanSee] = useState([]);
   const select = async (name) => {
     setArr([]); //清空歌单数组
     setTitleInfo({
@@ -77,6 +78,7 @@ export default function Songlist() {
     const result = await getListSongs(100, 1, name);
     setNumber(result.data.total);
     setArr(result.data.playlists);
+    clearCanSeeArr(result.data.playlists.length);
   };
   const changePageSize = async (v) => {
     const result = await getListSongs(100, v, selectTag);
@@ -84,10 +86,22 @@ export default function Songlist() {
     setTimeout(() => {
       setNumber(result.data.total);
       setArr(result.data.playlists);
+      clearCanSeeArr(result.data.playlists.length);
     }, 0);
   };
   function scroll() {
-    console.log(1);
+    listRef.forEach((item, index) => {
+      if (item) {
+        let arr = canSee;
+        arr[index] = true;
+        setCanSee(arr);
+      }
+    });
+  }
+  function clearCanSeeArr(length) {
+    let arr2 = [];
+    for (let i = 0; i <= length - 1; i++) arr2.push(false);
+    setCanSee(arr2);
   }
   return (
     <div className={style.main} ref={page}>
@@ -237,7 +251,12 @@ export default function Songlist() {
               avatar={item.creator.avatarUrl}
               creatorName={item.creator.nickname}
               icon={item.creator.avatarDetail?.identityIconUrl || ""}
-              ref={(r) => listRef.push(r)}
+              canSee={canSee[index]}
+              ref={(r) => {
+                let arr = listRef;
+                arr.push(r);
+                setRef(arr);
+              }}
               key={index}
             ></Songlist2>
           );
