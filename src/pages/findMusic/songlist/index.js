@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { getSongListTag } from "../../../axios/service/songlist";
 import { RightOutlined } from "@ant-design/icons";
-import { Popover, Skeleton } from "antd";
+import { Popover, Skeleton, Pagination } from "antd";
 import {
   GlobalOutlined,
   ProjectOutlined,
@@ -9,9 +9,10 @@ import {
   SmileOutlined,
   CustomerServiceOutlined,
 } from "@ant-design/icons";
-import { getImg } from "../../../axios/service/songlist";
+import { getImg, getListSongs } from "../../../axios/service/songlist";
 import SonglistSkeleton2 from "../../../components/Skeleton/songList2";
 import SonglistPageTitle from "../../../components/songListPageTitle";
+import Songlist2 from "../../../components/songlist2";
 import tagArr from "../../../json/songListTag";
 import style from "./index.module.scss";
 export default function Songlist() {
@@ -33,18 +34,23 @@ export default function Songlist() {
         img: playlists[0].coverImgUrl,
         name: playlists[0].name,
       });
+      const result = await getListSongs(100, 1, "全部");
+      setNumber(result.data.total);
+      setArr(result.data.playlists);
     })();
   }, []);
   const [selectTag, setTag] = useState("");
   const [tagCategories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [listArr, setArr] = useState([]); //歌单数组
+  const [listNumber, setNumber] = useState(0); //该标签对应歌单数量
   const [noTitle, setTitle] = useState(false); //用于加载完成 但是标签没有对应封面
   const [titleInfo, setTitleInfo] = useState({
     img: "",
     name: "",
   });
   const select = async (name) => {
+    setArr([]); //清空歌单数组
     setTitleInfo({
       img: "",
       name: "",
@@ -60,6 +66,17 @@ export default function Songlist() {
         name: playlists[0].name,
       });
     } else setTitle(true);
+    const result = await getListSongs(100, 1, name);
+    setNumber(result.data.total);
+    setArr(result.data.playlists);
+  };
+  const changePageSize = async (v) => {
+    const result = await getListSongs(100, v, selectTag);
+    setArr((value) => []);
+    setTimeout(() => {
+      setNumber(result.data.total);
+      setArr(result.data.playlists);
+    }, 0);
   };
   return (
     <div className={style.main}>
@@ -195,10 +212,33 @@ export default function Songlist() {
           return (
             <SonglistSkeleton2
               key={index}
-              style={{ display: listArr.length > 0 ? "none" : "block" }}
+              display={listArr.length > 0 ? "none" : "block"}
             ></SonglistSkeleton2>
           );
         })}
+        {listArr.map((item, index) => {
+          return (
+            <Songlist2
+              id={item.id}
+              name={item.name}
+              imgUrl={item.coverImgUrl}
+              playCount={item.playCount}
+              avatar={item.creator.avatarUrl}
+              creatorName={item.creator.nickname}
+              icon={item.creator.avatarDetail?.identityIconUrl || ""}
+              key={index}
+            ></Songlist2>
+          );
+        })}
+      </div>
+      <div className={style.lastContent}>
+        <Pagination
+          defaultCurrent={1}
+          pageSize={100}
+          showSizeChanger={false}
+          total={listNumber}
+          onChange={changePageSize}
+        />
       </div>
     </div>
   );
