@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import style from "./index.module.scss";
 import routerArr from "../../json/findMusicRouterArr";
-
 export default function FindMusic() {
   useEffect(() => {
     let arr = [];
@@ -14,6 +13,7 @@ export default function FindMusic() {
   }, []);
   const navigate = useNavigate();
   const [clickArr, setClickArr] = useState([]); //判断有没有点击路由
+
   const click = (index) => {
     let arr = [];
     for (let i = 0; i <= clickArr.length - 1; i++) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import style from "./index.module.scss";
 import {
   PlayCircleOutlined,
@@ -6,9 +6,9 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import numberDeal from "../../utils/playCount";
-export default function Songlist2(props) {
+function Songlist2(props, ref) {
   return (
-    <div className={style.main}>
+    <div className={style.main} ref={ref}>
       <div className={style.imgContain}>
         <div className={style.countArea}>
           <CaretRightOutlined
@@ -45,3 +45,4 @@ export default function Songlist2(props) {
     </div>
   );
 }
+export default forwardRef(Songlist2); //解决子组件不能作为ref问题

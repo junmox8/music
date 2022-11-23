@@ -39,6 +39,12 @@ export default function Songlist() {
       setArr(result.data.playlists);
     })();
   }, []);
+  useEffect(() => {
+    page.current.addEventListener("scroll", scroll);
+    return function () {
+      if (page.current) page.current.removeEventListener("scroll", scroll);
+    };
+  }, []);
   const [selectTag, setTag] = useState("");
   const [tagCategories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
@@ -49,6 +55,8 @@ export default function Songlist() {
     img: "",
     name: "",
   });
+  const page = useRef();
+  const listRef = []; //歌单数组ref
   const select = async (name) => {
     setArr([]); //清空歌单数组
     setTitleInfo({
@@ -78,8 +86,11 @@ export default function Songlist() {
       setArr(result.data.playlists);
     }, 0);
   };
+  function scroll() {
+    console.log(1);
+  }
   return (
-    <div className={style.main}>
+    <div className={style.main} ref={page}>
       <SonglistPageTitle
         display={titleInfo.img.length >= 1 ? true : false}
         img={titleInfo.img}
@@ -226,6 +237,7 @@ export default function Songlist() {
               avatar={item.creator.avatarUrl}
               creatorName={item.creator.nickname}
               icon={item.creator.avatarDetail?.identityIconUrl || ""}
+              ref={(r) => listRef.push(r)}
               key={index}
             ></Songlist2>
           );

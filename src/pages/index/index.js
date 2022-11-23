@@ -8,7 +8,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { loginByQr, createQr } from "../../axios/service/login";
 import { PoweroffOutlined } from "@ant-design/icons";
 import routerArr from "../../json/routerArr";
-import { connect } from "react-redux";
 const { Header, Content, Footer, Sider } = Layout;
 export default function Index(props) {
   useEffect(() => {

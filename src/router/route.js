@@ -1,4 +1,5 @@
 import { useRoutes, Navigate } from "react-router-dom";
+import { lazy } from "react";
 import Index from "../pages/index/index";
 import FindMusic from "../pages/findMusic/index";
 import PersonalFM from "../pages/personalFM/index";
@@ -8,6 +9,16 @@ import Songlist from "../pages/findMusic/songlist";
 import Rank from "../pages/findMusic/rank";
 import Singer from "../pages/findMusic/singer";
 import Newest from "../pages/findMusic/newest";
+// const Songlist = lazy(() => import("../pages/findMusic/songlist"));
+// const Index = lazy(() => import("../pages/index/index"));
+// const FindMusic = lazy(() => import("../pages/findMusic/index"));
+// const PersonalFM = lazy(() => import("../pages/personalFM/index"));
+// const Video = lazy(() => import("../pages/video/index"));
+// const Recommand = lazy(() => import("../pages/findMusic/recommand"));
+// const Rank = lazy(() => import("../pages/findMusic/rank"));
+// const Singer = lazy(() => import("../pages/findMusic/singer"));
+// const Newest = lazy(() => import("../pages/findMusic/newest"));
+
 const Routes = () => {
   const routes = useRoutes([
     {
