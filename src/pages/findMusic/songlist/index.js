@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, createRef } from "react";
 import { getSongListTag } from "../../../axios/service/songlist";
 import { RightOutlined } from "@ant-design/icons";
 import { Popover, Skeleton, Pagination } from "antd";
@@ -15,7 +15,15 @@ import SonglistPageTitle from "../../../components/songListPageTitle";
 import Songlist2 from "../../../components/songlist2";
 import tagArr from "../../../json/songListTag";
 import style from "./index.module.scss";
+let listRef = [];
+
 export default function Songlist() {
+  const [canSee, setCanSee] = useState([]);
+  function clearCanSeeArr(length) {
+    let arr2 = [];
+    for (let i = 0; i <= length - 1; i++) arr2.push(false);
+    setCanSee(arr2);
+  }
   useEffect(() => {
     (async function () {
       const {
@@ -36,7 +44,17 @@ export default function Songlist() {
       });
       const result = await getListSongs(100, 1, "全部");
       setNumber(result.data.total);
-      clearCanSeeArr(result.data.playlists.length);
+      setArr(result.data.playlists);
+      let arr3 = [];
+      for (let i = 0; i <= result.data.playlists.length - 1; i++)
+        arr3.push(false);
+      setCanSee(arr3);
+      //初始化ref数组
+      let arr2 = [];
+      for (let i = 0; i <= 99; i++) {
+        arr2.push(createRef());
+      }
+      listRef = arr2;
     })();
   }, []);
   useEffect(() => {
@@ -56,8 +74,7 @@ export default function Songlist() {
     name: "",
   });
   const page = useRef();
-  let [listRef, setRef] = useState([]); //歌单数组ref
-  const [canSee, setCanSee] = useState([]);
+
   const select = async (name) => {
     setArr([]); //清空歌单数组
     setTitleInfo({
@@ -78,31 +95,36 @@ export default function Songlist() {
     const result = await getListSongs(100, 1, name);
     setNumber(result.data.total);
     setArr(result.data.playlists);
-    clearCanSeeArr(result.data.playlists.length);
+    let arr3 = [];
+    for (let i = 0; i <= result.data.playlists.length - 1; i++)
+      arr3.push(false);
   };
   const changePageSize = async (v) => {
     const result = await getListSongs(100, v, selectTag);
     setArr((value) => []);
+    let arr3 = [];
+    for (let i = 0; i <= result.data.playlists.length - 1; i++)
+      arr3.push(false);
     setTimeout(() => {
       setNumber(result.data.total);
       setArr(result.data.playlists);
-      clearCanSeeArr(result.data.playlists.length);
     }, 0);
   };
   function scroll() {
     listRef.forEach((item, index) => {
-      if (item) {
+      if (
+        item.current &&
+        item.current.getBoundingClientRect().top > 64 &&
+        item.current.getBoundingClientRect().top < 0.6 * window.screen.height
+      ) {
         let arr = canSee;
         arr[index] = true;
-        setCanSee(arr);
+        setCanSee((data) => arr);
+        console.log(canSee);
       }
     });
   }
-  function clearCanSeeArr(length) {
-    let arr2 = [];
-    for (let i = 0; i <= length - 1; i++) arr2.push(false);
-    setCanSee(arr2);
-  }
+
   return (
     <div className={style.main} ref={page}>
       <SonglistPageTitle
@@ -252,11 +274,7 @@ export default function Songlist() {
               creatorName={item.creator.nickname}
               icon={item.creator.avatarDetail?.identityIconUrl || ""}
               canSee={canSee[index]}
-              ref={(r) => {
-                let arr = listRef;
-                arr.push(r);
-                setRef(arr);
-              }}
+              ref={listRef[index]}
               key={index}
             ></Songlist2>
           );
