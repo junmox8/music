@@ -10,9 +10,11 @@ export default function RankComponent(props) {
           playlist: { tracks },
         },
       } = await getRankList(props.id);
-      console.log(tracks);
+      setSongs(tracks.slice(0, 5));
+      console.log(tracks.slice(0, 5));
     })();
   }, []);
+  const [songs, setSongs] = useState([]);
   return (
     <div className={style.main}>
       <div className={style.imgContainer}>
@@ -23,6 +25,40 @@ export default function RankComponent(props) {
             style={{ color: "#ec4141", fontSize: "46px" }}
           ></PlayCircleFilled>
         </div>
+      </div>
+      <div className={style.singList}>
+        {songs.map((item, index) => {
+          return (
+            <div className={style.listContainer} key={index}>
+              <div
+                className={style.id}
+                style={{ color: index <= 2 ? "#EC4141" : "#9C9CA4" }}
+              >
+                {index + 1}
+              </div>
+              <div className={style.name}>
+                <span>{item.name}</span>
+                <span style={{ color: "#999999" }}>
+                  {item.tns && item.tns.length > 0
+                    ? `(${item.tns[0]})`
+                    : item.alia && item.alia.length > 0
+                    ? `(${item.alia[0]})`
+                    : ""}
+                </span>
+              </div>
+              <div className={style.singer}>
+                {item.ar.map((item, index) => {
+                  return (
+                    <span key={index} className={style.singerName}>
+                      {item.name}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+        <div className={style.lookAll}>查看全部</div>
       </div>
     </div>
   );
