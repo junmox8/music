@@ -24,6 +24,7 @@ function MusicControl(props) {
     name: "",
     singer: "",
     time: "", //以秒为单位
+    songUrl: "",
   });
   const [slideLength, setLength] = useState(0); //当前进度条进度 以秒为单位
   const [playModel, setModel] = useState(0); //0顺序播放 1循环播放 2随机播放
@@ -38,7 +39,7 @@ function MusicControl(props) {
     timeInterval = setInterval(() => {
       setLength((value) => value + 1); //同步更新
     }, 1000);
-  }, [props.song]);
+  }, [singDetail]);
   useEffect(() => {
     //对传入的歌曲信息进行处理
     pubsub.subscribe("musicInfo", (_, obj) => {
@@ -52,6 +53,7 @@ function MusicControl(props) {
         name: obj.name,
         singer: str,
         time: obj.time / 1000,
+        songUrl: obj.songUrl,
       });
       setLength(0); //进度条清零
     });
@@ -90,7 +92,7 @@ function MusicControl(props) {
   }, [slideLength]);
 
   const changePlayState = () => {
-    if (props.song.length > 5) {
+    if (singDetail.songUrl.length > 5) {
       if (playState === true) musicControl.current.pause();
       if (playState === false) musicControl.current.play();
       setState((state) => !state);
@@ -108,7 +110,7 @@ function MusicControl(props) {
   };
   return (
     <div>
-      <audio src={props.song} autoPlay ref={musicControl}></audio>
+      <audio src={singDetail.songUrl} autoPlay ref={musicControl}></audio>
       <div className={style.musicControl}>
         <div className={style.controlContent}>
           <div className={style.btns}>
@@ -157,7 +159,7 @@ function MusicControl(props) {
                   max={singDetail.time}
                   onChange={onChange}
                   onAfterChange={onAfterChange}
-                  disabled={props.song.length > 4 ? false : true}
+                  disabled={singDetail.songUrl.length > 4 ? false : true}
                 />
                 <div className={style.time}>
                   <span>{timeFormat(slideLength)}</span>
@@ -224,9 +226,7 @@ function MusicControl(props) {
   );
 }
 const a = (state) => {
-  return {
-    song: state.playSong,
-  };
+  return {};
 };
 const b = (dispatch) => {};
 export default connect(a, b)(MusicControl);
