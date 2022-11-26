@@ -4,6 +4,7 @@ import { getRank } from "../../../axios/service/rank";
 import RankComponent from "../../../components/rank";
 import SonglistSkeleton2 from "../../../components/Skeleton/songList2";
 import QuanqiuRank from "../../../components/rank/quanqiuRank";
+import OfficalRank from "../../../components/Skeleton/OfficalRank";
 export default function Rank() {
   useEffect(() => {
     (async function () {
@@ -20,6 +21,14 @@ export default function Rank() {
     <div className={style.main}>
       <div className={style.guanfang}>
         <div className={style.titleText}>官方榜</div>
+        {[1, 1, 1, 1].map((item, index) => {
+          return (
+            <OfficalRank
+              display={rank1.length > 0 ? "none" : "flex"}
+              key={index}
+            ></OfficalRank>
+          );
+        })}
         {rank1.map((item, index) => {
           return (
             <RankComponent
