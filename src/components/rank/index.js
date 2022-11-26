@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import { PlayCircleFilled } from "@ant-design/icons";
 import { getRankList } from "../../axios/service/rank";
+import playMusic from "../../utils/playMusic";
 export default function RankComponent(props) {
   useEffect(() => {
     (async function () {
@@ -36,7 +37,7 @@ export default function RankComponent(props) {
                 {index + 1}
               </div>
               <div className={style.name}>
-                <span>{item.name}</span>
+                <span onClick={() => playMusic(item.id)}>{item.name}</span>
                 <span style={{ color: "#999999" }}>
                   {item.tns && item.tns.length > 0
                     ? `(${item.tns[0]})`
