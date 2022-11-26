@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import style from "./index.module.scss";
 import { getRank } from "../../../axios/service/rank";
 import RankComponent from "../../../components/rank";
+import SonglistSkeleton2 from "../../../components/Skeleton/songList2";
+import QuanqiuRank from "../../../components/rank/quanqiuRank";
 export default function Rank() {
   useEffect(() => {
     (async function () {
@@ -9,6 +11,7 @@ export default function Rank() {
         data: { list },
       } = await getRank();
       setRank1(list.slice(0, 4));
+      setRank2(list.slice(4, list.length));
     })();
   }, []);
   const [rank1, setRank1] = useState([]); //前四个榜单
@@ -28,6 +31,30 @@ export default function Rank() {
             ></RankComponent>
           );
         })}
+      </div>
+      <div className={style.quanqiu}>
+        <div className={style.titleText}>全球榜</div>
+        <div className={style.content}>
+          {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => {
+            return (
+              <SonglistSkeleton2
+                display={rank2.length > 0 ? "none" : "block"}
+                key={index}
+              ></SonglistSkeleton2>
+            );
+          })}
+          {rank2.map((item, index) => {
+            return (
+              <QuanqiuRank
+                id={item.id}
+                name={item.name}
+                playCount={item.playCount}
+                img={item.coverImgUrl}
+                key={index}
+              ></QuanqiuRank>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

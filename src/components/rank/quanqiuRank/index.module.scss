@@ -1,0 +1,41 @@
+.img {
+  width: calc((100vw - 195px) * 0.8 * 0.18);
+  height: 190px !important;
+  border-radius: 12px;
+}
+.imgContain {
+  cursor: pointer;
+  position: relative;
+}
+.imgContain:hover {
+  .icon {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%);
+  }
+}
+.text {
+  width: calc((100vw - 195px) * 0.8 * 0.18);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: #373737;
+  font-size: 16px;
+  cursor: pointer;
+}
+.text:hover {
+  color: #000000;
+}
+.main {
+  height: 230px;
+  margin-bottom: 20px;
+}
+.countArea {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

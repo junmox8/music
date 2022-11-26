@@ -11,7 +11,6 @@ export default function RankComponent(props) {
         },
       } = await getRankList(props.id);
       setSongs(tracks.slice(0, 5));
-      console.log(tracks.slice(0, 5));
     })();
   }, []);
   const [songs, setSongs] = useState([]);
