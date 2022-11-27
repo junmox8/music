@@ -9,6 +9,7 @@ import Songlist from "../pages/findMusic/songlist";
 import Rank from "../pages/findMusic/rank";
 import Singer from "../pages/findMusic/singer";
 import Newest from "../pages/findMusic/newest";
+import SingerDetail from "../pages/singerDetail";
 // const Songlist = lazy(() => import("../pages/findMusic/songlist"));
 // const Index = lazy(() => import("../pages/index/index"));
 // const FindMusic = lazy(() => import("../pages/findMusic/index"));
@@ -58,6 +59,10 @@ const Routes = () => {
         {
           path: "/video",
           element: <Video />,
+        },
+        {
+          path: "/singer",
+          element: <SingerDetail />,
         },
       ],
     },

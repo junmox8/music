@@ -1,11 +1,12 @@
 .main {
   position: relative;
   width: 100%;
-  height: auto;
+  height: 100%;
+  overflow: scroll !important;
+  overflow-x: hidden !important;
   min-height: 100%;
   padding-left: 10%;
   padding-right: 10%;
-  overflow: hidden;
 }
 .popContent {
   height: auto;

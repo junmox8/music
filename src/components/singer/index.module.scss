@@ -1,5 +1,26 @@
 .main {
-  height: 190px;
+  height: 210px;
   width: calc((100vw - 195px) * 0.8 * 0.16);
   margin-top: 20px;
+}
+.img {
+  width: calc((100vw - 195px) * 0.8 * 0.16);
+  height: 180px !important;
+  border-radius: 12px;
+}
+.imgContain {
+  cursor: pointer;
+  position: relative;
+}
+.text {
+  max-width: calc((100vw - 195px) * 0.8 * 0.16);
+  width: fit-content;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: #373737;
+  font-size: 16px;
+  cursor: pointer;
 }

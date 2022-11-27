@@ -10,11 +10,17 @@ import numberDeal from "../../utils/playCount";
 function Songlist2(props, ref) {
   return (
     <div ref={ref}>
-      <div style={{ display: props.canSee === false ? "block" : "none" }}>
+      <div
+        style={{
+          display: props.canSee === false ? "block" : "none",
+        }}
+      >
         <SonglistSkeleton2></SonglistSkeleton2>
       </div>
       <div
-        style={{ display: props.canSee === false ? "none" : "block" }}
+        style={{
+          display: props.canSee === false ? "none" : "block",
+        }}
         className={style.main}
       >
         <div className={style.imgContain}>

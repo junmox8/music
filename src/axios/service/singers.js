@@ -1,5 +1,5 @@
 import Axios from "../index";
-export const getSingerList = (page, initial, type, area) => {
+export const getSingerList = (page, initial, area, type) => {
   //获取歌手列表
   if (initial === "热门")
     return Axios.get(
@@ -8,7 +8,9 @@ export const getSingerList = (page, initial, type, area) => {
         "&type=" +
         type +
         "&area=" +
-        area
+        area +
+        "&timestamp=" +
+        Date.now()
     );
   return Axios.get(
     "/api/artist/list?offset=" +
@@ -17,7 +19,9 @@ export const getSingerList = (page, initial, type, area) => {
       type +
       "&area=" +
       area +
-      "&inital=" +
-      initial
+      "&initial=" +
+      initial +
+      "&timestamp=" +
+      Date.now()
   );
 };

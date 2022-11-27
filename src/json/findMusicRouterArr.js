@@ -15,8 +15,4 @@ export default [
     name: "歌手",
     path: "/findMusic/singer",
   },
-  {
-    name: "最新音乐",
-    path: "/findMusic/newest",
-  },
 ];

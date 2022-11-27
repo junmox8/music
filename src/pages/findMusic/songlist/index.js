@@ -18,13 +18,14 @@ import style from "./index.module.scss";
 let listRef = [];
 
 export default function Songlist() {
-  const [canSee, setCanSee] = useState([]);
+  const [canSee, setCanSeeArr] = useState([]);
   function clearCanSeeArr(length) {
-    let arr2 = [];
-    for (let i = 0; i <= length - 1; i++) arr2.push(false);
-    setCanSee(arr2);
+    let arr = [];
+    for (let i = 0; i <= length - 1; i++) arr.push(false);
+    setCanSeeArr(arr);
   }
   useEffect(() => {
+    clearCanSeeArr(100);
     (async function () {
       const {
         data: { sub, categories },
@@ -45,10 +46,6 @@ export default function Songlist() {
       const result = await getListSongs(100, 1, "全部");
       setNumber(result.data.total);
       setArr(result.data.playlists);
-      let arr3 = [];
-      for (let i = 0; i <= result.data.playlists.length - 1; i++)
-        arr3.push(false);
-      setCanSee(arr3);
       //初始化ref数组
       let arr2 = [];
       for (let i = 0; i <= 99; i++) {
@@ -77,6 +74,7 @@ export default function Songlist() {
 
   const select = async (name) => {
     setArr([]); //清空歌单数组
+    setCanSeeArr([]);
     setTitleInfo({
       img: "",
       name: "",
@@ -95,16 +93,13 @@ export default function Songlist() {
     const result = await getListSongs(100, 1, name);
     setNumber(result.data.total);
     setArr(result.data.playlists);
-    let arr3 = [];
-    for (let i = 0; i <= result.data.playlists.length - 1; i++)
-      arr3.push(false);
+    clearCanSeeArr(result.data.playlists.length);
   };
   const changePageSize = async (v) => {
+    setCanSeeArr([]);
     const result = await getListSongs(100, v, selectTag);
     setArr((value) => []);
-    let arr3 = [];
-    for (let i = 0; i <= result.data.playlists.length - 1; i++)
-      arr3.push(false);
+    clearCanSeeArr(result.data.playlists.length);
     setTimeout(() => {
       setNumber(result.data.total);
       setArr(result.data.playlists);
@@ -119,7 +114,7 @@ export default function Songlist() {
       ) {
         let arr = canSee;
         arr[index] = true;
-        setCanSee((data) => arr);
+        setCanSeeArr((data) => arr);
         console.log(canSee);
       }
     });
@@ -273,7 +268,9 @@ export default function Songlist() {
               avatar={item.creator.avatarUrl}
               creatorName={item.creator.nickname}
               icon={item.creator.avatarDetail?.identityIconUrl || ""}
-              canSee={canSee[index]}
+              canSee={
+                typeof canSee[index] == "undefined" ? false : canSee[index]
+              }
               ref={listRef[index]}
               key={index}
             ></Songlist2>
