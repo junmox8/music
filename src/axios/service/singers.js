@@ -31,3 +31,10 @@ export const getSingerDesc = (id) => {
 export const getSingerDetail = (id) => {
   return Axios.get("/api/artist/detail?id=" + id);
 };
+export const findOutUserCollection = () => {
+  return Axios.get("/api/artist/sublist?timestamp=" + Date.now());
+};
+export const collectSingerOrNot = (id, t) => {
+  //1为收藏 其他为取消收藏
+  return Axios.get("/api/artist/sub?id=" + id + "&t=" + t);
+};

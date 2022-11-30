@@ -106,9 +106,7 @@ function Index(props) {
           <Loading display={isLoading}></Loading>
           <CollectSinger
             display={
-              props.loading === true && props.loadingType === 1
-                ? "block"
-                : "none"
+              props.loading === true && props.loadingType === 1 ? true : false
             }
           ></CollectSinger>
         </div>
