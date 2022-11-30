@@ -8,8 +8,9 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { loginByQr, createQr } from "../../axios/service/login";
 import { PoweroffOutlined } from "@ant-design/icons";
 import routerArr from "../../json/routerArr";
+import { connect } from "react-redux";
 const { Header, Content, Footer, Sider } = Layout;
-export default function Index(props) {
+function Index(props) {
   useEffect(() => {
     if (localStorage.getItem("cookie")) {
       //如果本地存储有cookie则登陆状态
@@ -72,12 +73,18 @@ export default function Index(props) {
       <div
         className={style.loadingBox}
         style={{
-          display: isLogin === true || isLoading === true ? "block" : "none",
+          display:
+            isLogin === true || isLoading === true || props.loading === true
+              ? "block"
+              : "none",
         }}
       >
         <div
           style={{
-            display: isLogin === true || isLoading === true ? "block" : "none",
+            display:
+              isLogin === true || isLoading === true || props.loading === true
+                ? "block"
+                : "none",
           }}
           className={style.box}
         >
@@ -173,3 +180,12 @@ export default function Index(props) {
     </div>
   );
 }
+const a = (state) => {
+  return {
+    loading: state.loading,
+  };
+};
+const b = (dispatch) => {
+  return {};
+};
+export default connect(a, b)(Index);

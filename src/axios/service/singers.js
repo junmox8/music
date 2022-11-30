@@ -25,3 +25,9 @@ export const getSingerList = (page, initial, area, type) => {
       Date.now()
   );
 };
+export const getSingerDesc = (id) => {
+  return Axios.get("/api/artist/desc?id=" + id);
+};
+export const getSingerDetail = (id) => {
+  return Axios.get("/api/artist/detail?id=" + id);
+};

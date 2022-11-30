@@ -1,6 +1,8 @@
 import { combineReducers, createStore } from "redux";
-import setSongsArr from "./reducers/songsArr";
+import songsArr from "./reducers/songsArr";
+import loading from "./reducers/loading";
 const reducer = combineReducers({
-  setSongsArr,
+  songsArr,
+  loading,
 });
 export default createStore(reducer);
