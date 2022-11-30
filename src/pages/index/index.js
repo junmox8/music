@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import style from "./index.module.scss";
-import Loading from "../../components/loginLoading";
+import Loading from "../../components/loading/loginLoading";
+import CollectSinger from "../../components/loading/collectSinger";
 import Login from "../../components/login";
 import MusicControl from "../../components/musicControl";
 import { Layout } from "antd";
@@ -103,6 +104,13 @@ function Index(props) {
             }}
           ></Login>
           <Loading display={isLoading}></Loading>
+          <CollectSinger
+            display={
+              props.loading === true && props.loadingType === 1
+                ? "block"
+                : "none"
+            }
+          ></CollectSinger>
         </div>
       </div>
       <Layout style={{ height: "100%" }}>
@@ -183,6 +191,7 @@ function Index(props) {
 const a = (state) => {
   return {
     loading: state.loading,
+    loadingType: state.loadingType,
   };
 };
 const b = (dispatch) => {

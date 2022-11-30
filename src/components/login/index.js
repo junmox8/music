@@ -14,11 +14,12 @@ import {
   loginByCaptcha,
 } from "../../axios/service/login";
 import { message, Input, Spin } from "antd";
+import { connect } from "react-redux";
 let interval = null; //useEffect定时器
 let time = null; //登录节流
 const reg_tel =
   /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/; //手机号正则表达式
-export default function Login(props) {
+function Login(props) {
   const [qrState, setState] = useState(801); //801代表待扫码 802为待确认 803为登陆成功 800为过期
   const [page, changePage] = useState(0); //0代码是扫码页面 1代表是手机号登录页面
   const [type, setType] = useState(1); //0代表扫码登陆 1代表密码 2代表验证码 (这个是表单登录页面 所以一般不用0)
@@ -139,6 +140,7 @@ export default function Login(props) {
             password: "",
             captcha: "",
           });
+          props.setLogin(true);
           message.success("登陆成功");
         }
         if (result && result.data && result.data.code !== 200)
@@ -344,3 +346,10 @@ export default function Login(props) {
     </div>
   );
 }
+const a = null;
+const b = (dispatch) => {
+  return {
+    setLogin: (value) => dispatch({ type: "setLoginType", data: value }),
+  };
+};
+export default connect(a, b)(Login);
