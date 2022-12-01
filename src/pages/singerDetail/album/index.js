@@ -4,6 +4,7 @@ import {
   getSingerHotSongs,
 } from "../../../axios/service/singers";
 import style from "./index.module.scss";
+import Song from "../../../components/song";
 import { PlayCircleOutlined } from "@ant-design/icons";
 import { useSearchParams } from "react-router-dom";
 import { connect } from "react-redux";
@@ -31,6 +32,17 @@ export default function Album(props) {
             style={{ marginLeft: "25px", cursor: "pointer" }}
           ></PlayCircleOutlined>
         </div>
+        {hotSongs.map((item, index) => {
+          return (
+            <Song
+              name={item.name}
+              engName={item.alia.length > 0 ? item.alia[0] : ""}
+              key={index}
+              id={item.id}
+              fee={item.fee} //会员非会员区别
+            ></Song>
+          );
+        })}
       </div>
     </div>
   );

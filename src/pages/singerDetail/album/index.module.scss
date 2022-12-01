@@ -10,7 +10,7 @@
   }
   .singContent {
     width: calc(100% - 237px);
-    height: 300px;
+    min-height: 300px;
     margin-left: 25px;
     .firstLine {
       display: flex;
