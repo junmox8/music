@@ -38,3 +38,8 @@ export const collectSingerOrNot = (id, t) => {
   //1为收藏 其他为取消收藏
   return Axios.get("/api/artist/sub?id=" + id + "&t=" + t);
 };
+export const getSingerAlbum = (id, offset) => {
+  return Axios.get(
+    "/api/artist/album?id=" + id + "&limit=5" + "&offset=" + (offset - 1) * 5
+  );
+};
