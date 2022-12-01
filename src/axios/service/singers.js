@@ -43,3 +43,6 @@ export const getSingerAlbum = (id, offset) => {
     "/api/artist/album?id=" + id + "&limit=5" + "&offset=" + (offset - 1) * 5
   );
 };
+export const getSingerHotSongs = (id) => {
+  return Axios.get("/api/artist/top/song?id=" + id);
+};
