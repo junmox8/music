@@ -123,7 +123,6 @@ function Login(props) {
             loginForm.phoneNumber,
             loginForm.captcha
           );
-          console.log(result);
         }
         if (result && result.data && result.data.code == 200) {
           const {
