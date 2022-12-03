@@ -3,6 +3,7 @@ import songsArr from "./reducers/songsArr";
 import loading from "./reducers/loading";
 import loginType from "./reducers/loginType";
 import loadingType from "./reducers/loadingType";
+import userInfo from "./reducers/userInfo";
 import { persistReducer, persistStore } from "redux-persist"; //持久化
 import storage from "redux-persist/lib/storage";
 
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   loading,
   loadingType,
   loginType,
+  userInfo,
 });
 
 const persist_reducers = persistReducer(persitConfig, reducer);

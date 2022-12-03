@@ -3,15 +3,16 @@ import style from "./index.module.scss";
 import add0 from "../../utils/add0";
 import { message } from "antd";
 import { HeartOutlined, DownloadOutlined } from "@ant-design/icons";
+import { connect } from "react-redux";
 import playMusic from "../../utils/playMusic";
 import timeFormat from "../../utils/songTimeChange";
-export default function Song(props) {
+function Song(props) {
   return (
     <div
       onClick={() => props.c(props.index)}
       className={style.main}
       onDoubleClick={() => {
-        if (props.fee === 1 || props.fee === 4)
+        if ((props.fee === 1 || props.fee === 4) && props.userInfo.vip === 0)
           return message.error("该歌曲需要vip");
         playMusic(props.id);
       }}
@@ -49,3 +50,10 @@ export default function Song(props) {
     </div>
   );
 }
+const a = (state) => {
+  return {
+    userInfo: state.userInfo,
+  };
+};
+const b = null;
+export default connect(a, b)(Song);

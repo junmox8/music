@@ -13,14 +13,6 @@ import { connect } from "react-redux";
 const { Header, Content, Footer, Sider } = Layout;
 function Index(props) {
   useEffect(() => {
-    if (localStorage.getItem("cookie")) {
-      //如果本地存储有cookie则登陆状态
-      setState(true);
-      setUserInfo({
-        name: localStorage.getItem("name"),
-        avatar: localStorage.getItem("avatar"),
-      });
-    }
     navigate(routerArr[0].path, { replace: true });
     let arr = [];
     routerArr.forEach((item, index) => {
@@ -34,13 +26,6 @@ function Index(props) {
   const [isLoading, setLoading] = useState(false); //控制loading显示
   const [qrimg, setImgUrl] = useState(""); //二维码图片url
   const [qrkey, setQrKey] = useState(""); //二维码图片key
-  const [loginState, setState] = useState(false); //登陆状态
-  const [userInfo, setUserInfo] = useState({
-    //用户头像姓名
-    name: "未登录",
-    avatar:
-      "https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1668333498132",
-  });
   const exitBox = useRef();
   const click = (index) => {
     let arr = [];
@@ -51,7 +36,7 @@ function Index(props) {
     navigate(routerArr[index].path);
   };
   const login = async () => {
-    if (loginState === false) {
+    if (props.userInfo.isLogin === false) {
       setLoading(true);
       const {
         data: {
@@ -96,12 +81,6 @@ function Index(props) {
             closeBox={() => {
               setLogin(false);
             }}
-            sendUserInfo={(userInfo) => {
-              setUserInfo(userInfo);
-              setState(true);
-              localStorage.setItem("name", userInfo.name);
-              localStorage.setItem("avatar", userInfo.avatar);
-            }}
           ></Login>
           <Loading display={isLoading}></Loading>
           <CollectSinger
@@ -125,7 +104,7 @@ function Index(props) {
             className={style.infoContainer}
             onClick={login}
             onMouseOver={() => {
-              if (loginState === true) {
+              if (props.userInfo.isLogin === true) {
                 exitBox.current.style.visibility = "visible";
                 exitBox.current.style.opacity = 1;
               }
@@ -135,20 +114,18 @@ function Index(props) {
               exitBox.current.style.opacity = 0;
             }}
           >
-            <img className={style.avatar} src={userInfo.avatar}></img>
-            <div className={style.loginText}>{userInfo.name}</div>
+            <img className={style.avatar} src={props.userInfo.avatar}></img>
+            <div className={style.loginText}>{props.userInfo.name}</div>
             <div
               ref={exitBox}
               className={style.exitBox}
               onClick={() => {
-                setState(false);
-                localStorage.removeItem("cookie");
-                localStorage.removeItem("name");
-                localStorage.removeItem("avatar");
-                setUserInfo({
+                props.setUserInfo({
                   name: "未登录",
                   avatar:
                     "https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1668333498132",
+                  vip: 0,
+                  isLogin: false,
                 });
               }}
             >
@@ -190,9 +167,16 @@ const a = (state) => {
   return {
     loading: state.loading,
     loadingType: state.loadingType,
+    userInfo: state.userInfo,
   };
 };
 const b = (dispatch) => {
-  return {};
+  return {
+    setUserInfo: (value) =>
+      dispatch({
+        type: "setUserInfo",
+        data: value,
+      }),
+  };
 };
 export default connect(a, b)(Index);

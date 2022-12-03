@@ -127,19 +127,23 @@ function Login(props) {
         if (result && result.data && result.data.code == 200) {
           const {
             data: {
-              profile: { nickname: name, avatarUrl: avatar },
+              profile: { nickname: name, avatarUrl: avatar, vipType },
               cookie,
             },
           } = result;
           props.closeBox();
           localStorage.setItem("cookie", cookie);
-          props.sendUserInfo({ name, avatar });
           setForm({
             phoneNumber: "",
             password: "",
             captcha: "",
           });
-          props.setLogin(true);
+          props.setUserInfo({
+            name,
+            avatar,
+            vip: vipType,
+            isLogin: true,
+          });
           message.success("登陆成功");
         }
         if (result && result.data && result.data.code !== 200)
@@ -348,7 +352,11 @@ function Login(props) {
 const a = null;
 const b = (dispatch) => {
   return {
-    setLogin: (value) => dispatch({ type: "setLoginType", data: value }),
+    setUserInfo: (value) =>
+      dispatch({
+        type: "setUserInfo",
+        data: value,
+      }),
   };
 };
 export default connect(a, b)(Login);
