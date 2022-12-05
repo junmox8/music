@@ -1,3 +1,5 @@
+//此方法会使歌曲位置发生改变 单首歌unshift进歌曲数组里
+//播放单首歌曲
 import { message } from "antd";
 import {
   checkMusic,

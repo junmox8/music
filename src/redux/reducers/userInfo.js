@@ -5,6 +5,7 @@ export default function userInfo(
       "https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1668333498132",
     vip: 0,
     isLogin: false,
+    userId: 0,
   },
   { type, data }
 ) {

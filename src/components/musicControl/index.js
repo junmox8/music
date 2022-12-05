@@ -4,6 +4,7 @@ import { Slider, Space, Tooltip, Popover } from "antd";
 import timeFormat from "../../utils/songTimeChange";
 import arrGetRid from "../../utils/arrGetRid";
 import playMusic from "../../utils/playMusic";
+import PrevOrNextPlayMusic from "../../utils/prevOrNextPlayMusic";
 import {
   BackwardOutlined,
   ForwardOutlined,
@@ -15,6 +16,7 @@ import {
   SoundOutlined,
 } from "@ant-design/icons";
 import style from "./index.module.scss";
+import { getMusicDetail, getMusicUrl } from "../../axios/service/music";
 import pubsub from "pubsub-js";
 let timeInterval = null;
 function MusicControl(props) {
@@ -69,6 +71,23 @@ function MusicControl(props) {
         id: obj.id,
       });
       props.setSongsArr(arrGetRid(arr));
+    });
+    pubsub.subscribe("prevOrNext", (_, obj) => {
+      //上一首/下一首
+      let str = "";
+      JSON.parse(obj.singers).map((item, index) => {
+        if (index === JSON.parse(obj.singers).length - 1) str += item.name;
+        else str += item.name + "/";
+      });
+      setDetail({
+        imgUrl: obj.img,
+        name: obj.name,
+        singer: str,
+        time: obj.time / 1000,
+        songUrl: obj.songUrl,
+        id: obj.id,
+      });
+      setLength(0); //进度条清零
     });
     setState((state) => false); //初始化停止播放歌曲
   }, []);
@@ -142,13 +161,40 @@ function MusicControl(props) {
     setSound(value);
     musicControl.current.volume = Number(value) / 100;
   };
+  const prevOrNext = (type) => {
+    //0为prev 1为next
+    //这里默认歌曲列表的歌都是有权限的 后续添加歌曲之前记得判断权限
+    //不调用playMusic方法 因为此方法会导致播放歌曲时 歌曲位置改变
+    props.songsArr.map((item, index) => {
+      if (item.id == singDetail.id) {
+        if (
+          (index !== props.songsArr.length - 1 && type === 1) ||
+          (index !== 0 && type === 0)
+        )
+          PrevOrNextPlayMusic(
+            type === 0
+              ? props.songsArr[index - 1].id
+              : props.songsArr[index + 1].id
+          );
+        else
+          PrevOrNextPlayMusic(
+            type === 0
+              ? props.songsArr[props.songsArr.length - 1].id
+              : props.songsArr[0].id
+          );
+      }
+    });
+  };
   return (
     <div>
       <audio src={singDetail.songUrl} autoPlay ref={musicControl}></audio>
       <div className={style.musicControl}>
         <div className={style.controlContent}>
           <div className={style.btns}>
-            <BackwardOutlined className={style.icon} />
+            <BackwardOutlined
+              className={style.icon}
+              onClick={() => prevOrNext(0)}
+            />
             <PauseCircleOutlined
               onClick={changePlayState}
               style={{ display: playState === true ? "block" : "none" }}
@@ -159,7 +205,10 @@ function MusicControl(props) {
               style={{ display: playState === false ? "block" : "none" }}
               className={style.icon2}
             ></PlayCircleOutlined>
-            <ForwardOutlined className={style.icon}></ForwardOutlined>
+            <ForwardOutlined
+              className={style.icon}
+              onClick={() => prevOrNext(1)}
+            ></ForwardOutlined>
           </div>
           <div className={style.songDetail}>
             <div

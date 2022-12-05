@@ -11,3 +11,11 @@ export const getMusicDetail = (id) => {
 export const getRecentSong = () => {
   return Axios.get("/api/record/recent/song?timestamp=" + Date.now());
 };
+export const likeMusic = (id, like) => {
+  return Axios.get(
+    "/api/like?id=" + id + "&like=" + like + "&timestamp=" + Date.now()
+  );
+};
+export const getUserLikeMusics = (uid) => {
+  return Axios.get("/api/likelist?uid=" + uid);
+};

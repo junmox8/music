@@ -127,7 +127,7 @@ function Login(props) {
         if (result && result.data && result.data.code == 200) {
           const {
             data: {
-              profile: { nickname: name, avatarUrl: avatar, vipType },
+              profile: { nickname: name, avatarUrl: avatar, vipType, userId },
               cookie,
             },
           } = result;
@@ -143,6 +143,7 @@ function Login(props) {
             avatar,
             vip: vipType,
             isLogin: true,
+            userId,
           });
           message.success("登陆成功");
         }

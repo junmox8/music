@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import add0 from "../../utils/add0";
 import { message } from "antd";
 import { HeartOutlined, DownloadOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import playMusic from "../../utils/playMusic";
+import { likeMusic } from "../../axios/service/music";
 import timeFormat from "../../utils/songTimeChange";
+
 function Song(props) {
+  useEffect(() => {
+    console.log(props.isLike);
+    setLike(props.isLike);
+  }, []);
+  const [like, setLike] = useState(false); //是否喜欢该歌曲
+  const likeOrNotLike = async () => {
+    const result = await likeMusic(props.id, !like);
+    if (result.data.code === 200) {
+      if (like === false) message.success("喜欢该歌曲");
+      else message.success("取消喜欢该歌曲");
+      setLike((value) => !value);
+    } else message.error("操作失败,请稍后重试");
+  };
   return (
     <div
       onClick={() => props.c(props.index)}
@@ -26,8 +41,10 @@ function Song(props) {
       }}
     >
       <div className={style.xuhao}>{add0(props.index + 1)}</div>
-      <div className={style.aixin}>
-        <HeartOutlined></HeartOutlined>
+      <div className={style.aixin} onClick={likeOrNotLike}>
+        <HeartOutlined
+          style={{ color: like === true ? "#EC4141" : "#d7d7d7" }}
+        ></HeartOutlined>
       </div>
       <div className={style.download}>
         <DownloadOutlined></DownloadOutlined>
