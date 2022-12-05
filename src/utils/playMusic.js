@@ -23,6 +23,7 @@ export default async function playMusic(id) {
         time: songs[0].dt,
         singers: JSON.stringify(songs[0].ar),
         img: songs[0].al.picUrl,
+        id,
       });
       //后续加入播放列表的操作记得补上
     } else message.error("获取歌曲链接失败");

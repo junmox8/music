@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { Slider, Space, Tooltip, Popover } from "antd";
 import timeFormat from "../../utils/songTimeChange";
+import arrGetRid from "../../utils/arrGetRid";
+import playMusic from "../../utils/playMusic";
 import {
   BackwardOutlined,
   ForwardOutlined,
@@ -25,6 +27,7 @@ function MusicControl(props) {
     singer: "",
     time: "", //以秒为单位
     songUrl: "",
+    id: 0,
   });
   const [slideLength, setLength] = useState(0); //当前进度条进度 以秒为单位
   const [playModel, setModel] = useState(0); //0顺序播放 1循环播放 2随机播放
@@ -54,8 +57,18 @@ function MusicControl(props) {
         singer: str,
         time: obj.time / 1000,
         songUrl: obj.songUrl,
+        id: obj.id,
       });
       setLength(0); //进度条清零
+      //把歌曲加到歌单列表
+      let arr = props.songsArr;
+      arr.unshift({
+        name: obj.name,
+        singer: str,
+        time: timeFormat(obj.time / 1000),
+        id: obj.id,
+      });
+      props.setSongsArr(arrGetRid(arr));
     });
     setState((state) => false); //初始化停止播放歌曲
   }, []);
@@ -88,6 +101,27 @@ function MusicControl(props) {
     if (slideLength >= Number(singDetail.time) - 1) {
       clearInterval(timeInterval);
       timeInterval = null;
+      if (playModel === 0) {
+        //顺序播放
+        props.songsArr.map((item, index) => {
+          if (item.id === singDetail.id) {
+            if (index !== props.songsArr.length - 1) {
+              playMusic(props.songsArr[index + 1].id);
+            } else {
+              playMusic(props.songsArr[0].id);
+            }
+          }
+        });
+      }
+      if (playModel === 1) {
+        //单曲循环
+        playMusic(singDetail.id);
+      }
+      if (playModel === 2) {
+        //随机播放
+        const index = Math.floor(Math.random() * props.songsArr.length);
+        playMusic(props.songsArr[index].id);
+      }
     }
   }, [slideLength]);
 
@@ -226,7 +260,14 @@ function MusicControl(props) {
   );
 }
 const a = (state) => {
-  return {};
+  return {
+    songsArr: state.songsArr,
+  };
 };
-const b = (dispatch) => {};
+const b = (dispatch) => {
+  return {
+    setSongsArr: (value) => dispatch({ type: "setSongsArr", data: value }),
+    addSongToArr: (value) => dispatch({ type: "addSongToArr", data: value }),
+  };
+};
 export default connect(a, b)(MusicControl);

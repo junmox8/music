@@ -127,6 +127,7 @@ function Index(props) {
                   vip: 0,
                   isLogin: false,
                 });
+                localStorage.removeItem("cookie");
               }}
             >
               <PoweroffOutlined />

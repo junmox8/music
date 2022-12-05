@@ -8,3 +8,6 @@ export const getMusicUrl = (id) => {
 export const getMusicDetail = (id) => {
   return Axios.get("/api/song/detail?ids=" + id);
 };
+export const getRecentSong = () => {
+  return Axios.get("/api/record/recent/song?timestamp=" + Date.now());
+};
