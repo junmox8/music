@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { Slider, Space, Tooltip, Popover } from "antd";
-import timeFormat from "../../utils/songTimeChange";
+import timeFormat, { changeTime } from "../../utils/songTimeChange";
 import arrGetRid from "../../utils/arrGetRid";
 import playMusic from "../../utils/playMusic";
 import PrevOrNextPlayMusic from "../../utils/prevOrNextPlayMusic";
@@ -16,7 +16,7 @@ import {
   SoundOutlined,
 } from "@ant-design/icons";
 import style from "./index.module.scss";
-import { getMusicDetail, getMusicUrl } from "../../axios/service/music";
+import { getMusicUrl } from "../../axios/service/music";
 import pubsub from "pubsub-js";
 let timeInterval = null;
 function MusicControl(props) {
@@ -86,6 +86,23 @@ function MusicControl(props) {
         time: obj.time / 1000,
         songUrl: obj.songUrl,
         id: obj.id,
+      });
+      setLength(0); //进度条清零
+    });
+    pubsub.subscribe("playAllMusic", async (_, arr) => {
+      //播放整个歌单 把歌单第一首播放
+
+      props.setSongsArr(arr);
+      const {
+        data: { code, data: music },
+      } = await getMusicUrl(arr[0].id);
+      setDetail({
+        imgUrl: arr[0].img,
+        name: arr[0].name,
+        singer: arr[0].singer,
+        time: changeTime(arr[0].time),
+        songUrl: music[0].url,
+        id: arr[0].id,
       });
       setLength(0); //进度条清零
     });

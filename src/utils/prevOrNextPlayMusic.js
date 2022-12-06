@@ -1,5 +1,4 @@
 //此方法用于上/下一首播放歌曲 不会使位置改变
-//此方法会使歌曲位置发生改变 单首歌unshift进歌曲数组里
 //默认不判断歌曲版权
 import { message } from "antd";
 import { getMusicUrl, getMusicDetail } from "../axios/service/music";

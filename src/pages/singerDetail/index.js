@@ -15,13 +15,14 @@ import style from "./index.module.scss";
 function SingerDetail(props) {
   useEffect(() => {
     (async function () {
-      if (props.loginState === true) {
+      if (props.userInfo.isLogin === true) {
         const {
           data: { data },
         } = await findOutUserCollection();
         let end = data.some((item) => {
           return item.id == singerId;
         });
+        console.log(end);
         setState(end);
       }
       let arr = [];
@@ -158,7 +159,7 @@ function SingerDetail(props) {
 }
 const a = (state) => {
   return {
-    loginState: state.loginType,
+    userInfo: state.userInfo,
   };
 };
 const b = (dispatch) => {

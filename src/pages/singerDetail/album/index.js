@@ -4,6 +4,7 @@ import {
   getSingerHotSongs,
 } from "../../../axios/service/singers";
 import { getUserLikeMusics } from "../../../axios/service/music";
+import PlayAllMusic from "../../../utils/playAllMusic";
 import style from "./index.module.scss";
 import Song from "../../../components/song";
 import AlbumComponent from "../../../components/album";
@@ -60,7 +61,9 @@ function Album(props) {
     setSelect(arr);
   };
   const scroll = async () => {};
-  const playAllSongs = async () => {};
+  const playAllSongs = async () => {
+    PlayAllMusic(hotSongs, props.userInfo.isLogin);
+  };
   return (
     <div className={style.main} onScroll={scroll}>
       <div className={style.hotSongImg}></div>
