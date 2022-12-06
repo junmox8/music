@@ -17,5 +17,8 @@ export const likeMusic = (id, like) => {
   );
 };
 export const getUserLikeMusics = (uid) => {
-  return Axios.get("/api/likelist?uid=" + uid);
+  return Axios.get("/api/likelist?uid=" + uid + "&timestamp=" + Date.now());
+};
+export const downloadMusic = (id) => {
+  return Axios.get("/api/song/download/url?id=" + id);
 };

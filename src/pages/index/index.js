@@ -128,6 +128,7 @@ function Index(props) {
                   isLogin: false,
                 });
                 localStorage.removeItem("cookie");
+                props.setSongsArr([]); //清空歌曲列表
               }}
             >
               <PoweroffOutlined />
@@ -176,6 +177,11 @@ const b = (dispatch) => {
     setUserInfo: (value) =>
       dispatch({
         type: "setUserInfo",
+        data: value,
+      }),
+    setSongsArr: (value) =>
+      dispatch({
+        type: "setSongsArr",
         data: value,
       }),
   };

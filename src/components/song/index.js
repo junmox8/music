@@ -5,22 +5,32 @@ import { message } from "antd";
 import { HeartOutlined, DownloadOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import playMusic from "../../utils/playMusic";
-import { likeMusic } from "../../axios/service/music";
+import { likeMusic, downloadMusic } from "../../axios/service/music";
 import timeFormat from "../../utils/songTimeChange";
 
 function Song(props) {
   useEffect(() => {
-    console.log(props.isLike);
     setLike(props.isLike);
+    (async function () {
+      const {
+        data: {
+          data: { url },
+        },
+      } = await downloadMusic(props.id);
+      setUrl(url);
+    })();
   }, []);
   const [like, setLike] = useState(false); //是否喜欢该歌曲
+  const [songUrl, setUrl] = useState("");
   const likeOrNotLike = async () => {
-    const result = await likeMusic(props.id, !like);
-    if (result.data.code === 200) {
-      if (like === false) message.success("喜欢该歌曲");
-      else message.success("取消喜欢该歌曲");
-      setLike((value) => !value);
-    } else message.error("操作失败,请稍后重试");
+    if (props.userInfo.isLogin === true) {
+      const result = await likeMusic(props.id, !like);
+      if (result.data.code === 200) {
+        if (like === false) message.success("喜欢该歌曲");
+        else message.success("取消喜欢该歌曲");
+        setLike((value) => !value);
+      } else message.error("操作失败,请稍后重试");
+    } else message.error("请先登录");
   };
   return (
     <div
@@ -46,9 +56,9 @@ function Song(props) {
           style={{ color: like === true ? "#EC4141" : "#d7d7d7" }}
         ></HeartOutlined>
       </div>
-      <div className={style.download}>
+      <a className={style.download} href={songUrl}>
         <DownloadOutlined></DownloadOutlined>
-      </div>
+      </a>
       <div className={style.name}>
         <span style={{ color: "#333333" }}>{props.name}</span>
         <span style={{ color: "#B6B6B6" }}>

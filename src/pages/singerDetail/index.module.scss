@@ -45,8 +45,9 @@
 }
 .main {
   width: 100%;
-  height: auto;
-  overflow: hidden;
+  height: 100%;
+  overflow: scroll !important;
+  overflow-x: hidden !important;
 }
 .routerLine {
   width: 100%;
@@ -78,7 +79,7 @@
 }
 .content {
   width: 100% !important;
-  height: 100%;
+  height: calc(100% - 290px) !important;
   padding-left: 50px;
   position: relative;
 }
