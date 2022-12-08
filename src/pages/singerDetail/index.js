@@ -22,7 +22,6 @@ function SingerDetail(props) {
         let end = data.some((item) => {
           return item.id == singerId;
         });
-        console.log(end);
         setState(end);
       }
       let arr = [];

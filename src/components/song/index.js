@@ -10,14 +10,12 @@ import timeFormat from "../../utils/songTimeChange";
 
 function Song(props) {
   useEffect(() => {
-    setLike(props.isLike);
+    setLike(props.userLikeMusic.includes(props.id) ? true : false);
     (async function () {
-      const {
-        data: {
-          data: { url },
-        },
-      } = await downloadMusic(props.id);
-      setUrl(url);
+      const result = await downloadMusic(props.id);
+      if (result && result.data && result.data.data && result.data.data.url)
+        setUrl(result.data.data.url);
+      else setUrl("");
     })();
   }, []);
   const [like, setLike] = useState(false); //是否喜欢该歌曲
@@ -80,6 +78,7 @@ function Song(props) {
 const a = (state) => {
   return {
     userInfo: state.userInfo,
+    userLikeMusic: state.userLikeMusic,
   };
 };
 const b = null;

@@ -129,6 +129,7 @@ function Index(props) {
                 });
                 localStorage.removeItem("cookie");
                 props.setSongsArr([]); //清空歌曲列表
+                props.setUserLikeMusic([]); //清空用户喜欢的歌曲列表
               }}
             >
               <PoweroffOutlined />
@@ -184,6 +185,12 @@ const b = (dispatch) => {
         type: "setSongsArr",
         data: value,
       }),
+    setUserLikeMusic: (v) => {
+      dispatch({
+        type: "setUserLikeMusic",
+        data: v,
+      });
+    },
   };
 };
 export default connect(a, b)(Index);

@@ -17,7 +17,7 @@ Axios.interceptors.response.use(
     return responce;
   },
   (error) => {
-    message.error(error.response.data.message);
+    message.error(error.mesage ? error.message : error.response?.data?.message);
   }
 );
 export default Axios;

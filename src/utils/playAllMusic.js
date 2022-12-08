@@ -1,6 +1,5 @@
 //播放整个歌单歌曲
 //此方法用于上/下一首播放歌曲 不会使位置改变
-//此方法会使歌曲位置发生改变 单首歌unshift进歌曲数组里
 //默认不判断歌曲版权
 import { checkMusic } from "../axios/service/music";
 import { message } from "antd";

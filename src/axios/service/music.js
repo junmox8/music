@@ -22,3 +22,6 @@ export const getUserLikeMusics = (uid) => {
 export const downloadMusic = (id) => {
   return Axios.get("/api/song/download/url?id=" + id);
 };
+export const getAlbumDetail = (id) => {
+  return Axios.get("/api/album?id=" + id);
+};

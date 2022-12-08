@@ -1,0 +1,32 @@
+.main {
+  height: auto;
+  width: 100%;
+  display: flex;
+  padding-top: 10px;
+  margin-top: 20px;
+}
+.hotContent {
+  width: 100%;
+  display: flex;
+  padding-top: 10px;
+  overflow: hidden;
+  .hotSongImg {
+    background-image: url("https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1669888753174");
+    background-size: cover;
+    width: 187px;
+    height: 187px;
+  }
+  .singContent {
+    width: calc(100% - 237px);
+    min-height: 300px;
+    margin-left: 25px;
+    .firstLine {
+      display: flex;
+      align-items: center;
+      .text {
+        font-weight: 600;
+        font-size: 16px;
+      }
+    }
+  }
+}

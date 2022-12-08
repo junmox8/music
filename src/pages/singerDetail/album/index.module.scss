@@ -1,10 +1,16 @@
 .main {
   width: 100%;
-  display: flex;
   height: 100%;
   overflow: scroll;
   overflow-x: hidden !important;
   padding-top: 10px;
+}
+.hotContent,
+.albumContent {
+  width: 100%;
+  display: flex;
+  padding-top: 10px;
+  overflow: hidden;
   .hotSongImg {
     background-image: url("https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1669888753174");
     background-size: cover;
@@ -24,4 +30,7 @@
       }
     }
   }
+}
+.albumContent {
+  display: block;
 }
