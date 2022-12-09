@@ -3,7 +3,9 @@ import style from "./index.module.scss";
 import { PlayCircleFilled } from "@ant-design/icons";
 import { getRankList } from "../../axios/service/rank";
 import playMusic from "../../utils/playMusic";
+import { useNavigate } from "react-router-dom";
 export default function RankComponent(props) {
+  const navigate = useNavigate();
   useEffect(() => {
     (async function () {
       const {
@@ -17,7 +19,12 @@ export default function RankComponent(props) {
   const [songs, setSongs] = useState([]);
   return (
     <div className={style.main}>
-      <div className={style.imgContainer}>
+      <div
+        className={style.imgContainer}
+        onClick={() => {
+          navigate("/playlist?id=" + props.id);
+        }}
+      >
         <img src={props.img}></img>
         <div className={style.text}>{props.time}</div>
         <div className={style.iconContainer}>
@@ -58,7 +65,14 @@ export default function RankComponent(props) {
             </div>
           );
         })}
-        <div className={style.lookAll}>查看全部</div>
+        <div
+          onClick={() => {
+            navigate("/playlist?id=" + props.id);
+          }}
+          className={style.lookAll}
+        >
+          查看全部
+        </div>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import SingerDetail from "../pages/singerDetail";
 import Album from "../pages/singerDetail/album";
 import MV from "../pages/singerDetail/MV";
 import Detail from "../pages/singerDetail/detail";
+import PlaylistDetail from "../pages/playlistDetail";
 // const Songlist = lazy(() => import("../pages/findMusic/songlist"));
 // const Index = lazy(() => import("../pages/index/index"));
 // const FindMusic = lazy(() => import("../pages/findMusic/index"));
@@ -80,6 +81,10 @@ const Routes = () => {
               element: <Detail></Detail>,
             },
           ],
+        },
+        {
+          path: "/playlist",
+          element: <PlaylistDetail />,
         },
       ],
     },
