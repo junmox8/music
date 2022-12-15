@@ -1,6 +1,7 @@
 //播放整个歌单歌曲
 //此方法用于上/下一首播放歌曲 不会使位置改变
 //默认不判断歌曲版权
+//使用promise.all保证歌曲数组发请求判断是否有权限 保证按顺序返回结果 不会出现歌曲数组乱序现象
 import { checkMusic } from "../axios/service/music";
 import { message } from "antd";
 import timeFormat from "./songTimeChange";
@@ -28,15 +29,21 @@ export default async function PlayAllMusic(arr, isLogin) {
       songArr.push(obj);
     }
   });
-  let endArr = [];
-  songArr.forEach(async (item, index) => {
-    const {
-      data: { success },
-    } = await checkMusic(item.id);
-    if (success === true) endArr.push(item);
+  let promiseArr = [];
+  songArr.forEach((item) => {
+    promiseArr.push(
+      new Promise((resolve, reject) => {
+        checkMusic(item.id).then((result) => {
+          if (result.data.success === true) resolve(item);
+          else reject("失败");
+        });
+      })
+    );
   });
-  message.success("添加歌单成功,已自动为您去掉没有播放权限的歌曲");
-  setTimeout(() => {
-    pubsub.publish("playAllMusic", endArr);
-  }, 500);
+  Promise.all(promiseArr).then((data) => {
+    message.success("添加歌单成功,已自动为您去掉没有播放权限的歌曲");
+    setTimeout(() => {
+      pubsub.publish("playAllMusic", data);
+    }, 500);
+  });
 }

@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import add0 from "../../utils/add0";
 import { message } from "antd";
-import { HeartOutlined, DownloadOutlined } from "@ant-design/icons";
+import {
+  HeartOutlined,
+  DownloadOutlined,
+  NotificationOutlined,
+} from "@ant-design/icons";
 import { connect } from "react-redux";
+import PubSub from "pubsub-js";
 import playMusic from "../../utils/playMusic";
 import { likeMusic, downloadMusic } from "../../axios/service/music";
 import timeFormat from "../../utils/songTimeChange";
-
 function Song(props) {
   useEffect(() => {
     setLike(props.userLikeMusic.includes(props.id) ? true : false);
@@ -48,7 +52,23 @@ function Song(props) {
             : "#FAFAFA",
       }}
     >
-      <div className={style.xuhao}>{add0(props.index + 1)}</div>
+      <div
+        className={style.xuhao}
+        style={{
+          display: props.id === props.musicPlaying.id ? "none" : "flex",
+        }}
+      >
+        {add0(props.index + 1)}
+      </div>
+      <div
+        className={style.xuhao}
+        style={{
+          display: props.id === props.musicPlaying.id ? "flex" : "none",
+          color: "#EC4141",
+        }}
+      >
+        <NotificationOutlined />
+      </div>
       <div className={style.aixin} onClick={likeOrNotLike}>
         <HeartOutlined
           style={{ color: like === true ? "#EC4141" : "#d7d7d7" }}
@@ -58,7 +78,13 @@ function Song(props) {
         <DownloadOutlined></DownloadOutlined>
       </a>
       <div className={style.name}>
-        <span style={{ color: "#333333" }}>{props.name}</span>
+        <span
+          style={{
+            color: props.id === props.musicPlaying.id ? "#EC4141" : "#333333",
+          }}
+        >
+          {props.name}
+        </span>
         <span style={{ color: "#B6B6B6" }}>
           {props.engName.length > 0 ? "（" + props.engName + "）" : ""}
         </span>
@@ -75,10 +101,14 @@ function Song(props) {
     </div>
   );
 }
+Song.defaultProps = {
+  type: 0, //默认没有歌手和专辑那一栏
+};
 const a = (state) => {
   return {
     userInfo: state.userInfo,
     userLikeMusic: state.userLikeMusic,
+    musicPlaying: state.musicPlaying,
   };
 };
 const b = null;

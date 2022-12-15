@@ -7,7 +7,8 @@ import {
   getMusicDetail,
 } from "../axios/service/music";
 import pubsub from "pubsub-js";
-export default async function playMusic(id) {
+//type为0表示更改歌曲在列表顺序 1为不更改
+export default async function playMusic(id, type = 0) {
   const {
     data: { success },
   } = await checkMusic(id);
@@ -26,6 +27,9 @@ export default async function playMusic(id) {
         singers: JSON.stringify(songs[0].ar),
         img: songs[0].al.picUrl,
         id,
+        type,
+        playingId: sessionStorage.getItem("playingId"),
+        local: localStorage.getItem("persist:root"),
       });
       //后续加入播放列表的操作记得补上
     } else message.error("获取歌曲链接失败");

@@ -48,11 +48,51 @@ function MusicControl(props) {
   useEffect(() => {
     //对传入的歌曲信息进行处理
     pubsub.subscribe("musicInfo", (_, obj) => {
+      let songsArr = JSON.parse(JSON.parse(obj.local).songsArr);
       let str = "";
       JSON.parse(obj.singers).map((item, index) => {
         if (index === JSON.parse(obj.singers).length - 1) str += item.name;
         else str += item.name + "/";
       });
+      //把歌曲加到歌单列表
+      if (obj.type === 0) {
+        //如果obj.type===0说明需要改变歌单数组顺序
+        let arr = songsArr;
+        if (!obj.playingId)
+          arr.push({
+            name: obj.name,
+            singer: str,
+            time: timeFormat(obj.time / 1000),
+            id: obj.id,
+          });
+        else {
+          //此时有歌曲播放
+          // console.log(props.musicPlaying);
+          //不能直接获取props.musicPlaying 获取的是订阅消息时候的值
+          //所以这种情况重新开一个订阅发布处理 双击歌曲时由歌曲发出pubsub
+          let init = false;
+          songsArr.forEach((item, index) => {
+            if (item.id == obj.playingId) {
+              init = true;
+              arr.splice(index + 1, 0, {
+                name: obj.name,
+                singer: str,
+                time: timeFormat(obj.time / 1000),
+                id: obj.id,
+              });
+            }
+          });
+          if (init === false)
+            //如果歌单里没播放的歌曲
+            arr.push({
+              name: obj.name,
+              singer: str,
+              time: timeFormat(obj.time / 1000),
+              id: obj.id,
+            });
+        }
+        props.setSongsArr(arrGetRid(arr));
+      }
       setDetail({
         imgUrl: obj.img,
         name: obj.name,
@@ -61,16 +101,17 @@ function MusicControl(props) {
         songUrl: obj.songUrl,
         id: obj.id,
       });
-      setLength(0); //进度条清零
-      //把歌曲加到歌单列表
-      let arr = props.songsArr;
-      arr.unshift({
+      props.setPlayingMusic({
+        //redux同步更新
+        imgUrl: obj.img,
         name: obj.name,
         singer: str,
-        time: timeFormat(obj.time / 1000),
+        time: obj.time / 1000,
+        songUrl: obj.songUrl,
         id: obj.id,
       });
-      props.setSongsArr(arrGetRid(arr));
+      sessionStorage.setItem("playingId", obj.id);
+      setLength(0); //进度条清零
     });
     pubsub.subscribe("prevOrNext", (_, obj) => {
       //上一首/下一首
@@ -87,6 +128,17 @@ function MusicControl(props) {
         songUrl: obj.songUrl,
         id: obj.id,
       });
+      props.setPlayingMusic({
+        //redux同步更新
+        imgUrl: obj.img,
+        name: obj.name,
+        singer: str,
+        time: obj.time / 1000,
+        songUrl: obj.songUrl,
+        id: obj.id,
+      });
+      sessionStorage.setItem("playingId", obj.id);
+
       setLength(0); //进度条清零
     });
     pubsub.subscribe("playAllMusic", async (_, arr) => {
@@ -104,6 +156,16 @@ function MusicControl(props) {
         songUrl: music[0].url,
         id: arr[0].id,
       });
+      props.setPlayingMusic({
+        //redux同步更新
+        imgUrl: arr[0].img,
+        name: arr[0].name,
+        singer: arr[0].singer,
+        time: changeTime(arr[0].time),
+        songUrl: music[0].url,
+        id: arr[0].id,
+      });
+      sessionStorage.setItem("playingId", arr[0].id);
       setLength(0); //进度条清零
     });
     setState((state) => false); //初始化停止播放歌曲
@@ -135,30 +197,27 @@ function MusicControl(props) {
   }, [playState]);
   useEffect(() => {
     if (slideLength >= Number(singDetail.time) - 1) {
-      clearInterval(timeInterval);
-      timeInterval = null;
       if (playModel === 0) {
         //顺序播放
-        props.songsArr.map((item, index) => {
-          if (item.id === singDetail.id) {
-            if (index !== props.songsArr.length - 1) {
-              playMusic(props.songsArr[index + 1].id);
-            } else {
-              playMusic(props.songsArr[0].id);
-            }
-          }
-        });
+        prevOrNext(1);
+        clearInterval(timeInterval);
+        timeInterval = null;
       }
       if (playModel === 1) {
         //单曲循环
-        playMusic(singDetail.id);
+        // playMusic(singDetail.id, 1);
+        setLength(0);
       }
       if (playModel === 2) {
         //随机播放
         const index = Math.floor(Math.random() * props.songsArr.length);
-        playMusic(props.songsArr[index].id);
+        playMusic(props.songsArr[index].id, 1);
+        clearInterval(timeInterval);
+        timeInterval = null;
       }
     }
+    //当单曲循环进度条到0
+    // if (slideLength >= 0 && !timeInterval && playState === false)
   }, [slideLength]);
 
   const changePlayState = () => {
@@ -298,6 +357,7 @@ function MusicControl(props) {
                       <RetweetOutlined
                         onClick={() => {
                           setModel(1);
+                          musicControl.current.loop = true;
                         }}
                         style={{ display: playModel === 0 ? "block" : "none" }}
                       ></RetweetOutlined>
@@ -305,6 +365,7 @@ function MusicControl(props) {
                       <RollbackOutlined
                         onClick={() => {
                           setModel(2);
+                          musicControl.current.loop = false;
                         }}
                         style={{ display: playModel === 1 ? "block" : "none" }}
                       ></RollbackOutlined>
@@ -328,12 +389,15 @@ function MusicControl(props) {
 const a = (state) => {
   return {
     songsArr: state.songsArr,
+    musicPlaying: state.musicPlaying,
   };
 };
 const b = (dispatch) => {
   return {
     setSongsArr: (value) => dispatch({ type: "setSongsArr", data: value }),
     addSongToArr: (value) => dispatch({ type: "addSongToArr", data: value }),
+    setPlayingMusic: (value) =>
+      dispatch({ type: "setPlayingMusic", data: value }),
   };
 };
 export default connect(a, b)(MusicControl);

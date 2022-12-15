@@ -14,6 +14,8 @@ import Album from "../pages/singerDetail/album";
 import MV from "../pages/singerDetail/MV";
 import Detail from "../pages/singerDetail/detail";
 import PlaylistDetail from "../pages/playlistDetail";
+import Song from "../pages/playlistDetail/song";
+import Comment from "../pages/playlistDetail/comment";
 // const Songlist = lazy(() => import("../pages/findMusic/songlist"));
 // const Index = lazy(() => import("../pages/index/index"));
 // const FindMusic = lazy(() => import("../pages/findMusic/index"));
@@ -85,6 +87,16 @@ const Routes = () => {
         {
           path: "/playlist",
           element: <PlaylistDetail />,
+          children: [
+            {
+              path: "/playlist/song",
+              element: <Song></Song>,
+            },
+            {
+              path: "/playlist/comment",
+              element: <Comment></Comment>,
+            },
+          ],
         },
       ],
     },

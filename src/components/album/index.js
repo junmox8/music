@@ -8,10 +8,8 @@ import PlayAllMusic from "../../utils/playAllMusic";
 function AlbumComponent(props) {
   useEffect(() => {
     (async function () {
-      const {
-        data: { songs },
-      } = await getAlbumDetail(props.id);
-      setSongs(songs);
+      const result = await getAlbumDetail(props.id);
+      setSongs(result.data.songs);
     })();
   }, []);
   const [songs, setSongs] = useState([]);
