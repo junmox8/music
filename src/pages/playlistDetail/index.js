@@ -5,7 +5,7 @@ import { Button } from "antd";
 import { CaretRightFilled, FileAddOutlined } from "@ant-design/icons";
 import { getRankDetail } from "../../axios/service/rank";
 import dealWithCount from "../../utils/playCount";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Outlet } from "react-router-dom";
 import routerArr from "../../json/songListRouterArr";
 export default function PlaylistDetail() {
   useEffect(() => {
@@ -150,7 +150,9 @@ export default function PlaylistDetail() {
           );
         })}
       </div>
-      <div className={style.content}></div>
+      <div className={style.content}>
+        <Outlet></Outlet>
+      </div>
     </div>
   );
 }

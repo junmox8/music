@@ -28,3 +28,6 @@ export const getListSongs = (limit, page, cat) => {
       cat
   );
 };
+export const getSongListDetail = (id) => {
+  return Axios.get("/api/playlist/track/all?id=" + id);
+};

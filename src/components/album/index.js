@@ -9,7 +9,8 @@ function AlbumComponent(props) {
   useEffect(() => {
     (async function () {
       const result = await getAlbumDetail(props.id);
-      setSongs(result.data.songs);
+      if (result && result.data && result.data.songs)
+        setSongs(result.data.songs);
     })();
   }, []);
   const [songs, setSongs] = useState([]);
