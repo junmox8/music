@@ -42,6 +42,9 @@ export default function Song() {
             fee={item.fee} //会员非会员区别
             time={item.dt}
             isSelect={isSelect[index]}
+            singer={JSON.stringify(item.ar)}
+            album={JSON.stringify(item.al)}
+            type={1}
           ></Song2>
         );
       })}

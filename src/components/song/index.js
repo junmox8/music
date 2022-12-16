@@ -8,7 +8,7 @@ import {
   NotificationOutlined,
 } from "@ant-design/icons";
 import { connect } from "react-redux";
-import PubSub from "pubsub-js";
+import { useNavigate } from "react-router-dom";
 import playMusic from "../../utils/playMusic";
 import { likeMusic, downloadMusic } from "../../axios/service/music";
 import timeFormat from "../../utils/songTimeChange";
@@ -20,10 +20,17 @@ function Song(props) {
       if (result && result.data && result.data.data && result.data.data.url)
         setUrl(result.data.data.url);
       else setUrl("");
+      if (props.type === 1) {
+        setSingerText(JSON.parse(props.singer));
+        setAlbumText(JSON.parse(props.album));
+      }
     })();
   }, []);
   const [like, setLike] = useState(false); //是否喜欢该歌曲
   const [songUrl, setUrl] = useState("");
+  const [singerText, setSingerText] = useState([]); //type为1 展示歌手字符串
+  const [albumText, setAlbumText] = useState({}); //type为1 展示专辑字符串
+  const navigate = useNavigate();
   const likeOrNotLike = async () => {
     if (props.userInfo.isLogin === true) {
       const result = await likeMusic(props.id, !like);
@@ -97,6 +104,29 @@ function Song(props) {
         }}
       >
         VIP
+      </div>
+      <div
+        style={{ display: props.type === 1 ? "block" : "none" }}
+        className={style.singer}
+      >
+        {singerText.map((item, index) => {
+          return (
+            <span
+              onClick={() => navigate("/singer/album?id=" + item.id)}
+              style={{ marginRight: "5px" }}
+              key={index}
+              id={item.id}
+            >
+              {item.name}
+            </span>
+          );
+        })}
+      </div>
+      <div
+        style={{ display: props.type === 1 ? "block" : "none" }}
+        className={style.album}
+      >
+        <span>{albumText.name}</span>
       </div>
     </div>
   );

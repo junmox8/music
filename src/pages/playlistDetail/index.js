@@ -13,7 +13,6 @@ export default function PlaylistDetail() {
       const {
         data: { playlist },
       } = await getRankDetail(rankId);
-      console.log(playlist);
       setInfo(playlist);
       setArr(playlist.tracks);
       let arr = [];
@@ -32,6 +31,7 @@ export default function PlaylistDetail() {
     playCount: 0,
     subscribedCount: 0, //收藏数量
     trackCount: 0, //歌曲数量
+    commentCount: 0, //评论数量
     description: "",
     updateTime: "",
     creator: {
@@ -142,6 +142,9 @@ export default function PlaylistDetail() {
               key={index}
             >
               {item.name}
+              <span style={{ display: index === 1 ? "display" : "none" }}>
+                ({textInfo.commentCount}条)
+              </span>
               <div
                 className={style.redLine}
                 style={{ display: clickArr[index] === true ? "block" : "none" }}

@@ -31,3 +31,15 @@ export const getListSongs = (limit, page, cat) => {
 export const getSongListDetail = (id) => {
   return Axios.get("/api/playlist/track/all?id=" + id);
 };
+export const getSongListComment = (id, offset) => {
+  return Axios.get(
+    "/api/comment/playlist?id=" +
+      id +
+      "&limit=" +
+      50 +
+      "&offset=" +
+      (offset - 1) * 50 +
+      "&timestamp=" +
+      Date.now()
+  );
+};
