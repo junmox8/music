@@ -5,9 +5,12 @@ import { Button } from "antd";
 import { CaretRightFilled, FileAddOutlined } from "@ant-design/icons";
 import { getRankDetail } from "../../axios/service/rank";
 import dealWithCount from "../../utils/playCount";
+import PlayAllMusic from "../../utils/playAllMusic";
+import { getSongListDetail } from "../../axios/service/songlist";
+import { connect } from "react-redux";
 import { useSearchParams, useNavigate, Outlet } from "react-router-dom";
 import routerArr from "../../json/songListRouterArr";
-export default function PlaylistDetail() {
+function PlaylistDetail(props) {
   useEffect(() => {
     (async function () {
       const {
@@ -57,6 +60,12 @@ export default function PlaylistDetail() {
     setClickArr(arr);
     navigate(routerArr[index].path + "?id=" + rankId);
   };
+  const playAll = async () => {
+    const {
+      data: { songs },
+    } = await getSongListDetail(rankId);
+    PlayAllMusic(songs, props.userInfo.isLogin);
+  };
   return (
     <div className={style.main}>
       <div className={style.title}>
@@ -102,6 +111,7 @@ export default function PlaylistDetail() {
               type="primary"
               shape="round"
               icon={<CaretRightFilled />}
+              onClick={playAll}
             >
               播放全部
             </Button>
@@ -159,3 +169,10 @@ export default function PlaylistDetail() {
     </div>
   );
 }
+const a = (state) => {
+  return {
+    userInfo: state.userInfo,
+  };
+};
+const b = null;
+export default connect(a, b)(PlaylistDetail);

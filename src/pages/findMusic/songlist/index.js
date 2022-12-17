@@ -47,18 +47,18 @@ export default function Songlist() {
       setNumber(result.data.total);
       setArr(result.data.playlists);
       //初始化ref数组
-      let arr2 = [];
-      for (let i = 0; i <= 99; i++) {
-        arr2.push(createRef());
-      }
-      listRef = arr2;
+      // let arr2 = [];
+      // for (let i = 0; i <= 99; i++) {
+      //   arr2.push(createRef());
+      // }
+      // listRef = arr2;
     })();
   }, []);
   useEffect(() => {
-    page.current.addEventListener("scroll", scroll);
-    return function () {
-      if (page.current) page.current.removeEventListener("scroll", scroll);
-    };
+    // page.current.addEventListener("scroll", scroll);
+    // return function () {
+    //   if (page.current) page.current.removeEventListener("scroll", scroll);
+    // };
   }, []);
   const [selectTag, setTag] = useState("");
   const [tagCategories, setCategories] = useState([]);
@@ -105,20 +105,20 @@ export default function Songlist() {
       setArr(result.data.playlists);
     }, 0);
   };
-  function scroll() {
-    listRef.forEach((item, index) => {
-      if (
-        item.current &&
-        item.current.getBoundingClientRect().top > 64 &&
-        item.current.getBoundingClientRect().top < 0.6 * window.screen.height
-      ) {
-        let arr = canSee;
-        arr[index] = true;
-        setCanSeeArr((data) => arr);
-        console.log(canSee);
-      }
-    });
-  }
+  // function scroll() {
+  //   listRef.forEach((item, index) => {
+  //     if (
+  //       item.current &&
+  //       item.current.getBoundingClientRect().top > 64 &&
+  //       item.current.getBoundingClientRect().top < 0.6 * window.screen.height
+  //     ) {
+  //       let arr = canSee;
+  //       arr[index] = true;
+  //       setCanSeeArr((data) => arr);
+  //       console.log(canSee);
+  //     }
+  //   });
+  // }
 
   return (
     <div className={style.main} ref={page}>
@@ -269,7 +269,8 @@ export default function Songlist() {
               creatorName={item.creator.nickname}
               icon={item.creator.avatarDetail?.identityIconUrl || ""}
               canSee={
-                typeof canSee[index] == "undefined" ? false : canSee[index]
+                // typeof canSee[index] == "undefined" ? false : canSee[index]
+                true
               }
               ref={listRef[index]}
               key={index}
