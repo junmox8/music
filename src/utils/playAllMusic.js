@@ -7,6 +7,7 @@ import { message } from "antd";
 import timeFormat from "./songTimeChange";
 import pubsub from "pubsub-js";
 export default async function PlayAllMusic(arr, isLogin) {
+  pubsub.publish("setLoading", true);
   let songArr = [];
   arr.forEach((item) => {
     //初步过滤数组(会员非会员)
@@ -41,7 +42,9 @@ export default async function PlayAllMusic(arr, isLogin) {
     );
   });
   Promise.all(promiseArr).then((data) => {
+    pubsub.publish("setLoading", false);
     message.success("添加歌单成功,已自动为您去掉没有播放权限的歌曲");
+
     setTimeout(() => {
       pubsub.publish("playAllMusic", data);
     }, 500);

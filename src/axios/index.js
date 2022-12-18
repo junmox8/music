@@ -1,7 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 const Axios = axios.create({
-  timeout: 4000,
+  timeout: 19000,
   withCredentials: true,
 });
 Axios.interceptors.request.use((request) => {
@@ -17,6 +17,7 @@ Axios.interceptors.response.use(
     return responce;
   },
   (error) => {
+    console.log(error);
     message.error(error.mesage ? error.message : error.response?.data?.message);
   }
 );

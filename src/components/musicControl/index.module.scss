@@ -3,6 +3,7 @@
   height: 53px;
   display: flex;
   justify-content: center;
+  overflow: hidden;
   .controlContent {
     width: fit-content;
     height: 100%;
@@ -82,5 +83,16 @@
         }
       }
     }
+  }
+  .songListContainer {
+    position: absolute;
+    right: 0;
+    bottom: 53px;
+    width: 27.5vw;
+    height: calc(100vh - 117px);
+    overflow: scroll;
+    overflow-x: hidden;
+    background-color: red;
+    z-index: 10000;
   }
 }

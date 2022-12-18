@@ -14,6 +14,7 @@ import {
   SwapOutlined, //随机播放
   RollbackOutlined, //单曲循环
   SoundOutlined,
+  MenuFoldOutlined, //列表
 } from "@ant-design/icons";
 import style from "./index.module.scss";
 import { getMusicUrl } from "../../axios/service/music";
@@ -34,6 +35,7 @@ function MusicControl(props) {
   const [slideLength, setLength] = useState(0); //当前进度条进度 以秒为单位
   const [playModel, setModel] = useState(0); //0顺序播放 1循环播放 2随机播放
   const [audioSound, setSound] = useState(100); //音量大小
+  const [showSongList, setShow] = useState(false); //是否展示歌单列表
   useEffect(() => {
     //只要有歌曲传进来 立马进入播放状态
     setState((state) => true);
@@ -376,12 +378,17 @@ function MusicControl(props) {
                         style={{ display: playModel === 2 ? "block" : "none" }}
                       ></SwapOutlined>
                     </Tooltip>
+                    <MenuFoldOutlined onClick={() => setShow((v) => !v)} />
                   </Space>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div
+          style={{ display: showSongList === true ? "block" : "none" }}
+          className={style.songListContainer}
+        ></div>
       </div>
     </div>
   );

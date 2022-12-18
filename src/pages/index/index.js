@@ -4,6 +4,7 @@ import Loading from "../../components/loading/loginLoading";
 import CollectSinger from "../../components/loading/collectSinger";
 import Login from "../../components/login";
 import MusicControl from "../../components/musicControl";
+import PubSub from "pubsub-js";
 import { Layout } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { loginByQr, createQr } from "../../axios/service/login";
@@ -19,6 +20,9 @@ function Index(props) {
       arr.push(index === 0 ? true : false);
     });
     setClickArr(arr);
+    PubSub.subscribe("setLoading", (_, data) => {
+      props.setLoading(data);
+    });
   }, []);
   const navigate = useNavigate();
   const [clickArr, setClickArr] = useState([]); //判断有没有点击路由
@@ -190,6 +194,9 @@ const b = (dispatch) => {
         type: "setUserLikeMusic",
         data: v,
       });
+    },
+    setLoading: (v) => {
+      dispatch({ type: "setLoading", data: v });
     },
   };
 };
