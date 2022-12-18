@@ -5,6 +5,7 @@ import timeFormat, { changeTime } from "../../utils/songTimeChange";
 import arrGetRid from "../../utils/arrGetRid";
 import playMusic from "../../utils/playMusic";
 import PrevOrNextPlayMusic from "../../utils/prevOrNextPlayMusic";
+import Song2 from "../song/song2";
 import {
   BackwardOutlined,
   ForwardOutlined,
@@ -36,6 +37,7 @@ function MusicControl(props) {
   const [playModel, setModel] = useState(0); //0顺序播放 1循环播放 2随机播放
   const [audioSound, setSound] = useState(100); //音量大小
   const [showSongList, setShow] = useState(false); //是否展示歌单列表
+  const [isSelect, setSelect] = useState([]); //歌单单击背景颜色改变
   useEffect(() => {
     //只要有歌曲传进来 立马进入播放状态
     setState((state) => true);
@@ -171,6 +173,11 @@ function MusicControl(props) {
       setLength(0); //进度条清零
     });
     setState((state) => false); //初始化停止播放歌曲
+    let arr = [];
+    props.songsArr.forEach((item) => {
+      arr.push(false);
+    });
+    setSelect(arr);
   }, []);
 
   useEffect(() => {
@@ -262,6 +269,13 @@ function MusicControl(props) {
           );
       }
     });
+  };
+  const SingleClickHotSong = (index) => {
+    let arr = [];
+    for (let i = 0; i <= isSelect.length - 1; i++) {
+      arr.push(i == index ? true : false);
+    }
+    setSelect(arr);
   };
   return (
     <div>
@@ -388,7 +402,28 @@ function MusicControl(props) {
         <div
           style={{ display: showSongList === true ? "block" : "none" }}
           className={style.songListContainer}
-        ></div>
+        >
+          <div className={style.title}>
+            <div className={style.text1}>当前播放</div>
+            <div className={style.text2}>共{props.songsArr.length}首</div>
+          </div>
+          <div className={style.songsContent}>
+            {props.songsArr.map((item, index) => {
+              return (
+                <Song2
+                  c={SingleClickHotSong}
+                  key={index}
+                  index={index}
+                  id={item.id}
+                  name={item.name}
+                  singer={item.singer}
+                  time={item.time}
+                  isSelect={isSelect[index]}
+                ></Song2>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

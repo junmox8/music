@@ -92,7 +92,29 @@
     height: calc(100vh - 117px);
     overflow: scroll;
     overflow-x: hidden;
-    background-color: red;
     z-index: 10000;
+    background-color: #fff;
+    .title {
+      width: 90%;
+      margin-left: 5%;
+      height: 90px;
+      padding-top: 20px;
+      overflow: hidden;
+      border-bottom: 1px solid #f2f2f2;
+      .text1 {
+        font-weight: 700;
+        color: #333333;
+        font-size: 19px;
+      }
+      .text2 {
+        margin-top: 10px;
+        color: #d3d3d3;
+      }
+    }
+    .songsContent {
+      width: 90%;
+      height: auto;
+      margin-left: 5%;
+    }
   }
 }
