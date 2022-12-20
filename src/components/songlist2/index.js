@@ -6,8 +6,10 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import SonglistSkeleton2 from "../Skeleton/songList2";
+import { useNavigate } from "react-router-dom";
 import numberDeal from "../../utils/playCount";
 function Songlist2(props, ref) {
+  const navigate = useNavigate();
   return (
     <div ref={ref}>
       <div
@@ -20,6 +22,9 @@ function Songlist2(props, ref) {
       <div
         style={{
           display: props.canSee === false ? "none" : "block",
+        }}
+        onClick={() => {
+          navigate("/playlist?id=" + props.id);
         }}
         className={style.main}
       >
