@@ -19,6 +19,7 @@ import {
 } from "@ant-design/icons";
 import style from "./index.module.scss";
 import { getMusicUrl } from "../../axios/service/music";
+import { useNavigate } from "react-router-dom";
 import pubsub from "pubsub-js";
 let timeInterval = null;
 function MusicControl(props) {
@@ -38,6 +39,7 @@ function MusicControl(props) {
   const [audioSound, setSound] = useState(100); //音量大小
   const [showSongList, setShow] = useState(false); //是否展示歌单列表
   const [isSelect, setSelect] = useState([]); //歌单单击背景颜色改变
+  const navigate = useNavigate();
   useEffect(() => {
     //只要有歌曲传进来 立马进入播放状态
     setState((state) => true);
@@ -311,6 +313,9 @@ function MusicControl(props) {
                 cursor: "pointer",
                 backgroundImage: `url(${singDetail.imgUrl})`,
                 backgroundSize: "cover",
+              }}
+              onClick={() => {
+                navigate("/musicDetail?id=" + singDetail.id);
               }}
             ></div>
             <div className={style.otherDetail}>

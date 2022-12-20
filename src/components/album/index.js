@@ -15,7 +15,7 @@ function AlbumComponent(props) {
   }, []);
   const [songs, setSongs] = useState([]);
   const playAllSongs = async () => {
-    PlayAllMusic(songs, props.userInfo.isLogin);
+    PlayAllMusic(songs, props.userInfo.isLogin, props.userInfo.vip);
   };
   return (
     <div className={style.main}>

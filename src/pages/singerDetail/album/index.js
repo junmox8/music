@@ -73,7 +73,7 @@ function Album(props) {
     }
   };
   const playAllSongs = async () => {
-    PlayAllMusic(hotSongs, props.userInfo.isLogin);
+    PlayAllMusic(hotSongs, props.userInfo.isLogin, props.userInfo.vip);
   };
 
   return (

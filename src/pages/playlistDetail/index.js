@@ -67,7 +67,7 @@ function PlaylistDetail(props) {
     const {
       data: { songs },
     } = await getSongListDetail(rankId);
-    PlayAllMusic(songs, props.userInfo.isLogin);
+    PlayAllMusic(songs, props.userInfo.isLogin, props.userInfo.vip);
   };
 
   return (

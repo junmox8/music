@@ -6,14 +6,24 @@ import { checkMusic } from "../axios/service/music";
 import { message } from "antd";
 import timeFormat from "./songTimeChange";
 import pubsub from "pubsub-js";
-export default async function PlayAllMusic(arr, isLogin) {
+let hasDone = false; //变量记录有没有完成
+export default async function PlayAllMusic(arr, isLogin, vip) {
+  setTimeout(() => {
+    if (hasDone === false) {
+      message.error("网络较繁忙,请重试");
+      pubsub.publish("setLoading", false);
+    }
+  }, 20000); //20秒后若还没有完成 则结束请求
   pubsub.publish("setLoading", true);
   let songArr = [];
   arr.forEach((item) => {
     //初步过滤数组(会员非会员)
     if (
       (isLogin === false && (item.fee === 0 || item.fee === 8)) ||
-      isLogin === true
+      (isLogin === true &&
+        Number(vip) === 0 &&
+        (item.fee === 0 || item.fee === 8)) ||
+      (isLogin === true && Number(vip) !== 0 && item.fee !== 4)
     ) {
       let str = "";
       item.ar.map((i, index) => {
@@ -36,12 +46,14 @@ export default async function PlayAllMusic(arr, isLogin) {
       new Promise((resolve, reject) => {
         checkMusic(item.id).then((result) => {
           if (result.data.success === true) resolve(item);
-          else reject("失败");
+          else resolve("失败"); //promise.all如果有一个失败 就会报错
         });
       })
     );
   });
   Promise.all(promiseArr).then((data) => {
+    data = data.filter((item) => item !== "失败");
+    hasDone = true;
     pubsub.publish("setLoading", false);
     message.success("添加歌单成功,已自动为您去掉没有播放权限的歌曲");
 
