@@ -35,19 +35,28 @@ function Login(props) {
     if (props.display === false || page === 1) return clearInterval(interval);
     if (props.display === true) {
       interval = setInterval(async () => {
+        const result = await checkQr(props.qrkey);
+        console.log(result);
         const {
           data: { code, cookie },
-        } = await checkQr(props.qrkey);
+        } = result;
         setState(code);
         if (code == 803) {
-          props.closeBox();
           localStorage.setItem("cookie", cookie);
+          props.closeBox();
+          const result = await getUserInfo();
           const {
             data: {
-              profile: { nickname: name, avatarUrl: avatar },
+              profile: { nickname: name, avatarUrl: avatar, vipType, userId },
             },
-          } = await getUserInfo();
-          props.sendUserInfo({ name, avatar });
+          } = result;
+          props.setUserInfo({
+            name,
+            avatar,
+            vip: vipType,
+            isLogin: true,
+            userId,
+          });
           message.success("登陆成功");
         }
       }, 2000);

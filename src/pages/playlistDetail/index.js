@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import dataChange from "../../utils/dateChange";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { CaretRightFilled, FileAddOutlined } from "@ant-design/icons";
 import { getRankDetail } from "../../axios/service/rank";
 import dealWithCount from "../../utils/playCount";
 import PlayAllMusic from "../../utils/playAllMusic";
-import { getSongListDetail } from "../../axios/service/songlist";
+import {
+  getSongListDetail,
+  subscribePlaylist,
+} from "../../axios/service/songlist";
 import { connect } from "react-redux";
 import { useSearchParams, useNavigate, Outlet } from "react-router-dom";
 import routerArr from "../../json/songListRouterArr";
@@ -66,6 +69,7 @@ function PlaylistDetail(props) {
     } = await getSongListDetail(rankId);
     PlayAllMusic(songs, props.userInfo.isLogin);
   };
+
   return (
     <div className={style.main}>
       <div className={style.title}>
@@ -115,7 +119,7 @@ function PlaylistDetail(props) {
             >
               播放全部
             </Button>
-            <Button
+            {/* <Button
               style={{
                 backgroundColor: "transparent",
                 border: "1px solid #D9D9D9",
@@ -127,7 +131,7 @@ function PlaylistDetail(props) {
               icon={<FileAddOutlined />}
             >
               收藏({dealWithCount(textInfo.subscribedCount)})
-            </Button>
+            </Button> */}
           </div>
           <div className={style.countContent}>
             <div style={{ fontSize: "12px", color: "#676767" }}>

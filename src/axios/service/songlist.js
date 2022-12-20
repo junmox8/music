@@ -43,3 +43,8 @@ export const getSongListComment = (id, offset) => {
       Date.now()
   );
 };
+export const subscribePlaylist = (id, t) => {
+  return Axios.get(
+    "/api/playlist/subscribe?t=" + t + "&id=" + id + "&timestamp=" + Date.now()
+  );
+};
