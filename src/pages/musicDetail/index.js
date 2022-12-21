@@ -1,18 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import style from "./index.module.scss";
-import { getMusicDetail } from "../../axios/service/music";
+import { getMusicDetail, getLyric } from "../../axios/service/music";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import PubSub from "pubsub-js";
 export default function MusicDetail(props) {
-  useEffect(() => {
-    (async function () {
-      const result = await getMusicDetail(id);
-      setSongDetail(result.data);
-      PubSub.subscribe("changePlayState", (_, state) => {
-        setState((s) => state);
-      });
-    })();
-  }, []);
   const navigate = useNavigate();
   const [searchParams, setParams] = useSearchParams();
   const id = searchParams.get("id");
@@ -25,6 +16,18 @@ export default function MusicDetail(props) {
       PubSub.subscribe("changePlayState", (_, state) => {
         setState((s) => state);
       });
+      const result2 = await getLyric(id);
+      let arr = result2.data.lrc.lyric.split(/[(\r\n)\r\n]+/);
+      let arr1 = [];
+      let arr2 = [];
+      arr.forEach((item) => {
+        let index1 = item.indexOf("[");
+        let index2 = item.indexOf("]");
+        arr1.push(item.slice(index1 + 1, index2));
+        arr2.push(item.slice(index2 + 1, item.length));
+      });
+      setLyricArr(arr2);
+      setTimeArr(arr1);
     })();
   }, [id]);
   const [playState, setState] = useState(true); //播放状态
@@ -40,6 +43,8 @@ export default function MusicDetail(props) {
 
   const [songDetail, setSongDetail] = useState({});
   const [singer, setSinger] = useState([]);
+  const [lyricArr, setLyricArr] = useState([]); //歌词数组
+  const [timeArr, setTimeArr] = useState([]); //歌词对应的时间
   const handle = useRef();
   return (
     <div className={style.main}>
@@ -103,6 +108,18 @@ export default function MusicDetail(props) {
                 ? songDetail.songs[0].al.name
                 : ""}
             </span>
+          </div>
+          <div className={style.lyrics}>
+            <div className={style.content}>
+              {lyricArr.map((item, index) => {
+                return (
+                  <div key={index} style={{ marginTop: "8px" }}>
+                    {item}
+                  </div>
+                );
+              })}
+            </div>
+            <div className={style.middleDiv}></div>
           </div>
         </div>
       </div>

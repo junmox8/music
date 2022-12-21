@@ -72,10 +72,8 @@
     }
     .right {
       width: 35%;
-      height: 400px;
       padding-top: 15px;
       margin-left: 10%;
-      overflow: hidden;
       .title {
         font-size: 24px;
       }
@@ -95,6 +93,34 @@
         }
         .text:hover {
           color: #3f6fa5;
+        }
+      }
+      .lyrics {
+        margin-top: 20px;
+        height: 350px;
+        width: 100%;
+        position: relative;
+        .content {
+          height: 350px;
+          width: 100%;
+          overflow: scroll;
+          overflow-x: hidden;
+        }
+        .middleDiv {
+          position: absolute;
+          width: 115%;
+          left: -7.5%;
+          z-index: 500;
+          height: 10px;
+          visibility: hidden;
+          background-color: red;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+      .lyrics:hover {
+        .middleDiv {
+          visibility: visible;
         }
       }
     }

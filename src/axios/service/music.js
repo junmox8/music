@@ -25,3 +25,6 @@ export const downloadMusic = (id) => {
 export const getAlbumDetail = (id) => {
   return Axios.get("/api/album?id=" + id);
 };
+export const getLyric = (id) => {
+  return Axios.get("/api/lyric?id=" + id);
+};

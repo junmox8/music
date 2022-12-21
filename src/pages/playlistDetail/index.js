@@ -100,7 +100,13 @@ function PlaylistDetail(props) {
               <div
                 className={style.icon}
                 style={{
-                  backgroundImage: `url(${textInfo.creator.avatarDetail.identityIconUrl})`,
+                  backgroundImage: `url(${
+                    textInfo.creator &&
+                    textInfo.creator.avatarDetail &&
+                    textInfo.creator.avatarDetail.identityIconUrl
+                      ? textInfo.creator.avatarDetail.identityIconUrl
+                      : ""
+                  })`,
                   backgroundSize: "cover",
                 }}
               ></div>
