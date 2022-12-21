@@ -6,6 +6,99 @@
   animation-name: main;
   animation-duration: 2s;
   background-image: linear-gradient(#cecfcb, #fff);
+  .titleContent {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    .left {
+      display: flex;
+      width: 300px;
+      justify-content: center;
+      flex-wrap: wrap;
+      .icon1 {
+        width: 20px;
+        height: 20px;
+        background-image: url("https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1671608043271");
+        background-size: cover;
+        position: relative;
+        .icon2 {
+          transition: all;
+          transition-duration: 2s;
+          width: 200px;
+          height: 100px;
+          position: absolute;
+          z-index: 500;
+          left: 10px;
+          top: 10px;
+          // left: -115px;
+          // top: 68px;
+          // transform: rotateZ(80deg);
+          background-size: cover;
+
+          background-image: url("https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1671608303850");
+        }
+      }
+      .circle1 {
+        margin-top: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background-color: #c2c2c0;
+        animation-duration: 15s;
+        animation-iteration-count: infinite;
+        animation-name: circle;
+        animation-timing-function: linear;
+        .circle2 {
+          width: 270px;
+          height: 270px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-image: radial-gradient(#6c6d6f 20%, black);
+          .circle3 {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background-size: cover;
+          }
+        }
+      }
+    }
+    .right {
+      width: 35%;
+      height: 400px;
+      padding-top: 15px;
+      margin-left: 10%;
+      overflow: hidden;
+      .title {
+        font-size: 24px;
+      }
+      .singer,
+      .album {
+        word-break: break-all;
+        word-wrap: break-word;
+        width: 100%;
+        margin-top: 5px;
+        span {
+          font-size: 14px;
+          color: #a1a19f;
+        }
+        .text {
+          cursor: pointer;
+          margin-right: 5px;
+        }
+        .text:hover {
+          color: #3f6fa5;
+        }
+      }
+    }
+  }
 }
 @keyframes main {
   from {
@@ -13,5 +106,12 @@
   }
   to {
     transform: translateY(0);
+  }
+}
+@keyframes circle {
+  from {
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -19,7 +19,7 @@ import {
 } from "@ant-design/icons";
 import style from "./index.module.scss";
 import { getMusicUrl } from "../../axios/service/music";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import pubsub from "pubsub-js";
 let timeInterval = null;
 function MusicControl(props) {
@@ -40,9 +40,11 @@ function MusicControl(props) {
   const [showSongList, setShow] = useState(false); //是否展示歌单列表
   const [isSelect, setSelect] = useState([]); //歌单单击背景颜色改变
   const navigate = useNavigate();
+  const location = useLocation();
   useEffect(() => {
     //只要有歌曲传进来 立马进入播放状态
     setState((state) => true);
+    pubsub.publish("changePlayState", true); //给音乐详情页面传值
     if (timeInterval) {
       clearInterval(timeInterval);
       timeInterval = null;
@@ -50,6 +52,10 @@ function MusicControl(props) {
     timeInterval = setInterval(() => {
       setLength((value) => value + 1); //同步更新
     }, 1000);
+    if (location.pathname === "/musicDetail") {
+      //如果当前页面是歌曲详情页面 跳转到新的歌曲详情
+      navigate("/musicDetail?id=" + singDetail.id);
+    }
   }, [singDetail]);
   useEffect(() => {
     //对传入的歌曲信息进行处理
@@ -175,6 +181,8 @@ function MusicControl(props) {
       setLength(0); //进度条清零
     });
     setState((state) => false); //初始化停止播放歌曲
+    pubsub.publish("changePlayState", false); //给音乐详情页面传值
+
     let arr = [];
     props.songsArr.forEach((item) => {
       arr.push(false);
@@ -235,6 +243,7 @@ function MusicControl(props) {
     if (singDetail.songUrl.length > 5) {
       if (playState === true) musicControl.current.pause();
       if (playState === false) musicControl.current.play();
+      pubsub.publish("changePlayState", !playState); //给音乐详情页面传值
       setState((state) => !state);
     }
   };
