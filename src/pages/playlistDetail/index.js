@@ -61,7 +61,11 @@ function PlaylistDetail(props) {
       arr.push(i == index ? true : false);
     }
     setClickArr(arr);
-    navigate(routerArr[index].path + "?id=" + rankId);
+    navigate(routerArr[index].path + "?id=" + rankId, {
+      state: {
+        commentCount: textInfo.commentCount,
+      },
+    });
   };
   const playAll = async () => {
     const {

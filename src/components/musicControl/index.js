@@ -315,7 +315,8 @@ function MusicControl(props) {
                 backgroundSize: "cover",
               }}
               onClick={() => {
-                navigate("/musicDetail?id=" + singDetail.id);
+                if (singDetail.id !== 0)
+                  navigate("/musicDetail?id=" + singDetail.id);
               }}
             ></div>
             <div className={style.otherDetail}>

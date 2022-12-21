@@ -18,7 +18,7 @@ Axios.interceptors.response.use(
   },
   (error) => {
     console.log(error);
-    message.error(error.mesage ? error.message : error.response?.data?.message);
+    message.error(error.mesage ? error.message : "请稍后再试");
   }
 );
 export default Axios;

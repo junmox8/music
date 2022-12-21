@@ -53,6 +53,25 @@
       word-break: break-all;
     }
   }
+  .line3 {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    width: 90%;
+    word-break: break-all;
+    word-wrap: break-word;
+    .username {
+      color: #5090c8;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .content {
+      font-size: 13px;
+      color: #626262;
+    }
+  }
   .lin4 {
     display: flex;
     flex-wrap: nowrap;

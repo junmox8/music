@@ -1,9 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import style from "./index.module.scss";
 export default function Comment(props) {
-  useEffect(() => {
-    console.log(props);
-  }, []);
   return (
     <div className={style.main}>
       <div className={style.avatarContent}>
@@ -31,6 +28,20 @@ export default function Comment(props) {
         </div>
         <div className={style.line2}>
           <div className={style.text}>{props.content}</div>
+        </div>
+        <div
+          className={style.line3}
+          style={{
+            display:
+              props.replyContent && props.replyContent.length > 0
+                ? "block"
+                : "none",
+          }}
+        >
+          <span className={style.username}>
+            @{props.replyUsername}:&nbsp;&nbsp;
+          </span>
+          <span className={style.content}>@{props.replyContent}:</span>
         </div>
         <div className={style.lin4}>
           <div className={style.time}>{props.time}</div>

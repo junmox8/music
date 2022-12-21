@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getSongListComment } from "../../../axios/service/songlist";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
+import PubSub from "pubsub-js";
+import { Pagination } from "antd";
 import Comment2 from "../../../components/comment/index";
 import style from "./index.module.scss";
 export default function Comment(props) {
@@ -9,7 +11,6 @@ export default function Comment(props) {
       const {
         data: { comments },
       } = await getSongListComment(id, 1);
-      console.log(comments);
       setCommentArr(comments);
     })();
   }, []);
@@ -17,6 +18,15 @@ export default function Comment(props) {
   const [commentArr, setCommentArr] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get("id");
+  const location = useLocation();
+  const changePage = async (page) => {
+    PubSub.publish("setLoading", true);
+    const {
+      data: { comments },
+    } = await getSongListComment(id, page);
+    setCommentArr(comments);
+    PubSub.publish("setLoading", false);
+  };
   return (
     <div className={style.main}>
       <div className={style.commentContent}>
@@ -39,9 +49,32 @@ export default function Comment(props) {
               time={item.timeStr}
               content={item.content}
               id={item.commentId}
+              replyUsername={
+                item.beReplied &&
+                item.beReplied.length &&
+                item.beReplied.length > 0
+                  ? item.beReplied[0].user.nickname
+                  : ""
+              }
+              replyContent={
+                item.beReplied &&
+                item.beReplied.length &&
+                item.beReplied.length > 0
+                  ? item.beReplied[0].content
+                  : ""
+              }
             ></Comment2>
           );
         })}
+      </div>
+      <div className={style.paginationContent}>
+        <Pagination
+          defaultCurrent={1}
+          total={location.state.commentCount}
+          pageSize={50}
+          showSizeChanger={false}
+          onChange={changePage}
+        />
       </div>
     </div>
   );
