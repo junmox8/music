@@ -111,11 +111,36 @@
           width: 115%;
           left: -7.5%;
           z-index: 500;
-          height: 10px;
           visibility: hidden;
-          background-color: red;
           top: 50%;
+          display: flex;
+          align-items: center;
           transform: translateY(-50%);
+          .line {
+            width: 80%;
+            display: flex;
+            align-items: center;
+            margin-left: 5px;
+            .line1 {
+              width: 20%;
+              height: 1px;
+              background-image: linear-gradient(to right, #c3c2c2, transparent);
+            }
+            .line2 {
+              width: 60%;
+              background-color: transparent;
+              height: 1px;
+            }
+            .line3 {
+              width: 20%;
+              height: 1px;
+              background-image: linear-gradient(to right, transparent, #c3c2c2);
+            }
+          }
+          .playIcon {
+            font-size: 24px;
+            cursor: pointer;
+          }
         }
       }
       .lyrics:hover {

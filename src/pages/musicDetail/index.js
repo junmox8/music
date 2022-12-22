@@ -1,20 +1,33 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, createRef } from "react";
 import style from "./index.module.scss";
 import { getMusicDetail, getLyric } from "../../axios/service/music";
+import timeExchange from "../../utils/timeExchange"; //分秒转秒
+import { timeFormat2 } from "../../utils/songTimeChange"; //上面倒置
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { CaretRightOutlined } from "@ant-design/icons";
 import PubSub from "pubsub-js";
+let refs = [];
 export default function MusicDetail(props) {
   const navigate = useNavigate();
   const [searchParams, setParams] = useSearchParams();
   const id = searchParams.get("id");
+  const handle = useRef();
+  const scrollDiv = useRef(); //歌词滚动ref
+  const middleDiv = useRef(); //歌词滚动中间横条ref
+  const scroll1 = useRef(); //包含true/false 表示歌曲时间是否到当前歌词  ref来实现实时传值
+  const scroll2 = useRef(); //包含true/false 表示横杠是否到当前歌词 ref来实现实时传值
   useEffect(() => {
     //当id参数重置 进入新的页面 重新发请求获取
     (async function () {
+      setShowTime("00:00"); //重置展示时间
       const result = await getMusicDetail(id);
       setSongDetail(result.data);
       setSinger(result.data.songs[0].ar);
       PubSub.subscribe("changePlayState", (_, state) => {
         setState((s) => state);
+      });
+      PubSub.subscribe("changeTime", (_, value) => {
+        setCurrentTime(value);
       });
       const result2 = await getLyric(id);
       let arr = result2.data.lrc.lyric.split(/[(\r\n)\r\n]+/);
@@ -23,11 +36,22 @@ export default function MusicDetail(props) {
       arr.forEach((item) => {
         let index1 = item.indexOf("[");
         let index2 = item.indexOf("]");
-        arr1.push(item.slice(index1 + 1, index2));
+        arr1.push(timeExchange(item.slice(index1 + 1, index1 + 6))); //获取分秒 00:00  转为秒
         arr2.push(item.slice(index2 + 1, item.length));
       });
+      let refArr = [];
+      let scrollArr = [];
+      arr2.forEach((item, index) => {
+        //给ref数组补充元素
+        refArr.push(createRef());
+        scrollArr.push(false);
+      });
+      refs = refArr;
+      scroll1.current = scrollArr;
+      scroll2.current = scrollArr;
       setLyricArr(arr2);
-      setTimeArr(arr1);
+      timeArr = arr1;
+      scrollDiv.current.addEventListener("scroll", scroll);
     })();
   }, [id]);
   const [playState, setState] = useState(true); //播放状态
@@ -40,12 +64,35 @@ export default function MusicDetail(props) {
       handle.current.style.top = "10px";
     }
   }, [playState]);
-
+  const [currentTime, setCurrentTime] = useState(0); //当前歌曲播放时间
+  useEffect(() => {}, [currentTime]);
   const [songDetail, setSongDetail] = useState({});
   const [singer, setSinger] = useState([]);
   const [lyricArr, setLyricArr] = useState([]); //歌词数组
-  const [timeArr, setTimeArr] = useState([]); //歌词对应的时间
-  const handle = useRef();
+  let timeArr = []; //歌词对应的时间 number秒格式 因为不考虑数组变动 故直接用普通数组表示
+  const [showTime, setShowTime] = useState("00:00"); //中间横杠展示的时间
+  const scroll = () => {
+    const px = middleDiv.current.getBoundingClientRect().top;
+    refs.forEach((item, index) => {
+      if (item) {
+        if (
+          item.current.getBoundingClientRect().top <= px + 7 &&
+          item.current.getBoundingClientRect().top >= px - 5
+        ) {
+          setShowTime(timeFormat2(timeArr[index]));
+          if (scroll1.current[index] !== true) {
+            //确保当前歌词不是正在播放 再改变样式 防止样式被替换掉
+            let arr = scroll2.current;
+            for (let i = 0; i <= arr.length - 1; i++) {
+              if (i === index) arr[i] = true;
+              else arr[i] = false;
+            }
+            scroll2.current = arr;
+          }
+        }
+      }
+    });
+  };
   return (
     <div className={style.main}>
       <div className={style.titleContent}>
@@ -110,16 +157,36 @@ export default function MusicDetail(props) {
             </span>
           </div>
           <div className={style.lyrics}>
-            <div className={style.content}>
+            <div className={style.content} ref={scrollDiv}>
               {lyricArr.map((item, index) => {
                 return (
-                  <div key={index} style={{ marginTop: "8px" }}>
+                  <div
+                    key={index}
+                    style={{
+                      marginTop: "8px",
+                      fontWeight:
+                        scroll2.current[index] === true ? "700" : "400",
+                      fontSize:
+                        scroll2.current[index] === true ? "20px" : "14px",
+                    }}
+                    ref={refs[index]}
+                  >
                     {item}
                   </div>
                 );
               })}
             </div>
-            <div className={style.middleDiv}></div>
+            <div className={style.middleDiv} ref={middleDiv}>
+              <div className={style.showTime}>{showTime}</div>
+              <div className={style.line}>
+                <div className={style.line1}></div>
+                <div className={style.line2}></div>
+                <div className={style.line3}></div>
+              </div>
+              <div className={style.playIcon}>
+                <CaretRightOutlined></CaretRightOutlined>
+              </div>
+            </div>
           </div>
         </div>
       </div>

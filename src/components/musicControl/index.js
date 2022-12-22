@@ -235,8 +235,7 @@ function MusicControl(props) {
         timeInterval = null;
       }
     }
-    //当单曲循环进度条到0
-    // if (slideLength >= 0 && !timeInterval && playState === false)
+    pubsub.publish("changeTime", slideLength);
   }, [slideLength]);
 
   const changePlayState = () => {
