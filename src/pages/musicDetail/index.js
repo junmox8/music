@@ -6,7 +6,7 @@ import { timeFormat2 } from "../../utils/songTimeChange"; //上面倒置
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { CaretRightOutlined } from "@ant-design/icons";
 import PubSub from "pubsub-js";
-let refs = [];
+let refs = []; //每行歌词 ref
 export default function MusicDetail(props) {
   const navigate = useNavigate();
   const [searchParams, setParams] = useSearchParams();
@@ -14,7 +14,7 @@ export default function MusicDetail(props) {
   const handle = useRef();
   const scrollDiv = useRef(); //歌词滚动ref
   const middleDiv = useRef(); //歌词滚动中间横条ref
-  const scroll1 = useRef(); //包含true/false 表示歌曲时间是否到当前歌词  ref来实现实时传值
+  const scrolls1 = useRef(); //包含true/false 表示歌曲时间是否到当前歌词  ref来实现实时传值
   const scroll2 = useRef(); //包含true/false 表示横杠是否到当前歌词 ref来实现实时传值
   useEffect(() => {
     //当id参数重置 进入新的页面 重新发请求获取
@@ -41,14 +41,16 @@ export default function MusicDetail(props) {
       });
       let refArr = [];
       let scrollArr = [];
+      let scrollArr2 = [];
       arr2.forEach((item, index) => {
         //给ref数组补充元素
         refArr.push(createRef());
         scrollArr.push(false);
+        scrollArr2.push(false);
       });
       refs = refArr;
-      scroll1.current = scrollArr;
-      scroll2.current = scrollArr;
+      scrolls1.current = scrollArr;
+      scroll2.current = scrollArr2;
       setLyricArr(arr2);
       timeArr = arr1;
       scrollDiv.current.addEventListener("scroll", scroll);
@@ -80,15 +82,12 @@ export default function MusicDetail(props) {
           item.current.getBoundingClientRect().top >= px - 5
         ) {
           setShowTime(timeFormat2(timeArr[index]));
-          if (scroll1.current[index] !== true) {
-            //确保当前歌词不是正在播放 再改变样式 防止样式被替换掉
-            let arr = scroll2.current;
-            for (let i = 0; i <= arr.length - 1; i++) {
-              if (i === index) arr[i] = true;
-              else arr[i] = false;
-            }
-            scroll2.current = arr;
+          let arr = scroll2.current;
+          for (let i = 0; i <= arr.length - 1; i++) {
+            if (i === index) arr[i] = true;
+            else arr[i] = false;
           }
+          scroll2.current = arr;
         }
       }
     });
@@ -165,9 +164,18 @@ export default function MusicDetail(props) {
                     style={{
                       marginTop: "8px",
                       fontWeight:
-                        scroll2.current[index] === true ? "700" : "400",
+                        scrolls1.current[index] === true ||
+                        scroll2.current[index] === true
+                          ? "700"
+                          : "400",
                       fontSize:
-                        scroll2.current[index] === true ? "20px" : "14px",
+                        scrolls1.current[index] === true ? "20px" : "14px",
+                      color:
+                        scrolls1.current[index] === true
+                          ? "black"
+                          : scroll2.current[index] === true
+                          ? "#484848"
+                          : "",
                     }}
                     ref={refs[index]}
                   >
