@@ -16,6 +16,7 @@ export default function MusicDetail(props) {
   const middleDiv = useRef(); //歌词滚动中间横条ref
   const scrolls1 = useRef(); //包含true/false 表示歌曲时间是否到当前歌词  ref来实现实时传值
   const scroll2 = useRef(); //包含true/false 表示横杠是否到当前歌词 ref来实现实时传值
+  const timeArr = useRef(); //歌词对应的时间 number秒格式 因为不考虑数组变动 故直接用普通数组表示
   useEffect(() => {
     //当id参数重置 进入新的页面 重新发请求获取
     (async function () {
@@ -42,6 +43,7 @@ export default function MusicDetail(props) {
       let refArr = [];
       let scrollArr = [];
       let scrollArr2 = [];
+      timeArr.current = arr1;
       arr2.forEach((item, index) => {
         //给ref数组补充元素
         refArr.push(createRef());
@@ -52,7 +54,7 @@ export default function MusicDetail(props) {
       scrolls1.current = scrollArr;
       scroll2.current = scrollArr2;
       setLyricArr(arr2);
-      timeArr = arr1;
+
       scrollDiv.current.addEventListener("scroll", scroll);
     })();
   }, [id]);
@@ -67,11 +69,22 @@ export default function MusicDetail(props) {
     }
   }, [playState]);
   const [currentTime, setCurrentTime] = useState(0); //当前歌曲播放时间
-  useEffect(() => {}, [currentTime]);
+  useEffect(() => {
+    if (timeArr && timeArr.current)
+      timeArr.current.forEach((item, index) => {
+        if (item === currentTime) {
+          let arr = scrolls1.current;
+          for (let i = 0; i <= arr.length - 1; i++) {
+            if (i === index) arr[i] = true;
+            else arr[i] = false;
+          }
+          scrolls1.current = arr;
+        }
+      });
+  }, [currentTime]);
   const [songDetail, setSongDetail] = useState({});
   const [singer, setSinger] = useState([]);
   const [lyricArr, setLyricArr] = useState([]); //歌词数组
-  let timeArr = []; //歌词对应的时间 number秒格式 因为不考虑数组变动 故直接用普通数组表示
   const [showTime, setShowTime] = useState("00:00"); //中间横杠展示的时间
   const scroll = () => {
     const px = middleDiv.current.getBoundingClientRect().top;
@@ -81,7 +94,7 @@ export default function MusicDetail(props) {
           item.current.getBoundingClientRect().top <= px + 7 &&
           item.current.getBoundingClientRect().top >= px - 5
         ) {
-          setShowTime(timeFormat2(timeArr[index]));
+          setShowTime(timeFormat2(timeArr.current[index]));
           let arr = scroll2.current;
           for (let i = 0; i <= arr.length - 1; i++) {
             if (i === index) arr[i] = true;
