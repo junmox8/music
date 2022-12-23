@@ -120,6 +120,9 @@ export default function MusicDetail(props) {
       }
     }
   };
+  const changeCurrentTime = () => {
+    PubSub.publish("changeCurrentTime", timeExchange(showTime));
+  };
   return (
     <div className={style.main}>
       <div className={style.titleContent}>
@@ -223,7 +226,7 @@ export default function MusicDetail(props) {
                 <div className={style.line2}></div>
                 <div className={style.line3}></div>
               </div>
-              <div className={style.playIcon}>
+              <div className={style.playIcon} onClick={changeCurrentTime}>
                 <CaretRightOutlined></CaretRightOutlined>
               </div>
             </div>

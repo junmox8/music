@@ -180,6 +180,10 @@ function MusicControl(props) {
       sessionStorage.setItem("playingId", arr[0].id);
       setLength(0); //进度条清零
     });
+    pubsub.subscribe("changeCurrentTime", (_, value) => {
+      setLength(value);
+      musicControl.current.currentTime = value;
+    });
     setState((state) => false); //初始化停止播放歌曲
     pubsub.publish("changePlayState", false); //给音乐详情页面传值
 
