@@ -105,6 +105,8 @@
           width: 100%;
           overflow: scroll;
           overflow-x: hidden;
+          transition: all;
+          transition-duration: 2s;
         }
         .middleDiv {
           position: absolute;

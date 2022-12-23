@@ -74,11 +74,16 @@ export default function MusicDetail(props) {
       timeArr.current.forEach((item, index) => {
         if (item === currentTime) {
           let arr = scrolls1.current;
+          let ind = 0;
           for (let i = 0; i <= arr.length - 1; i++) {
-            if (i === index) arr[i] = true;
-            else arr[i] = false;
+            if (i === index) {
+              ind = i;
+              arr[i] = true;
+            } else arr[i] = false;
           }
+
           scrolls1.current = arr;
+          scrollDiv.current.scrollTop = refs[ind].current.offsetTop - 150;
         }
       });
   }, [currentTime]);
@@ -104,6 +109,16 @@ export default function MusicDetail(props) {
         }
       }
     });
+  };
+  const mouseOut = () => {
+    const index = scrolls1.current.indexOf(true);
+    if (index !== -1) {
+      if (refs[index].current.offsetTop) {
+        setTimeout(() => {
+          scrollDiv.current.scrollTop = refs[index].current.offsetTop - 150;
+        }, 1000);
+      }
+    }
   };
   return (
     <div className={style.main}>
@@ -169,7 +184,11 @@ export default function MusicDetail(props) {
             </span>
           </div>
           <div className={style.lyrics}>
-            <div className={style.content} ref={scrollDiv}>
+            <div
+              className={style.content}
+              ref={scrollDiv}
+              onMouseLeave={mouseOut}
+            >
               {lyricArr.map((item, index) => {
                 return (
                   <div
