@@ -7,7 +7,6 @@ export default function Detail(props) {
   useEffect(() => {
     (async function () {
       const result = await getSingerDesc(singerId);
-      console.log(result);
       setArr(result.data.introduction);
       setIntroduction({
         title: "简介",

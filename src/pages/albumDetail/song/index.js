@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import Song2 from "../../../components/song";
 import { useSearchParams } from "react-router-dom";
-import { getSongListDetail } from "../../../axios/service/songlist";
-export default function Song() {
+import { getAlbumDetail } from "../../../axios/service/album";
+export default function AlbumSong() {
   useEffect(() => {
     (async function () {
       const {
         data: { songs },
-      } = await getSongListDetail(id);
+      } = await getAlbumDetail(id);
       let arr = [];
       if (songs && songs instanceof Array) {
         songs.forEach((item) => {
@@ -44,9 +44,6 @@ export default function Song() {
             fee={item.fee} //会员非会员区别
             time={item.dt}
             isSelect={isSelect[index]}
-            singer={JSON.stringify(item.ar)}
-            album={JSON.stringify(item.al)}
-            type={1}
           ></Song2>
         );
       })}

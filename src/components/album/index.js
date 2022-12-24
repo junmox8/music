@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import { PlayCircleOutlined } from "@ant-design/icons";
 import Song from "../song";
+import { useNavigate } from "react-router-dom";
 import { getAlbumDetail } from "../../axios/service/music";
 import { connect } from "react-redux";
 import PlayAllMusic from "../../utils/playAllMusic";
@@ -14,6 +15,7 @@ function AlbumComponent(props) {
     })();
   }, []);
   const [songs, setSongs] = useState([]);
+  const navigate = useNavigate();
   const playAllSongs = async () => {
     PlayAllMusic(songs, props.userInfo.isLogin, props.userInfo.vip);
   };
@@ -26,7 +28,12 @@ function AlbumComponent(props) {
         ></div>
         <div className={style.singContent}>
           <div className={style.firstLine}>
-            <div className={style.text}>{props.name}</div>
+            <div
+              className={style.text}
+              onClick={() => navigate("/albumDetail?id=" + props.id)}
+            >
+              {props.name}
+            </div>
             <PlayCircleOutlined
               onClick={playAllSongs}
               style={{ marginLeft: "25px", cursor: "pointer" }}

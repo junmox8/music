@@ -17,6 +17,10 @@ import PlaylistDetail from "../pages/playlistDetail";
 import Song from "../pages/playlistDetail/song";
 import Comment from "../pages/playlistDetail/comment";
 import MusicDetail from "../pages/musicDetail";
+import AlbumDetail from "../pages/albumDetail";
+import AlbumComment from "../pages/albumDetail/comment";
+import AlbumInfo from "../pages/albumDetail/info";
+import AlbumSong from "../pages/albumDetail/song";
 // const Songlist = lazy(() => import("../pages/findMusic/songlist"));
 // const Index = lazy(() => import("../pages/index/index"));
 // const FindMusic = lazy(() => import("../pages/findMusic/index"));
@@ -96,6 +100,24 @@ const Routes = () => {
             {
               path: "/playlist/comment",
               element: <Comment></Comment>,
+            },
+          ],
+        },
+        {
+          path: "/albumDetail",
+          element: <AlbumDetail></AlbumDetail>,
+          children: [
+            {
+              path: "/albumDetail/song",
+              element: <AlbumSong></AlbumSong>,
+            },
+            {
+              path: "/albumDetail/comment",
+              element: <AlbumComment></AlbumComment>,
+            },
+            {
+              path: "/albumDetail/info",
+              element: <AlbumInfo></AlbumInfo>,
             },
           ],
         },

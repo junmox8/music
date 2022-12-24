@@ -125,6 +125,7 @@ function Song(props) {
       <div
         style={{ display: props.type === 1 ? "block" : "none" }}
         className={style.album}
+        onClick={() => navigate("/albumDetail?id=" + albumText.id)}
       >
         <span>{albumText.name}</span>
       </div>

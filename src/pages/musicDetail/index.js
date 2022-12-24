@@ -180,7 +180,12 @@ export default function MusicDetail(props) {
           </div>
           <div className={style.album}>
             <span>专辑:&nbsp;</span>
-            <span className={style.text}>
+            <span
+              className={style.text}
+              onClick={() =>
+                navigate("/albumDetail?id=" + songDetail.songs[0].al.id)
+              }
+            >
               {songDetail.songs && songDetail.songs.length > 0
                 ? songDetail.songs[0].al.name
                 : ""}

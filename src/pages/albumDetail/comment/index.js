@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { getSongListComment } from "../../../axios/service/songlist";
+import { getAlbumConment } from "../../../axios/service/album";
 import { useSearchParams, useLocation } from "react-router-dom";
 import PubSub from "pubsub-js";
 import { Pagination } from "antd";
 import Comment2 from "../../../components/comment/index";
 import style from "./index.module.scss";
-export default function Comment(props) {
+export default function AlbumComment(props) {
   useEffect(() => {
     (async function () {
       const {
         data: { comments },
-      } = await getSongListComment(id, 1);
+      } = await getAlbumConment(id, 1);
       setCommentArr(comments);
     })();
   }, []);
@@ -22,7 +22,7 @@ export default function Comment(props) {
     PubSub.publish("setLoading", true);
     const {
       data: { comments },
-    } = await getSongListComment(id, page);
+    } = await getAlbumConment(id, page);
     setCommentArr(comments);
     PubSub.publish("setLoading", false);
   };

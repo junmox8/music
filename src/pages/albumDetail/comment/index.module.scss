@@ -1,0 +1,12 @@
+.main {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  .paginationContent {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+}
