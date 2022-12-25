@@ -21,7 +21,6 @@ import AlbumDetail from "../pages/albumDetail";
 import AlbumComment from "../pages/albumDetail/comment";
 import AlbumInfo from "../pages/albumDetail/info";
 import AlbumSong from "../pages/albumDetail/song";
-import KeepAlive from "react-activation";
 // const Songlist = lazy(() => import("../pages/findMusic/songlist"));
 // const Index = lazy(() => import("../pages/index/index"));
 // const FindMusic = lazy(() => import("../pages/findMusic/index"));
@@ -40,171 +39,91 @@ const Routes = () => {
       children: [
         {
           path: "/findMusic",
-          element: (
-            <KeepAlive id="1">
-              <FindMusic />
-            </KeepAlive>
-          ),
+          element: <FindMusic />,
           children: [
             {
               path: "/findMusic/recommand",
-              element: (
-                <KeepAlive id="2">
-                  <Recommand />
-                </KeepAlive>
-              ),
+              element: <Recommand />,
             },
             {
               path: "/findMusic/songlist",
-              element: (
-                <KeepAlive id="3">
-                  <Songlist />
-                </KeepAlive>
-              ),
+              element: <Songlist />,
             },
             {
               path: "/findMusic/rank",
-              element: (
-                <KeepAlive id="4">
-                  <Rank />
-                </KeepAlive>
-              ),
+              element: <Rank />,
             },
             {
               path: "/findMusic/singer",
-              element: (
-                <KeepAlive id="5">
-                  <Singer />
-                </KeepAlive>
-              ),
+              element: <Singer />,
             },
             {
               path: "/findMusic/newest",
-              element: (
-                <KeepAlive id="6">
-                  <Newest />,
-                </KeepAlive>
-              ),
+              element: <Newest />,
             },
           ],
         },
         {
           path: "/personalFM",
-          element: (
-            <KeepAlive id="7">
-              <PersonalFM />
-            </KeepAlive>
-          ),
+          element: <PersonalFM />,
         },
         {
           path: "/video",
-          element: (
-            <KeepAlive id="8">
-              <Video />
-            </KeepAlive>
-          ),
+          element: <Video />,
         },
         {
           path: "/singer",
-          element: (
-            <KeepAlive id="9">
-              <SingerDetail />
-            </KeepAlive>
-          ),
+          element: <SingerDetail />,
           children: [
             {
               path: "/singer/album",
-              element: (
-                <KeepAlive id="10">
-                  <Album />
-                </KeepAlive>
-              ),
+              element: <Album />,
             },
             {
               path: "/singer/MV",
-              element: (
-                <KeepAlive id="11">
-                  <MV />
-                </KeepAlive>
-              ),
+              element: <MV />,
             },
             {
               path: "/singer/detail",
-              element: (
-                <KeepAlive id="12">
-                  <Detail />
-                </KeepAlive>
-              ),
+              element: <Detail />,
             },
           ],
         },
         {
           path: "/playlist",
-          element: (
-            <KeepAlive id="13">
-              <PlaylistDetail />
-            </KeepAlive>
-          ),
+          element: <PlaylistDetail />,
           children: [
             {
               path: "/playlist/song",
-              element: (
-                <KeepAlive id="14">
-                  <Song />
-                </KeepAlive>
-              ),
+              element: <Song />,
             },
             {
               path: "/playlist/comment",
-              element: (
-                <KeepAlive id="15">
-                  <Comment />
-                </KeepAlive>
-              ),
+              element: <Comment />,
             },
           ],
         },
         {
           path: "/albumDetail",
-          element: (
-            <KeepAlive id="16">
-              <AlbumDetail />
-            </KeepAlive>
-          ),
+          element: <AlbumDetail />,
           children: [
             {
               path: "/albumDetail/song",
-              element: (
-                <KeepAlive id="17">
-                  <AlbumSong />
-                </KeepAlive>
-              ),
+              element: <AlbumSong />,
             },
             {
               path: "/albumDetail/comment",
-              element: (
-                <KeepAlive id="18">
-                  <AlbumComment />
-                </KeepAlive>
-              ),
+              element: <AlbumComment />,
             },
             {
               path: "/albumDetail/info",
-              element: (
-                <KeepAlive id="19">
-                  <AlbumInfo />
-                </KeepAlive>
-              ),
+              element: <AlbumInfo />,
             },
           ],
         },
         {
           path: "/musicDetail",
-          element: (
-            <KeepAlive id="20">
-              <MusicDetail />
-            </KeepAlive>
-          ),
+          element: <MusicDetail />,
         },
       ],
     },

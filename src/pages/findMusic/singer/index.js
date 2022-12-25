@@ -10,12 +10,14 @@ let timeInterval = null;
 export default function Singer() {
   async function scroll() {
     //节流
+    console.log(1);
     if (!timeInterval) {
       if (page.current.scrollHeight <= page.current.scrollTop + 1200) {
         timeInterval = setTimeout(() => {
           clearTimeout(timeInterval);
           timeInterval = null;
         }, 1000);
+        console.log(1);
         setPage((page) => page + 1);
       }
     }
