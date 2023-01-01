@@ -1,0 +1,15 @@
+.main {
+  height: 33px;
+  padding-left: 22px;
+  line-height: 33px;
+  font-size: 13px;
+  .content {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+.main:hover {
+  background-color: #f2f2f2;
+}

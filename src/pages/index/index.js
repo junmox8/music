@@ -4,14 +4,22 @@ import Loading from "../../components/loading/loginLoading";
 import CollectSinger from "../../components/loading/collectSinger";
 import Login from "../../components/login";
 import MusicControl from "../../components/musicControl";
+import SuggestWord from "../../components/suggestWord";
+import {
+  getHotSearchWords,
+  getSearchSuggests,
+} from "../../axios/service/search";
 import PubSub from "pubsub-js";
-import { Layout } from "antd";
+import { Layout, Popover } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { loginByQr, createQr } from "../../axios/service/login";
-import { PoweroffOutlined } from "@ant-design/icons";
+import { PoweroffOutlined, SearchOutlined } from "@ant-design/icons";
+import HotWord from "../../components/hotWord";
 import routerArr from "../../json/routerArr";
 import { connect } from "react-redux";
 const { Header, Content, Footer, Sider } = Layout;
+let timeInterval = null; //搜索防抖
+let flag = false; //判断是否输入完毕 中文拼音问题
 function Index(props) {
   useEffect(() => {
     navigate(routerArr[0].path, { replace: true });
@@ -23,6 +31,12 @@ function Index(props) {
     PubSub.subscribe("setLoading", (_, data) => {
       props.setLoading(data);
     });
+    (async function () {
+      const {
+        data: { data: result }, //获取热搜条目
+      } = await getHotSearchWords();
+      setHotWords(result);
+    })();
   }, []);
   const navigate = useNavigate();
   const [clickArr, setClickArr] = useState([]); //判断有没有点击路由
@@ -30,6 +44,11 @@ function Index(props) {
   const [isLoading, setLoading] = useState(false); //控制loading显示
   const [qrimg, setImgUrl] = useState(""); //二维码图片url
   const [qrkey, setQrKey] = useState(""); //二维码图片key
+  const [value, setValue] = useState(""); //搜索框
+  const [hotWords, setHotWords] = useState([]); //热搜词
+  const [suggestAlbum, setSuggestAlbum] = useState([]); //搜索建议专辑
+  const [suggestSong, setSuggestSong] = useState([]); //搜索建议单曲
+  const [suggestSonglist, setSuggestSonglist] = useState([]); //搜索建议歌单
   const exitBox = useRef();
   const click = (index) => {
     let arr = [];
@@ -58,6 +77,49 @@ function Index(props) {
       setLogin(true);
     }
   };
+  const changeInput = async (e) => {
+    setValue(e.target.value);
+    if (e.target.value.length === 0) {
+      setSuggestAlbum([]);
+      setSuggestSong([]);
+      setSuggestSonglist([]);
+    }
+    if (timeInterval == null && flag === true) {
+      timeInterval = setTimeout(async () => {
+        const result = await getSearchSuggests(e.target.value);
+        if (result && result.data && result.data.result) {
+          setSuggestAlbum(
+            typeof result.data.result.albums != "undefined"
+              ? result.data.result.albums
+              : []
+          );
+          setSuggestSong(
+            typeof result.data.result.songs != "undefined"
+              ? result.data.result.songs
+              : []
+          );
+          setSuggestSonglist(
+            typeof result.data.result.playlists != "undefined"
+              ? result.data.result.playlists
+              : []
+          );
+        }
+        clearTimeout(timeInterval);
+        timeInterval = null;
+      }, 500);
+    } else {
+      clearTimeout(timeInterval);
+      timeInterval = null;
+    }
+  };
+  function dealWithStr(item) {
+    let str = "";
+    item.artists.forEach((i, ind) => {
+      if (ind !== item.artists.length - 1) str += i.name + "/";
+      else str += i.name;
+    });
+    return str;
+  }
   return (
     <div className={style.global}>
       <div
@@ -104,6 +166,117 @@ function Index(props) {
             }}
             src="https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1668331046337"
           ></img>
+          <div className={style.searchContent}>
+            <div className={style.searchBox}>
+              <div className={style.icon}>
+                <SearchOutlined></SearchOutlined>
+              </div>
+              <div className={style.inputBox}>
+                <Popover
+                  title={value.length === 0 ? "热搜榜" : "猜你想搜"}
+                  trigger="focus"
+                  content={() => {
+                    return (
+                      <div className={style.popover}>
+                        <div
+                          style={{
+                            display: value.length === 0 ? "block" : "none",
+                          }}
+                        >
+                          {hotWords.map((item, index) => {
+                            return (
+                              <HotWord
+                                key={index}
+                                index={index + 1}
+                                content={item.content}
+                                score={item.score}
+                                word={item.searchWord}
+                                iconUrl={item.iconUrl ? item.iconUrl : ""}
+                              ></HotWord>
+                            );
+                          })}
+                        </div>
+                        <div
+                          style={{
+                            display: value.length === 0 ? "none" : "block",
+                          }}
+                        >
+                          <img
+                            style={{ height: "15px" }}
+                            src="https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1672477149646"
+                          ></img>
+                          <div className={style.songs}>
+                            {suggestSong.map((item, index) => {
+                              return (
+                                <SuggestWord
+                                  key={index}
+                                  name={item.name}
+                                  id={item.id}
+                                  artist={dealWithStr(item)}
+                                  type={0}
+                                  word={value}
+                                ></SuggestWord>
+                              );
+                            })}
+                          </div>
+                          <img
+                            style={{ height: "14px" }}
+                            src="https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1672477278670"
+                          ></img>
+                          <div className={style.albums}>
+                            {suggestAlbum.map((item, index) => {
+                              return (
+                                <SuggestWord
+                                  key={index}
+                                  name={item.name}
+                                  artist={item.artist.name}
+                                  id={item.id}
+                                  type={1}
+                                  word={value}
+                                ></SuggestWord>
+                              );
+                            })}
+                          </div>
+                          <img
+                            style={{ height: "14px" }}
+                            src="https://huangjunyi-1310688513.cos.ap-shanghai.myqcloud.com/articleCover/1672477492245"
+                          ></img>
+                          <div className={style.songlists}>
+                            {suggestSonglist.map((item, index) => {
+                              return (
+                                <SuggestWord
+                                  key={index}
+                                  name={item.name}
+                                  id={item.id}
+                                  type={2}
+                                  word={value}
+                                ></SuggestWord>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }}
+                >
+                  <input
+                    type="text"
+                    onChange={async (e) => changeInput(e)}
+                    onCompositionStart={() => {
+                      flag = false;
+                    }}
+                    onCompositionEnd={(e) => {
+                      flag = true;
+                      changeInput(e);
+                    }}
+                    className={style.input}
+                    value={value}
+                    placeholder="请输入"
+                  ></input>
+                </Popover>
+              </div>
+            </div>
+          </div>
           <div
             className={style.infoContainer}
             onClick={login}

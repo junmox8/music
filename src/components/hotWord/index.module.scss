@@ -1,0 +1,51 @@
+.main {
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  .xuhao {
+    width: 40px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+  }
+  .content {
+    height: 100%;
+    width: calc(100% - 40px);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 13px;
+    align-content: space-around;
+    .line1 {
+      display: flex;
+      flex-wrap: nowrap;
+      .word {
+        font-weight: 700;
+      }
+      .icons {
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        align-self: flex-end;
+        .icon {
+          width: 23px;
+          height: 12px;
+          background-size: contain !important;
+          background-repeat: no-repeat;
+        }
+      }
+    }
+    .line2 {
+      color: #919191;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+.main:hover {
+  background-color: #f2f2f2;
+}
