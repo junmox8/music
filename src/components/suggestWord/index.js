@@ -1,6 +1,8 @@
 import React from "react";
 import style from "./index.module.scss";
+import { useNavigate } from "react-router-dom";
 export default function SuggestWord(props) {
+  const navigate = useNavigate();
   const fn = function (label, searchStr) {
     if (typeof label == "string" && typeof searchStr == "string") {
       const reg = new RegExp(searchStr, "gi");
@@ -41,6 +43,9 @@ export default function SuggestWord(props) {
         />
       </div>
       <div
+        onClick={() => {
+          navigate("/playlist/song?id=" + props.id);
+        }}
         className={style.content}
         style={{ display: props.type === 2 ? "display" : "none" }}
       >

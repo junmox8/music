@@ -122,7 +122,6 @@ function Index(props) {
   }
   const search = function (e) {
     if (e.code === "Enter" && value.length !== 0) {
-      PubSub.publish("search", value);
       navigate("/searchPage/song?words=" + value);
     }
   };

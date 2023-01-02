@@ -9,4 +9,24 @@
     color: #999999;
     font-size: 12px;
   }
+  .btnContent {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    outline: none;
+  }
+  .textLine {
+    font-size: 13px;
+    color: #888888;
+    margin-top: 20px;
+    position: relative;
+    height: 10px;
+    line-height: 10px;
+    span {
+      position: absolute;
+    }
+  }
+  .songs {
+    margin-top: 10px;
+  }
 }
