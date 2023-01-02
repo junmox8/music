@@ -21,6 +21,11 @@ import AlbumDetail from "../pages/albumDetail";
 import AlbumComment from "../pages/albumDetail/comment";
 import AlbumInfo from "../pages/albumDetail/info";
 import AlbumSong from "../pages/albumDetail/song";
+import SearchPage from "../pages/searchPage";
+import SearchPageAlbum from "../pages/searchPage/album";
+import SearchPagePlaylist from "../pages/searchPage/playlist";
+import SearchPageArtist from "../pages/searchPage/artist";
+import SearchPageSong from "../pages/searchPage/song";
 // const Songlist = lazy(() => import("../pages/findMusic/songlist"));
 // const Index = lazy(() => import("../pages/index/index"));
 // const FindMusic = lazy(() => import("../pages/findMusic/index"));
@@ -124,6 +129,28 @@ const Routes = () => {
         {
           path: "/musicDetail",
           element: <MusicDetail />,
+        },
+        {
+          path: "/searchPage",
+          element: <SearchPage />,
+          children: [
+            {
+              path: "/searchPage/song",
+              element: <SearchPageSong></SearchPageSong>,
+            },
+            {
+              path: "/searchPage/artist",
+              element: <SearchPageArtist></SearchPageArtist>,
+            },
+            {
+              path: "/searchPage/album",
+              element: <SearchPageAlbum></SearchPageAlbum>,
+            },
+            {
+              path: "/searchPage/playlist",
+              element: <SearchPagePlaylist></SearchPagePlaylist>,
+            },
+          ],
         },
       ],
     },

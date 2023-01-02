@@ -120,6 +120,12 @@ function Index(props) {
     });
     return str;
   }
+  const search = function (e) {
+    if (e.code === "Enter" && value.length !== 0) {
+      PubSub.publish("search", value);
+      navigate("/searchPage/song?words=" + value);
+    }
+  };
   return (
     <div className={style.global}>
       <div
@@ -269,6 +275,7 @@ function Index(props) {
                       flag = true;
                       changeInput(e);
                     }}
+                    onKeyDown={search}
                     className={style.input}
                     value={value}
                     placeholder="请输入"

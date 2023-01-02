@@ -1,0 +1,45 @@
+.main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding-left: 25px;
+  padding-top: 20px;
+  overflow: scroll !important;
+  overflow-x: hidden !important;
+  .searchWord {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .content {
+    width: 100% !important;
+    height: calc(100% - 50px);
+    position: relative;
+  }
+}
+.routerLine {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-wrap: nowrap;
+  div {
+    margin-left: 2%;
+    line-height: 50px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+}
+.clickLink {
+  color: #373737;
+  font-size: 19px !important;
+  font-weight: 700;
+  position: relative;
+}
+.redLine {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 3px;
+  left: 18%;
+  width: 60%;
+  height: 3px;
+  background-color: #ec4141;
+}

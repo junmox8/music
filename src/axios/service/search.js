@@ -7,3 +7,17 @@ export const getSearchSuggests = (word) => {
     "/api/search/suggest?keywords=" + word + "&timestamp=" + Date.now()
   );
 };
+export const searchWords = (word, page, limit, type) => {
+  return Axios.get(
+    "/api/cloudsearch?keywords=" +
+      word +
+      "&limit=" +
+      limit +
+      "&type=" +
+      type +
+      "&offset=" +
+      (page - 1) * limit +
+      "&timestamp=" +
+      Date.now()
+  );
+};
