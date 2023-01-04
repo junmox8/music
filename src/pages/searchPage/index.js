@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import searchRouterArr from "../../json/searchRouterArr";
+import PubSub from "pubsub-js";
 import style from "./index.module.scss";
 export default function SearchPage() {
   useEffect(() => {
+    PubSub.subscribe("initPage", (_, v) => {
+      //在搜索页面初始化路由文字样式(红色部分)
+      let arr = [];
+      searchRouterArr.forEach((item, index) => {
+        arr.push(index === 0 ? true : false);
+      });
+      setClickArr(arr);
+    });
     let arr = [];
     searchRouterArr.forEach((item, index) => {
       arr.push(index === 0 ? true : false);

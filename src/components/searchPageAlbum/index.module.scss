@@ -1,0 +1,34 @@
+.main {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 20px;
+  .img {
+    height: 60px;
+    width: 60px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .name {
+    margin-left: 10px;
+    width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .name22 {
+    display: flex;
+    .name1 {
+      font-weight: 500;
+    }
+    .name2 {
+      margin-left: 5px;
+      color: #919192;
+    }
+  }
+}
+.main:hover {
+  background-color: #f2f2f3;
+}

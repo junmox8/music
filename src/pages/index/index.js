@@ -123,6 +123,7 @@ function Index(props) {
   const search = function (e) {
     if (e.code === "Enter" && value.length !== 0) {
       navigate("/searchPage/song?words=" + value);
+      PubSub.publish("initPage", 1); //在搜索页面初始化路由文字样式(红色部分)
     }
   };
   return (

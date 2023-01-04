@@ -5,14 +5,16 @@ import { CaretRightFilled } from "@ant-design/icons";
 import { searchWords } from "../../../axios/service/search";
 import PlayAllMusic from "../../../utils/playAllMusic";
 import { connect } from "react-redux";
-import { Button } from "antd";
+import { Button, Pagination } from "antd";
 import Song2 from "../../../components/song";
 import PubSub from "pubsub-js";
 function SearchPageSong(props) {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
   const word = searchParams.get("words");
   useEffect(() => {
     setSongs([]);
+    setCurrentPage(1);
     setSongCount(0);
     (async function () {
       PubSub.publish("setLoading", true);
@@ -44,6 +46,20 @@ function SearchPageSong(props) {
   };
   const playAll = async () => {
     PlayAllMusic(songs, props.userInfo.isLogin, props.userInfo.vip);
+  };
+  const changePageSize = async (page) => {
+    setCurrentPage((p) => page);
+    PubSub.publish("setLoading", true);
+    const result = await searchWords(word, page, 100, 1);
+    let arr = [];
+    if (result.data.result.songs && result.data.result.songs instanceof Array) {
+      result.data.result.songs.forEach((item) => {
+        arr.push(false);
+      });
+      setSelect(arr);
+    }
+    setSongs(result.data.result.songs);
+    PubSub.publish("setLoading", false);
   };
   return (
     <div className={style.main}>
@@ -89,7 +105,7 @@ function SearchPageSong(props) {
               key={index}
               name={item.name}
               engName={item.alia.length > 0 ? item.alia[0] : ""}
-              index={index}
+              index={index + (currentPage - 1) * 100}
               id={item.id}
               fee={item.fee} //会员非会员区别
               time={item.dt}
@@ -100,6 +116,15 @@ function SearchPageSong(props) {
             ></Song2>
           );
         })}
+      </div>
+      <div className={style.pageContent}>
+        <Pagination
+          pageSize={100}
+          showSizeChanger={false}
+          total={songCount}
+          onChange={changePageSize}
+          current={currentPage}
+        />
       </div>
     </div>
   );

@@ -58,7 +58,7 @@ export default function MusicDetail(props) {
       scrollDiv.current.addEventListener("scroll", scroll);
     })();
   }, [id]);
-  const [playState, setState] = useState(true); //播放状态
+  const [playState, setState] = useState(false); //播放状态
   useEffect(() => {
     if (playState === true) {
       handle.current.style.left = "-115px";

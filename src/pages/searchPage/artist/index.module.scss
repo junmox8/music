@@ -1,0 +1,19 @@
+.main {
+  width: 100%;
+  height: auto;
+  position: relative;
+  .topText {
+    position: absolute;
+    top: -35px;
+    right: 5%;
+    color: #999999;
+    font-size: 12px;
+  }
+  .pageContent {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+  }
+}
