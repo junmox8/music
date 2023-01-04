@@ -41,6 +41,27 @@ function Song(props) {
       } else message.error("操作失败,请稍后重试");
     } else message.error("请先登录");
   };
+  const fn = function (label, searchStr) {
+    if (typeof label == "string" && typeof searchStr == "string") {
+      const reg = new RegExp(searchStr, "gi");
+      let start = 0;
+      let end = 0;
+      let newStr = "";
+      let arr;
+      while ((arr = reg.exec(label)) !== null) {
+        end = arr.index;
+        newStr = newStr + label.slice(start, end);
+        start = end;
+        end = reg.lastIndex;
+        newStr =
+          newStr +
+          `<span style="color: #507daf">${label.slice(start, end)}</span>`;
+        start = end;
+      }
+      newStr = newStr + label.slice(end);
+      return newStr;
+    }
+  };
   return (
     <div
       onClick={() => props.c(props.index)}
@@ -90,7 +111,15 @@ function Song(props) {
             color: props.id === props.musicPlaying.id ? "#EC4141" : "#333333",
           }}
         >
-          {props.name}
+          {props.word && props.word.length > 0 ? (
+            <span
+              dangerouslySetInnerHTML={{
+                __html: fn(props.name, props.word),
+              }}
+            />
+          ) : (
+            <span>{props.name}</span>
+          )}
         </span>
         <span style={{ color: "#B6B6B6" }}>
           {props.engName.length > 0 ? "（" + props.engName + "）" : ""}
@@ -111,13 +140,27 @@ function Song(props) {
       >
         {singerText.map((item, index) => {
           return (
-            <span
-              onClick={() => navigate("/singer/album?id=" + item.id)}
-              style={{ marginRight: "5px" }}
-              key={index}
-              id={item.id}
-            >
-              {item.name}
+            <span>
+              {props.word && props.word.length > 0 ? (
+                <span
+                  onClick={() => navigate("/singer/album?id=" + item.id)}
+                  style={{ marginRight: "5px" }}
+                  key={index}
+                  id={item.id}
+                  dangerouslySetInnerHTML={{
+                    __html: fn(item.name, props.word),
+                  }}
+                />
+              ) : (
+                <span
+                  onClick={() => navigate("/singer/album?id=" + item.id)}
+                  style={{ marginRight: "5px" }}
+                  key={index}
+                  id={item.id}
+                >
+                  {item.name}
+                </span>
+              )}
             </span>
           );
         })}
@@ -127,7 +170,15 @@ function Song(props) {
         className={style.album}
         onClick={() => navigate("/albumDetail?id=" + albumText.id)}
       >
-        <span>{albumText.name}</span>
+        {props.word && props.word.length > 0 ? (
+          <span
+            dangerouslySetInnerHTML={{
+              __html: fn(albumText.name, props.word),
+            }}
+          />
+        ) : (
+          <span>{albumText.name}</span>
+        )}
       </div>
     </div>
   );

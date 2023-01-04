@@ -28,14 +28,23 @@ export default function SearchPageAlbumComponent(props) {
     <div
       className={style.main}
       onClick={() => {
-        navigate("/singer/album?id=" + props.id);
+        navigate("/albumDetail/song?id=" + props.id);
       }}
     >
       <img className={style.img} src={props.img}></img>
       <div className={style.name}>
-        <span>{props.name}</span>
+        <span
+          dangerouslySetInnerHTML={{
+            __html: fn(props.name, props.word),
+          }}
+        />
       </div>
-      <span className={style.name22}>
+      <span
+        className={style.name22}
+        onClick={() => {
+          navigate("/singer/album?id=" + props.artistId);
+        }}
+      >
         <span
           className={style.name1}
           dangerouslySetInnerHTML={{

@@ -41,6 +41,7 @@ export default function SearchPageAlbum(props) {
               name={item.name}
               id={item.id}
               artistName={item.artist.name}
+              artistId={item.artist.id}
               artistName2={
                 item.artist.alias && item.artist.alias.length > 0
                   ? item.artist.alias[0]

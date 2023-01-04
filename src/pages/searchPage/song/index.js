@@ -112,6 +112,7 @@ function SearchPageSong(props) {
               isSelect={isSelect[index]}
               singer={JSON.stringify(item.ar)}
               album={JSON.stringify(item.al)}
+              word={word}
               type={1}
             ></Song2>
           );
