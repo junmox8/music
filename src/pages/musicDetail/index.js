@@ -4,10 +4,11 @@ import { getMusicDetail, getLyric } from "../../axios/service/music";
 import timeExchange from "../../utils/timeExchange"; //分秒转秒
 import { timeFormat2 } from "../../utils/songTimeChange"; //上面倒置
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
 import { CaretRightOutlined } from "@ant-design/icons";
 import PubSub from "pubsub-js";
 let refs = []; //每行歌词 ref
-export default function MusicDetail(props) {
+function MusicDetail(props) {
   const navigate = useNavigate();
   const [searchParams, setParams] = useSearchParams();
   const id = searchParams.get("id");
@@ -60,14 +61,14 @@ export default function MusicDetail(props) {
   }, [id]);
   const [playState, setState] = useState(false); //播放状态
   useEffect(() => {
-    if (playState === true) {
+    if (props.playState === true) {
       handle.current.style.left = "-115px";
       handle.current.style.top = "68px";
     } else {
       handle.current.style.left = "10px";
       handle.current.style.top = "10px";
     }
-  }, [playState]);
+  }, [props.playState]);
   const [currentTime, setCurrentTime] = useState(0); //当前歌曲播放时间
   useEffect(() => {
     if (timeArr && timeArr.current)
@@ -131,7 +132,9 @@ export default function MusicDetail(props) {
             <div
               className={style.icon2}
               style={{
-                transform: `rotateZ(${playState === true ? "80deg" : "0deg"})`,
+                transform: `rotateZ(${
+                  props.playState === true ? "80deg" : "0deg"
+                })`,
               }}
               ref={handle}
             ></div>
@@ -139,7 +142,8 @@ export default function MusicDetail(props) {
           <div
             className={style.circle1}
             style={{
-              animationPlayState: playState === true ? "running" : "paused",
+              animationPlayState:
+                props.playState === true ? "running" : "paused",
             }}
           >
             <div className={style.circle2}>
@@ -241,3 +245,10 @@ export default function MusicDetail(props) {
     </div>
   );
 }
+const a = (state) => {
+  return {
+    playState: state.playState,
+  };
+};
+const b = null;
+export default connect(a, b)(MusicDetail);

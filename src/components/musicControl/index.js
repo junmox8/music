@@ -247,6 +247,7 @@ function MusicControl(props) {
       if (playState === true) musicControl.current.pause();
       if (playState === false) musicControl.current.play();
       pubsub.publish("changePlayState", !playState); //给音乐详情页面传值
+      props.setPlayState(!playState);
       setState((state) => !state);
     }
   };
@@ -450,6 +451,7 @@ const a = (state) => {
   return {
     songsArr: state.songsArr,
     musicPlaying: state.musicPlaying,
+    playState: state.playState,
   };
 };
 const b = (dispatch) => {
@@ -458,6 +460,7 @@ const b = (dispatch) => {
     addSongToArr: (value) => dispatch({ type: "addSongToArr", data: value }),
     setPlayingMusic: (value) =>
       dispatch({ type: "setPlayingMusic", data: value }),
+    setPlayState: (value) => dispatch({ type: "setPlayState", data: value }),
   };
 };
 export default connect(a, b)(MusicControl);

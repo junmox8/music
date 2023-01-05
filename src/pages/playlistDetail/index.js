@@ -14,6 +14,8 @@ import { connect } from "react-redux";
 import { useSearchParams, useNavigate, Outlet } from "react-router-dom";
 import routerArr from "../../json/songListRouterArr";
 function PlaylistDetail(props) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const rankId = searchParams.get("id");
   useEffect(() => {
     (async function () {
       const {
@@ -28,8 +30,8 @@ function PlaylistDetail(props) {
       setClickArr(arr);
       navigate(routerArr[0].path + "?id=" + rankId, { replace: true });
     })();
-  }, []);
-  const [searchParams, setSearchParams] = useSearchParams();
+  }, [rankId]);
+
   const [textInfo, setInfo] = useState({
     id: 0,
     name: "",
@@ -52,7 +54,7 @@ function PlaylistDetail(props) {
     },
   });
   const [songsArr, setArr] = useState([]);
-  const rankId = searchParams.get("id");
+
   const navigate = useNavigate();
   const [clickArr, setClickArr] = useState([]); //判断有没有点击路由
   const click = (index) => {

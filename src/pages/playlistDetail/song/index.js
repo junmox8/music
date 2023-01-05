@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import { getUserLikeMusics } from "../../../axios/service/music";
 import { getSongListDetail } from "../../../axios/service/songlist";
 function Song(props) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const id = searchParams.get("id");
   useEffect(() => {
     (async function () {
       const {
@@ -26,9 +28,8 @@ function Song(props) {
         props.setUserLikeMusic(ids);
       }
     })();
-  }, []);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const id = searchParams.get("id");
+  }, [id]);
+
   const [songs, setSongs] = useState([]);
   const [isSelect, setSelect] = useState([]); //热门歌曲单击背景颜色改变
   const SingleClickHotSong = (index) => {

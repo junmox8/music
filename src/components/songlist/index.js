@@ -1,10 +1,17 @@
 import React from "react";
 import style from "./index.module.scss";
 import { PlayCircleOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import numberDeal from "../../utils/playCount";
 export default function Songlist(props) {
+  const navigate = useNavigate();
   return (
-    <div className={style.main}>
+    <div
+      className={style.main}
+      onClick={() => {
+        navigate("/playlist?id=" + props.id);
+      }}
+    >
       <div className={style.imgContain}>
         <div className={style.countArea}>
           <CaretRightOutlined

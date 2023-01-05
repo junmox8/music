@@ -4,6 +4,8 @@ import Song2 from "../../../components/song";
 import { useSearchParams } from "react-router-dom";
 import { getAlbumDetail } from "../../../axios/service/album";
 export default function AlbumSong() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const id = searchParams.get("id");
   useEffect(() => {
     (async function () {
       const {
@@ -18,9 +20,8 @@ export default function AlbumSong() {
         setSongs(songs);
       }
     })();
-  }, []);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const id = searchParams.get("id");
+  }, [id]);
+
   const [songs, setSongs] = useState([]);
   const [isSelect, setSelect] = useState([]); //热门歌曲单击背景颜色改变
   const SingleClickHotSong = (index) => {
