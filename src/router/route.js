@@ -1,4 +1,5 @@
 import { useRoutes, Navigate } from "react-router-dom";
+import KeepAlive from "react-activation";
 import { lazy } from "react";
 import Index from "../pages/index/index";
 import FindMusic from "../pages/findMusic/index";
@@ -48,15 +49,27 @@ const Routes = () => {
           children: [
             {
               path: "/findMusic/recommand",
-              element: <Recommand />,
+              element: (
+                <KeepAlive id="recommand" saveScrollPosition={false}>
+                  <Recommand />
+                </KeepAlive>
+              ),
             },
             {
               path: "/findMusic/songlist",
-              element: <Songlist />,
+              element: (
+                <KeepAlive id="songlist" saveScrollPosition={false}>
+                  <Songlist />
+                </KeepAlive>
+              ),
             },
             {
               path: "/findMusic/rank",
-              element: <Rank />,
+              element: (
+                <KeepAlive id="rank" saveScrollPosition={false}>
+                  <Rank />
+                </KeepAlive>
+              ),
             },
             {
               path: "/findMusic/singer",
@@ -90,7 +103,11 @@ const Routes = () => {
             },
             {
               path: "/singer/detail",
-              element: <Detail />,
+              element: (
+                <KeepAlive id="detail" saveScrollPosition={false}>
+                  <Detail />
+                </KeepAlive>
+              ),
             },
           ],
         },
@@ -100,11 +117,19 @@ const Routes = () => {
           children: [
             {
               path: "/playlist/song",
-              element: <Song />,
+              element: (
+                <KeepAlive id="song" saveScrollPosition={false}>
+                  <Song />
+                </KeepAlive>
+              ),
             },
             {
               path: "/playlist/comment",
-              element: <Comment />,
+              element: (
+                <KeepAlive id="comment" saveScrollPosition={false}>
+                  <Comment />
+                </KeepAlive>
+              ),
             },
           ],
         },
@@ -114,15 +139,27 @@ const Routes = () => {
           children: [
             {
               path: "/albumDetail/song",
-              element: <AlbumSong />,
+              element: (
+                <KeepAlive id="AlbumSong" saveScrollPosition={false}>
+                  <AlbumSong />
+                </KeepAlive>
+              ),
             },
             {
               path: "/albumDetail/comment",
-              element: <AlbumComment />,
+              element: (
+                <KeepAlive id="AlbumComment" saveScrollPosition={false}>
+                  <AlbumComment />
+                </KeepAlive>
+              ),
             },
             {
               path: "/albumDetail/info",
-              element: <AlbumInfo />,
+              element: (
+                <KeepAlive id="AlbumInfo" saveScrollPosition={false}>
+                  <AlbumInfo />
+                </KeepAlive>
+              ),
             },
           ],
         },
@@ -136,19 +173,35 @@ const Routes = () => {
           children: [
             {
               path: "/searchPage/song",
-              element: <SearchPageSong></SearchPageSong>,
+              element: (
+                <KeepAlive id="SearchPageSong" saveScrollPosition={false}>
+                  <SearchPageSong />
+                </KeepAlive>
+              ),
             },
             {
               path: "/searchPage/artist",
-              element: <SearchPageArtist></SearchPageArtist>,
+              element: (
+                <KeepAlive id="SearchPageArtist" saveScrollPosition={false}>
+                  <SearchPageArtist />
+                </KeepAlive>
+              ),
             },
             {
               path: "/searchPage/album",
-              element: <SearchPageAlbum></SearchPageAlbum>,
+              element: (
+                <KeepAlive id="SearchPageAlbum" saveScrollPosition={false}>
+                  <SearchPageAlbum />
+                </KeepAlive>
+              ),
             },
             {
               path: "/searchPage/playlist",
-              element: <SearchPagePlaylist></SearchPagePlaylist>,
+              element: (
+                <KeepAlive id="SearchPagePlaylist" saveScrollPosition={false}>
+                  <SearchPagePlaylist />
+                </KeepAlive>
+              ),
             },
           ],
         },

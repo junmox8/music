@@ -103,6 +103,7 @@
     position: absolute;
     right: 0;
     bottom: 53px;
+    z-index: 100;
     width: 27.5vw;
     height: calc(100vh - 117px);
     overflow: scroll;
