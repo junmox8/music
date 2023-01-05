@@ -39,6 +39,7 @@ export default function SearchPageAlbum(props) {
               word={word}
               img={item.picUrl}
               name={item.name}
+              index={index}
               id={item.id}
               artistName={item.artist.name}
               artistId={item.artist.id}

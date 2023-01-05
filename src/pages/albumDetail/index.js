@@ -10,6 +10,8 @@ import { getUserLikeMusics } from "../../axios/service/music";
 import { useSearchParams, useNavigate, Outlet } from "react-router-dom";
 import routerArr from "../../json/albumRouterArr";
 function AlbumDetail(props) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const albumId = searchParams.get("id");
   useEffect(() => {
     (async function () {
       const {
@@ -30,8 +32,8 @@ function AlbumDetail(props) {
         props.setUserLikeMusic(ids);
       }
     })();
-  }, []);
-  const [searchParams, setSearchParams] = useSearchParams();
+  }, [albumId]);
+
   const [textInfo, setInfo] = useState({
     id: 0,
     name: "",
@@ -46,7 +48,7 @@ function AlbumDetail(props) {
     artists: [],
   });
   const [songsArr, setArr] = useState([]);
-  const albumId = searchParams.get("id");
+
   const navigate = useNavigate();
   const [clickArr, setClickArr] = useState([]); //判断有没有点击路由
   const click = (index) => {

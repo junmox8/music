@@ -40,6 +40,7 @@ export default function SearchPageArtist(props) {
               name2={item.alias && item.alias.length > 0 ? item.alias[0] : ""}
               avatar={item.picUrl}
               icon={item.img1v1Url}
+              index={index}
               word={word}
             ></SearchPageArtistComponent>
           );

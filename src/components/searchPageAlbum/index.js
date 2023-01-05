@@ -26,6 +26,9 @@ export default function SearchPageAlbumComponent(props) {
   };
   return (
     <div
+      style={{
+        backgroundColor: (props.index + 1) % 2 === 0 ? "#FAFAFA" : "#fff",
+      }}
       className={style.main}
       onClick={() => {
         navigate("/albumDetail/song?id=" + props.id);
@@ -41,7 +44,8 @@ export default function SearchPageAlbumComponent(props) {
       </div>
       <span
         className={style.name22}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           navigate("/singer/album?id=" + props.artistId);
         }}
       >

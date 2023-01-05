@@ -26,6 +26,9 @@ export default function SearchPageArtistComponent(props) {
   };
   return (
     <div
+      style={{
+        backgroundColor: (props.index + 1) % 2 === 0 ? "#FAFAFA" : "#fff",
+      }}
       className={style.main}
       onClick={() => {
         navigate("/singer/album?id=" + props.id);
