@@ -28,6 +28,13 @@
         margin-left: 10px;
         margin-right: 10px;
       }
+      .icon2 {
+        /* 设置2秒时间间隔 */
+        animation: throttle 1s step-end forwards;
+      }
+      .icon2:active {
+        animation: none; /* 关闭动画 */
+      }
     }
     .songDetail {
       width: fit-content;
@@ -124,5 +131,14 @@
       height: auto;
       margin-left: 5%;
     }
+  }
+}
+@keyframes throttle {
+  /* 设置一下颜色区分，方便查看 */
+  from {
+    pointer-events: none;
+  }
+  to {
+    pointer-events: all;
   }
 }
