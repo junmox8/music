@@ -6,6 +6,7 @@ import { getAlbumDetail } from "../../axios/service/album";
 import PlayAllMusic from "../../utils/playAllMusic";
 import dataChange from "../../utils/dateChange";
 import { connect } from "react-redux";
+import { getUserLikeMusics } from "../../axios/service/music";
 import { useSearchParams, useNavigate, Outlet } from "react-router-dom";
 import routerArr from "../../json/albumRouterArr";
 function AlbumDetail(props) {
@@ -14,8 +15,6 @@ function AlbumDetail(props) {
       const {
         data: { album, songs },
       } = await getAlbumDetail(albumId);
-      console.log(album);
-      console.log(songs);
       setInfo(album);
       setArr(songs);
       let arr = [];
@@ -24,6 +23,12 @@ function AlbumDetail(props) {
       });
       setClickArr(arr);
       navigate(routerArr[0].path + "?id=" + albumId, { replace: true });
+      if (props.userInfo.isLogin === true) {
+        const {
+          data: { ids },
+        } = await getUserLikeMusics(props.userInfo.userId);
+        props.setUserLikeMusic(ids);
+      }
     })();
   }, []);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -164,5 +169,13 @@ const a = (state) => {
     userInfo: state.userInfo,
   };
 };
-const b = null;
+const b = (dispatch) => {
+  return {
+    setUserLikeMusic: (value) =>
+      dispatch({
+        type: "setUserLikeMusic",
+        data: value,
+      }),
+  };
+};
 export default connect(a, b)(AlbumDetail);

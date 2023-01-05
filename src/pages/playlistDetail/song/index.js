@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import style from "./index.module.scss";
 import Song2 from "../../../components/song";
 import { useSearchParams } from "react-router-dom";
+import { connect } from "react-redux";
+import { getUserLikeMusics } from "../../../axios/service/music";
 import { getSongListDetail } from "../../../axios/service/songlist";
-export default function Song() {
+function Song(props) {
   useEffect(() => {
     (async function () {
       const {
@@ -16,6 +18,12 @@ export default function Song() {
         });
         setSelect(arr);
         setSongs(songs);
+      }
+      if (props.userInfo.isLogin === true) {
+        const {
+          data: { ids },
+        } = await getUserLikeMusics(props.userInfo.userId);
+        props.setUserLikeMusic(ids);
       }
     })();
   }, []);
@@ -53,3 +61,18 @@ export default function Song() {
     </div>
   );
 }
+const a = (state) => {
+  return {
+    userInfo: state.userInfo,
+  };
+};
+const b = (dispatch) => {
+  return {
+    setUserLikeMusic: (value) =>
+      dispatch({
+        type: "setUserLikeMusic",
+        data: value,
+      }),
+  };
+};
+export default connect(a, b)(Song);

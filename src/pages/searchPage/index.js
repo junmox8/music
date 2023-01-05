@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import searchRouterArr from "../../json/searchRouterArr";
 import PubSub from "pubsub-js";
+import { connect } from "react-redux";
+import { getUserLikeMusics } from "../../axios/service/music";
 import style from "./index.module.scss";
-export default function SearchPage() {
+function SearchPage(props) {
   useEffect(() => {
     PubSub.subscribe("initPage", (_, v) => {
       //在搜索页面初始化路由文字样式(红色部分)
@@ -13,14 +15,22 @@ export default function SearchPage() {
       });
       setClickArr(arr);
     });
-    let arr = [];
-    searchRouterArr.forEach((item, index) => {
-      arr.push(index === 0 ? true : false);
-    });
-    setClickArr(arr);
-    navigate(searchRouterArr[0].path + "?words=" + words, {
-      replace: true,
-    });
+    (async function () {
+      let arr = [];
+      searchRouterArr.forEach((item, index) => {
+        arr.push(index === 0 ? true : false);
+      });
+      setClickArr(arr);
+      navigate(searchRouterArr[0].path + "?words=" + words, {
+        replace: true,
+      });
+      if (props.userInfo.isLogin === true) {
+        const {
+          data: { ids },
+        } = await getUserLikeMusics(props.userInfo.userId);
+        props.setUserLikeMusic(ids);
+      }
+    })();
   }, []);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -61,3 +71,18 @@ export default function SearchPage() {
     </div>
   );
 }
+const a = (state) => {
+  return {
+    userInfo: state.userInfo,
+  };
+};
+const b = (dispatch) => {
+  return {
+    setUserLikeMusic: (value) =>
+      dispatch({
+        type: "setUserLikeMusic",
+        data: value,
+      }),
+  };
+};
+export default connect(a, b)(SearchPage);
