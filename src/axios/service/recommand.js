@@ -1,10 +1,10 @@
 import Axios from "../index";
 export const getBanner = () => {
-  return Axios.get("/api/banner");
+  return Axios.get("/api5/banner");
 };
 export const getSongList = () => {
-  return Axios.get("/api/personalized?limit=8");
+  return Axios.get("/api5/personalized?limit=8");
 };
 export const getNewestMusic = () => {
-  return Axios.get("/api/personalized/newsong?limit=12");
+  return Axios.get("/api5/personalized/newsong?limit=12");
 };

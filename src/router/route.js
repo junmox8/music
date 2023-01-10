@@ -1,5 +1,5 @@
 import { useRoutes, Navigate } from "react-router-dom";
-import KeepAlive from "react-activation";
+// import KeepAlive from "react-activation";
 import { lazy } from "react";
 import Index from "../pages/index/index";
 import FindMusic from "../pages/findMusic/index";
@@ -41,6 +41,11 @@ const Routes = () => {
   const routes = useRoutes([
     {
       path: "/",
+      // element: (
+      //   // <KeepAlive id="index" saveScrollPosition={false}>
+      //   <Index />
+      //   // </KeepAlive>
+      // ),
       element: <Index />,
       children: [
         {
@@ -50,25 +55,25 @@ const Routes = () => {
             {
               path: "/findMusic/recommand",
               element: (
-                <KeepAlive id="recommand" saveScrollPosition={false}>
-                  <Recommand />
-                </KeepAlive>
+                // <KeepAlive id="recommand" saveScrollPosition={false}>
+                <Recommand />
+                // </KeepAlive>
               ),
             },
             {
               path: "/findMusic/songlist",
               element: (
-                <KeepAlive id="songlist" saveScrollPosition={false}>
-                  <Songlist />
-                </KeepAlive>
+                // <KeepAlive id="songlist" saveScrollPosition={false}>
+                <Songlist />
+                // </KeepAlive>
               ),
             },
             {
               path: "/findMusic/rank",
               element: (
-                <KeepAlive id="rank" saveScrollPosition={false}>
-                  <Rank />
-                </KeepAlive>
+                // <KeepAlive id="rank" saveScrollPosition={false}>
+                <Rank />
+                // </KeepAlive>
               ),
             },
             {
@@ -104,9 +109,9 @@ const Routes = () => {
             {
               path: "/singer/detail",
               element: (
-                <KeepAlive id="detail" saveScrollPosition={false}>
-                  <Detail />
-                </KeepAlive>
+                // <KeepAlive id="detail" saveScrollPosition={false}>
+                <Detail />
+                // </KeepAlive>
               ),
             },
           ],
@@ -118,17 +123,17 @@ const Routes = () => {
             {
               path: "/playlist/song",
               element: (
-                <KeepAlive id="song" saveScrollPosition={false}>
-                  <Song />
-                </KeepAlive>
+                // <KeepAlive id="song" saveScrollPosition={false}>
+                <Song />
+                // </KeepAlive>
               ),
             },
             {
               path: "/playlist/comment",
               element: (
-                <KeepAlive id="comment" saveScrollPosition={false}>
-                  <Comment />
-                </KeepAlive>
+                // <KeepAlive id="comment" saveScrollPosition={false}>
+                <Comment />
+                // </KeepAlive>
               ),
             },
           ],
@@ -140,25 +145,25 @@ const Routes = () => {
             {
               path: "/albumDetail/song",
               element: (
-                <KeepAlive id="AlbumSong" saveScrollPosition={false}>
-                  <AlbumSong />
-                </KeepAlive>
+                // <KeepAlive id="AlbumSong" saveScrollPosition={false}>
+                <AlbumSong />
+                // </KeepAlive>
               ),
             },
             {
               path: "/albumDetail/comment",
               element: (
-                <KeepAlive id="AlbumComment" saveScrollPosition={false}>
-                  <AlbumComment />
-                </KeepAlive>
+                // <KeepAlive id="AlbumComment" saveScrollPosition={false}>
+                <AlbumComment />
+                // </KeepAlive>
               ),
             },
             {
               path: "/albumDetail/info",
               element: (
-                <KeepAlive id="AlbumInfo" saveScrollPosition={false}>
-                  <AlbumInfo />
-                </KeepAlive>
+                // <KeepAlive id="AlbumInfo" saveScrollPosition={false}>
+                <AlbumInfo />
+                // </KeepAlive>
               ),
             },
           ],
@@ -174,33 +179,33 @@ const Routes = () => {
             {
               path: "/searchPage/song",
               element: (
-                <KeepAlive id="SearchPageSong" saveScrollPosition={false}>
-                  <SearchPageSong />
-                </KeepAlive>
+                // <KeepAlive id="SearchPageSong" saveScrollPosition={false}>
+                <SearchPageSong />
+                // </KeepAlive>
               ),
             },
             {
               path: "/searchPage/artist",
               element: (
-                <KeepAlive id="SearchPageArtist" saveScrollPosition={false}>
-                  <SearchPageArtist />
-                </KeepAlive>
+                // <KeepAlive id="SearchPageArtist" saveScrollPosition={false}>
+                <SearchPageArtist />
+                // </KeepAlive>
               ),
             },
             {
               path: "/searchPage/album",
               element: (
-                <KeepAlive id="SearchPageAlbum" saveScrollPosition={false}>
-                  <SearchPageAlbum />
-                </KeepAlive>
+                // <KeepAlive id="SearchPageAlbum" saveScrollPosition={false}>
+                <SearchPageAlbum />
+                // </KeepAlive>
               ),
             },
             {
               path: "/searchPage/playlist",
               element: (
-                <KeepAlive id="SearchPagePlaylist" saveScrollPosition={false}>
-                  <SearchPagePlaylist />
-                </KeepAlive>
+                // <KeepAlive id="SearchPagePlaylist" saveScrollPosition={false}>
+                <SearchPagePlaylist />
+                // </KeepAlive>
               ),
             },
           ],

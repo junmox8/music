@@ -58,7 +58,7 @@ function SingerDetail(props) {
   const navigate = useNavigate();
   const [clickArr, setClickArr] = useState([]); //判断有没有点击路由
   const collectSinger = async (type) => {
-    if (props.loginState === false) return message.error("请先登录");
+    if (props.userInfo.isLogin === false) return message.error("请先登录");
     switch (type) {
       case true: //添加收藏
         props.setLoading(true);

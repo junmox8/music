@@ -22,7 +22,6 @@ let timeInterval = null; //搜索防抖
 let flag = false; //判断是否输入完毕 中文拼音问题
 function Index(props) {
   useEffect(() => {
-    navigate(routerArr[0].path, { replace: true });
     let arr = [];
     routerArr.forEach((item, index) => {
       arr.push(index === 0 ? true : false);
@@ -36,6 +35,7 @@ function Index(props) {
         data: { data: result }, //获取热搜条目
       } = await getHotSearchWords();
       setHotWords(result);
+      navigate("/findMusic/recommand", { replace: true });
     })();
   }, []);
   const navigate = useNavigate();

@@ -1,11 +1,11 @@
 import Axios from "../index";
 
 export const loginByQr = () => {
-  return Axios.get("/api/login/qr/key?timestamp=" + Date.now());
+  return Axios.get("/api5/login/qr/key?timestamp=" + Date.now());
 };
 export const createQr = (key) => {
   return Axios.get(
-    "/api/login/qr/create?key=" +
+    "/api5/login/qr/create?key=" +
       key +
       "&qrimg=" +
       1 +
@@ -15,15 +15,15 @@ export const createQr = (key) => {
 };
 export const checkQr = (key) => {
   return Axios.get(
-    "/api/login/qr/check?key=" + key + "&timestamp=" + Date.now()
+    "/api5/login/qr/check?key=" + key + "&timestamp=" + Date.now()
   );
 };
 export const getUserInfo = () => {
-  return Axios.get("/api/user/account");
+  return Axios.get("/api5/user/account");
 };
 export const loginByPassword = (phoneNumber, password) => {
   return Axios.get(
-    "/api/login/cellphone?phone=" +
+    "/api5/login/cellphone?phone=" +
       phoneNumber +
       "&password=" +
       password +
@@ -33,12 +33,12 @@ export const loginByPassword = (phoneNumber, password) => {
 };
 export const sentCaptcha = (phoneNumber) => {
   return Axios.get(
-    "/api/captcha/sent?phone=" + phoneNumber + "&timestamp=" + Date.now()
+    "/api5/captcha/sent?phone=" + phoneNumber + "&timestamp=" + Date.now()
   );
 };
 export const loginByCaptcha = (phoneNumber, captcha) => {
   return Axios.get(
-    "/api/login/cellphone?phone=" +
+    "/api5/login/cellphone?phone=" +
       phoneNumber +
       "&captcha=" +
       captcha +
